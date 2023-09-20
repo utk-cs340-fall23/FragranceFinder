@@ -1,7 +1,9 @@
+// Load environment variables
+require('dotenv').config();
+
 const path = require('path');
 const express = require('express');
 const mysql = require('mysql2');
-
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -9,10 +11,10 @@ app.use(express.json());
 
 // Database configuration
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'fragrance_finder_db'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 // Connect to the database
