@@ -39,6 +39,8 @@ app.get("/api/data", (req, res) => {
 });
 
 app.post("/api/posts/", (req, res) => {
+
+  // Get expected values from request body
   const { title, description } = req.body;
 
     // Check if title and description are provided
