@@ -1,7 +1,7 @@
 import './CSS/database.css';
 import {useEffect, useState} from "react";
 
-function DB() {
+function CrudExample() {
   const [data, setData] = useState(null);
 
   // Initialize empty form
@@ -33,7 +33,8 @@ function DB() {
   }
 
   // Handle submission of form
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
     // Send form state to backend
     const response = await fetch('/api/posts/', {
@@ -60,14 +61,14 @@ function DB() {
         alignItems: 'center',
       }}>
         <h2>Create Post</h2>
-        <form style={{
+        <form onSubmit={handleFormSubmit} style={{
           display: 'flex',
           flexDirection: 'column',
           width: '500px',
         }}>
           <input onChange={handleFormChange} name='title' placeholder='Title' value={formState.title}></input>
           <textarea onChange={handleFormChange} name='description' placeholder='Description' rows='10' value={formState.description}></textarea>
-          <button onClick={handleFormSubmit} style={{marginTop: '10px'}}>Submit</button>
+          <button type='submit' style={{marginTop: '10px'}}>Submit</button>
         </form>
 
         <h2>Posts</h2>
@@ -84,4 +85,4 @@ function DB() {
   );
 }
 
-export default DB;
+export default CrudExample;
