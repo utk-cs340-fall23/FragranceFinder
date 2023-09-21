@@ -1,7 +1,7 @@
 import "./CSS/email.css"
 
 import React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 const Email = () => {
 	const [form, setForm] = useState({
