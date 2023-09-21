@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages';
 import Email from './pages/email';
 import CrudExample from './pages/CrudExample';
+import "./App.css";
 
 function App() {
 

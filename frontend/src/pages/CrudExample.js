@@ -1,4 +1,4 @@
-import './CSS/database.css';
+import './CSS/crudexample.css';
 import {useEffect, useState} from "react";
 
 function CrudExample() {
@@ -60,6 +60,12 @@ function CrudExample() {
         flexDirection: 'column',
         alignItems: 'center',
       }}>
+        <div className='rainbow' style={{
+          margin: '20px',
+          fontSize: '25px',
+          fontStyle: 'italic',
+          fontWeight: 'bold'
+        }}>Lakelon Bailey Hello Plus Example:</div>
         <h2>Create Post</h2>
         <form onSubmit={handleFormSubmit} style={{
           display: 'flex',
