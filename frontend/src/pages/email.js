@@ -1,3 +1,5 @@
+import "./CSS/email.css"
+
 import React from "react";
 
 const Email = () => {
@@ -7,11 +9,11 @@ const Email = () => {
 	}
 	
     return (
-        <div>
+        <div className="body">
             <h1>Enter an email address and get an email!</h1>
-			<form>
+			<form onSubmit={handleFormSubmit}>
 				<input type="text" placeholder="email@example.com" />
-				<input onClick={handleFormSubmit} type="submit" />
+				<input type="submit" />
 			</form>
         </div>
     );
