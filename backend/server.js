@@ -38,6 +38,23 @@ app.get("/api/data", (req, res) => {
     });
 });
 
+
+
+// Author: Stephen Souther
+app.post("/api/email", (req, res) => {
+	const email = req.body;
+	
+	if(!email){
+		return res.status(400).json({ error: "Email is required." });
+	}
+	else{
+		return res.status(200).json({ message: email });
+	}
+})
+ 
+
+
+// Author: Lakelon Bailey
 app.post("/api/posts/", (req, res) => {
 
   // Get expected values from request body
