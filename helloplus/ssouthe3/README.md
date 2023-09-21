@@ -9,7 +9,7 @@ After multipage viewing was setup then I moved on to making the backend and fron
 2. Download and install the latest version of [MySQL](https://www.mysql.com/downloads/)
 3. Clone the repository's "dev" branch [github.com/utk-cs340-fall23/FragranceFinder](https://github.com/utk-cs340-fall23/FragranceFinder)
 4. Open a teminal in both the frontend and backend folders and run the command `npm i` to install each folder's dependencies.
-5. Create a .env file in the backend folder define the following:
+5. Create a .env file in the backend folder and define the following:
    * EMAIL_HOST=(your email service's SMTP domain name)
    * EMAIL_PORT=(your email service's SMTP port number)
    * EMAIL_SECURE=false
