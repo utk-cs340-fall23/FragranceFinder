@@ -1,5 +1,5 @@
 
-# React multipage handler
+# Our website :)
 ## General Info
 I made modifications to the index.js page, which is the page you look at first when openning the website.
 The modifications are made in another branch called dev, so check that out, and you can set it up following
