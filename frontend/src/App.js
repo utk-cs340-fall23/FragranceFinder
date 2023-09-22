@@ -1,38 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import {useEffect, useState} from "react";
+import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from './pages';
+import Email from './pages/email';
+import CrudExample from './pages/CrudExample';
+import Navbar from './pages/navigation';
+import "./App.css";
 
 function App() {
-  const [data, setData] = useState(null);
 
-  useEffect(function() {
-    fetch('/api').then(response => {
-      if (response.ok) {
-        response.json().then(newData => {
-          setData(newData);
-        })
-      }
-    });
-  }, []);
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          {data ? data.message : 'Loading...'}
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<Router>
+			<Routes>
+				<Route exact path='/' element={<Home />} />
+				<Route path='/email' element={<Email />} />
+				<Route path='/crud' element={<CrudExample />} />
+				<Route path='/nav' element={<Navbar />} />
+			</Routes>
+		</Router>
+	);
 }
 
 export default App;
