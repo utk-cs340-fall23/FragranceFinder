@@ -3,11 +3,10 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
-const mysql = require('mysql2');
 const nodemail = require("nodemailer");
 const PORT = process.env.PORT || 3001;
-
 const app = express();
+const db = require('./config/connection');
 app.use(express.json());
 
 // Author: Stephen Souther
@@ -30,22 +29,6 @@ mailer.verify(function(error, success) {
 		console.log("Mail host connected");
 	}
 });
-
-// Database configuration
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
-
-// Connect to the database
-db.connect((err) => {
-    if (err) throw err;
-});
-
-// Author: Send static requests to build folder
-app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // Author: Stephen Souther
 app.post("/api/email", (req, res) => {
@@ -76,82 +59,10 @@ app.post("/api/email", (req, res) => {
 	}
 })
 
-// Author: Lakelon Bailey
-// CRUD Example endpoints: Provide ability to Create, Retrieve, Update, and Delete posts.
-app.post("/api/posts/", (req, res) => {
+app.use(require('./routes/basicCrudRoutes'));
 
-  // Get expected values from request body
-  const { title, description } = req.body;
-
-    // Check if title and description are provided
-    if (!title || !description) {
-        return res.status(400).json({ error: "Both title and description are required." });
-    }
-
-    // Construct the SQL query
-    const sql = "INSERT INTO posts (title, description) VALUES (?, ?)";
-
-    // Execute the query
-    db.query(sql, [title, description], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ error: "Database error occurred." });
-        }
-
-        // Send a response back indicating success
-        res.json({ message: "Post created successfully.", postId: result.insertId });
-    });
-});
-
-app.delete("/api/posts/:postId", (req, res) => {
-    const sql = `
-        DELETE FROM posts WHERE id = ${req.params.postId};
-    `;
-
-    // Execute the query
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ error: "Database error occurred." });
-        }
-
-        // Send a response back indicating success
-        res.json({ message: "Post deleted successfully."});
-    });
-});
-
-app.put("/api/posts/:postId", (req, res) => {
-    const {title, description} = req.body;
-    const sql = `
-        UPDATE posts
-        SET title = '${title}', description = '${description}'
-        WHERE id = ${req.params.postId};
-    `;
-
-    // Execute the query
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ error: "Database error occurred." });
-        }
-
-        // Send a response back indicating success
-        res.json({ message: "Post updated successfully."});
-    });
-})
-
-app.get("/api/posts/", (req, res) => {
-  const sql = "SELECT * FROM posts";
-  db.query(sql, (err, results) => {
-      if (err) throw err;
-      res.json(results);
-  });
-})
-
-
-
-
-
+// Author: Send static requests to build folder
+app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // All other GET requests not handled before will return to our React app for frontend routing
 app.get('*', (req, res) => {
