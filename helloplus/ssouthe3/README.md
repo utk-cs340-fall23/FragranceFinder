@@ -20,6 +20,5 @@ After multipage viewing was setup then I moved on to making the backend and fron
    * DB_PASSWORD=(enter a password if one is set)
    * DB_NAME=fragrance_finder_db
 6. Load the database schema with the command `npm run load-db-local` while in the backend folder
-7. Run the command `npm run start:backend` and `npm run start:frontend`
-8. Run the command `npm run start`
-9. Open your browser and go to http://localhost:3000/email
+7. Run the command `npm run start` in both the frontend and backend folders
+8. Open your browser and go to http://localhost:3000/email
