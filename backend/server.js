@@ -59,7 +59,7 @@ app.post("/api/email", (req, res) => {
 	}
 })
 
-app.use(require('./routes/basicCrudRoutes'));
+app.use(require('./routes'));
 
 // Author: Send static requests to build folder
 app.use(express.static(path.resolve(__dirname, '../client/build')));
