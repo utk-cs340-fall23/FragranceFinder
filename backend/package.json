@@ -2,16 +2,21 @@
   "name": "fragrance-finder-api",
   "version": "1.0.0",
   "description": "Fragrance Finder API",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "load-db-local": "mysql -u root -p < schema/schema.sql"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mysql2": "^3.6.1"
+    "mysql2": "^3.6.1",
+    "nodemailer": "^6.9.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
