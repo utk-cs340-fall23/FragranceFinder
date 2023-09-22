@@ -1,5 +1,5 @@
 # CRUD Example for Hello World Plus
-I created a CRUD example for this assignment. This demonstrates basic stage management and RESTful API requests on the frontend, and basic database interaction on the backend. These are skills that will be necessary for this project. The frontend code for this is found in `frontend/src/CrudExample.js`. The backend code for this is found in `backend/routes/basicCrudRoutes.js`;
+I created a CRUD example for this assignment. This demonstrates basic stage management and RESTful API requests on the frontend, and basic database interaction on the backend. All of these skills will be foundational to our project, as they demonstrate the basic flow of data between the frontend, backend, and database. The frontend code for this is found in `frontend/src/CrudExample.js`. The backend code for this is found in `backend/routes/basicCrudRoutes.js`.
 
 # Install instructions
 1. Download and install the latest version of [Nodejs](https://nodejs.org)
