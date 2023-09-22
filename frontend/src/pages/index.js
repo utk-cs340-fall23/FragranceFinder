@@ -8,6 +8,8 @@ const Home = () => {
 			<a href="/crud">Lakelon Bailey's CRUD demo</a>
 			<br/>
 			<a href="/email">Stephen Souther's email demo</a>
+            <br/>
+            <a href="/nav">Kien Nguyen's Navigation Bar demo</a>
         </div>
     );
 };
