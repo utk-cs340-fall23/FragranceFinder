@@ -6,6 +6,7 @@ function CrudExample() {
 
   // Initialize empty form
   const [formState, setFormState] = useState({
+    id: null,
     title: '',
     description: ''
   })
@@ -36,19 +37,63 @@ function CrudExample() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // Send form state to backend
-    const response = await fetch('/api/posts/', {
-      method: 'POST',
-      body: JSON.stringify(formState),
-      headers: {
-        "Content-Type": "application/json"
+    // If there is an id, we're doing an update instead of a creation
+    if (formState.id) {
+      const response = await fetch(`/api/posts/${formState.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(formState),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.ok) {
+        setFormState({
+          id: null,
+          title: '',
+          description: ''
+        });
+
+        getPosts();
       }
+    }
+
+    // Creation
+    else {
+       // Send form state to backend
+      const response = await fetch('/api/posts/', {
+        method: 'POST',
+        body: JSON.stringify(formState),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      // If successful, reload posts
+      if (response.ok) {
+        getPosts();
+      }
+    }
+  }
+
+
+  const handlePostDelete = async event => {
+    const postId = event.target.value;
+    const response = await fetch(`/api/posts/${postId}`, {
+      method: 'DELETE',
     });
 
-    // If successful, reload posts
     if (response.ok) {
       getPosts();
     }
+  }
+
+  const renderUpdate = async ({id, title, description}) => {
+    setFormState({
+      id: id,
+      title: title,
+      description: description
+    });
   }
 
   return (
@@ -74,7 +119,7 @@ function CrudExample() {
         }}>
           <input onChange={handleFormChange} name='title' placeholder='Title' value={formState.title}></input>
           <textarea onChange={handleFormChange} name='description' placeholder='Description' rows='10' value={formState.description}></textarea>
-          <button type='submit' style={{marginTop: '10px'}}>Submit</button>
+          <button type='submit' style={{marginTop: '10px'}}>{formState.id ? 'Update' : 'Submit'}</button>
         </form>
 
         <h2>Posts</h2>
@@ -83,6 +128,10 @@ function CrudExample() {
             <div key={i}>
               <p><strong>{item.title}:</strong></p>
               <p style={{marginLeft: '8px'}}>{item.description}</p>
+              <span>
+                <button onClick={handlePostDelete} value={item.id}>Delete</button>
+                <button onClick={() => renderUpdate(item)}>Update</button>
+              </span>
             </div>
           )) : (<li>None</li>)}
         </div>

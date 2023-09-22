@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:frontend": "cd frontend; npm run start; cd ../;",
-    "start:backend": "cd backend; npm run start; cd ../;",
+    "start:backend": "cd backend; nodemon server.js; cd ../;",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/utk-cs340-fall23/FragranceFinder#readme",
   "devDependencies": {
-    "concurrently": "^8.2.1"
+    "concurrently": "^8.2.1",
+    "nodemon": "^3.0.1"
   }
 }
