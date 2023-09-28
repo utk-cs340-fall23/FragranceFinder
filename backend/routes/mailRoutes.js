@@ -25,7 +25,7 @@ router.post("/api/email/", (req, res) => {
 			}
 		});
 
-		return res.status(200).json({ message: email });
+		return res.status(200);
 	}
 })
 

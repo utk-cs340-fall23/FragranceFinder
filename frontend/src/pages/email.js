@@ -27,10 +27,6 @@ const Email = () => {
 				"Content-Type": "application/json"
 			}
 		});
-		
-		if(ret.ok){
-			console.log("submitted");
-		}
 	}
 	
     return (
