@@ -1,4 +1,4 @@
-import "./CSS/email.css"
+import "../CSS/email.css"
 
 import React from "react";
 import {useState} from "react";

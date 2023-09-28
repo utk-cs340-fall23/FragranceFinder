@@ -1,4 +1,4 @@
-import './CSS/crudexample.css';
+import '../CSS/crudexample.css';
 import {useEffect, useState} from "react";
 
 function CrudExample() {
