@@ -1,19 +1,19 @@
 const router = require('express').Router();
 const mailer = require('../config/mail');
 
-router.post("/api/email", (req, res) => {
-	const email = req.body;
+router.post("/api/email/", (req, res) => {
+	const {email, title, body} = req.body;
 
-	if(!email){
+	if(!email || !title || !body){
 		return res.status(400).json({ error: "Email is required." });
 	}
 	else{
 
 		const mail = {
 			from: process.env.EMAIL_USER,
-			to: email.email,
-			subject: "Hello Plus Email Demo",
-			text: "This is a hello world demo for the FragranceFinder website."
+			to: email,
+			subject: title,
+			text: body
 		};
 
 		mailer.sendMail(mail, function(error, info) {
