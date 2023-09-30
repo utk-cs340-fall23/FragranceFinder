@@ -11,18 +11,16 @@ const mailer = require('./config/mail');
 
 // https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 const spawn = require("child_process").spawn;
-const pyproc = spawn("python", ["test.py"])
-
-pyproc.stdout.on("data", (data) => {
-	console.log(data.toString());
-});
-
 
 function test(){
-	console.log("tick");
+	const pyproc = spawn("python", ["test.py"]);
+
+	pyproc.stdout.on("data", (data) => {
+		console.log(data.toString());
+	});
 }
 
-setInterval(test, 3600000);
+setInterval(test, 3600000); // 1 hour
 
 
 app.use(express.json());
