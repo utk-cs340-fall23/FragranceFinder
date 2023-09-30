@@ -8,6 +8,12 @@ const app = express();
 const db = require('./config/db');
 const mailer = require('./config/mail');
 
+function test(){
+	console.log("tick");
+}
+
+setInterval(test, 3600000);
+
 app.use(express.json());
 
 app.use(require('./routes'));
