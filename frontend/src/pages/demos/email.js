@@ -2,6 +2,7 @@ import "../CSS/email.css"
 
 import React from "react";
 import {useState} from "react";
+import { sendPost } from "../../utils/requests";
 
 const Email = () => {
 	const [form, setForm] = useState({
@@ -9,26 +10,19 @@ const Email = () => {
 		title: "",
 		body: ""
 	})
-	
+
 	const handleForm = (event) => {
 		setForm({
 			...form,
 			[event.target.name]: event.target.value
 		});
 	}
-	
+
 	const handleFormSubmit = async(event) => {
 		event.preventDefault();
-		
-		const ret = await fetch("/api/email/", {
-			method: "POST",
-			body: JSON.stringify(form),
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
+		await sendPost("/api/email/", form);
 	}
-	
+
     return (
         <div className="body">
             <h1>Enter an email address and get an email!</h1>
@@ -41,5 +35,5 @@ const Email = () => {
         </div>
     );
 };
- 
+
 export default Email;

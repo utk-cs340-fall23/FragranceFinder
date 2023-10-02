@@ -5,7 +5,7 @@ const path = require('path');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const sequelize = require("./config/connection");
+const sequelize = require("./config/db");
 
 // https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 const spawn = require("child_process").spawn;
@@ -19,6 +19,8 @@ function test(){
 }
 
 setInterval(test, 3600000); // 1 hour
+
+app.use(express.json());
 
 // Direct all routes starting with api to the API's routes
 app.use('/api', require('./routes'));

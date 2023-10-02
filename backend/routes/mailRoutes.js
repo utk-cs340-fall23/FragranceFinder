@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const mailer = require('../config/mail');
 
-router.post("/api/email/", (req, res) => {
+router.post("/", (req, res) => {
 	const {email, title, body} = req.body;
 
 	if(!email || !title || !body){

@@ -20,7 +20,7 @@ const setData = async res => {
 }
 
 // Default method to send a GET request
-const sendGet = async (url) => {
+export const sendGet = async (url) => {
     const res = await fetch(url, {
         method: 'GET',
         headers: {
@@ -32,7 +32,7 @@ const sendGet = async (url) => {
 }
 
 // Default method to send a GET request
-const sendPost = async (url, data) => {
+export const sendPost = async (url, data) => {
     const res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -43,9 +43,4 @@ const sendPost = async (url, data) => {
     })
 
     return await setData(res);
-}
-
-module.exports = {
-    sendGet,
-    sendPost
 }

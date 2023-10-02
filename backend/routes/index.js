@@ -4,7 +4,7 @@ const router = require('express').Router();
 
 
 router.use('/users', userRoutes);
-router.use('/mail', mailRoutes);
+router.use('/email', mailRoutes);
 
 // This middleware handles any request that starts with /api and is not handled above
 router.use('*', (req, res) => {
