@@ -60,10 +60,11 @@ app.post("/api/email", (req, res) => {
 	}
 })
 
+// Direct all routes starting with api to the API's routes
 app.use('/api', require('./routes'));
-app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
 // All other GET requests not handled before will return to our React app for frontend routing
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });

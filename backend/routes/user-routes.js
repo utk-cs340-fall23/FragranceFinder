@@ -4,6 +4,8 @@ const { signToken, authMiddleware } = require('../utils/auth');
 
 
 router.post('/', async (req, res) => {
+
+    // Try to create user. Return token if successful
     try {
         const newUser = await User.create({
             username: req.body.username,
@@ -12,13 +14,12 @@ router.post('/', async (req, res) => {
         });
 
         res.json({
-            token: signToken(newUser),
-            user: newUser
+            token: signToken(newUser)
         });
     }
     catch (err) {
         if (err.original.code == 'ER_DUP_ENTRY') {
-            res.status(500).json({
+            res.status(400).json({
                 message: "An account already exists with that email!"
             });
             return;
@@ -35,6 +36,8 @@ router.get('/me', authMiddleware, async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
+
+    // Find user
     const user = await User.findOne({
         where: {
             email: req.body.email
@@ -49,8 +52,8 @@ router.post('/login', async (req, res) => {
         return;
     }
 
+    // If password is correct, create token and return to user
     const validPassword = user.checkPassword(req.body.password);
-
     if (!validPassword) {
       res.status(400).json({
         message: 'Incorrect password!',
@@ -60,8 +63,7 @@ router.post('/login', async (req, res) => {
     }
 
     res.json({
-        token: signToken(user),
-        user: user
+        token: signToken(user)
     });
 });
 
