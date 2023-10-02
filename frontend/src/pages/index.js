@@ -31,9 +31,6 @@ const Home = () => {
                     <button onClick={() => auth.logout()}>Log Out</button>
                 </div>
             )}
-			<a href="/email">Stephen Souther's email demo</a>
-            <br/>
-            <a href="/nav">Kien Nguyen's Navigation Bar demo</a>
         </div>
     );
 };

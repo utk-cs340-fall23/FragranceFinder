@@ -10,7 +10,7 @@ const getDefaultHeaders = () => {
 }
 
 
-const setData = res => {
+const setData = async res => {
     const contentType = res.headers.get("content-type");
     if (contentType && contentType.includes('application/json')) {
         const data = await res.json()
@@ -28,7 +28,7 @@ const sendGet = async (url) => {
         },
     });
 
-    return setData(res);
+    return await setData(res);
 }
 
 // Default method to send a GET request
@@ -42,7 +42,7 @@ const sendPost = async (url, data) => {
       }
     })
 
-    return setData(res);
+    return await setData(res);
 }
 
 module.exports = {
