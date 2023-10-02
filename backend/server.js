@@ -6,8 +6,7 @@ const express = require('express');
 const nodemail = require("nodemailer");
 const PORT = process.env.PORT || 3001;
 const app = express();
-const db = require('./config/connection');
-app.use(express.json());
+const sequelize = require("./config/connection");
 
 // Author: Stephen Souther
 const mailer = nodemail.createTransport({
@@ -19,6 +18,8 @@ const mailer = nodemail.createTransport({
 		pass: process.env.EMAIL_PASS
 	}
 });
+
+app.use(express.json());
 
 // Author: Stephen Souther
 mailer.verify(function(error, success) {
@@ -59,15 +60,14 @@ app.post("/api/email", (req, res) => {
 	}
 })
 
-app.use(require('./routes'));
-
-// Author: Send static requests to build folder
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use('/api', require('./routes'));
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
 // All other GET requests not handled before will return to our React app for frontend routing
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
-app.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
+
+sequelize.sync({ force: false }).then(() => {
+	app.listen(PORT, () => console.log('Now listening'));
 });
