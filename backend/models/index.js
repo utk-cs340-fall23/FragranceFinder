@@ -1,39 +1,28 @@
 // import the models
 const User = require('./User');
+const Fragrance = require('./Fragrance');
+const FragranceListing = require('./FragranceListing');
+const UserFragrance = require('./UserFragrance');
 
-// // create associations
-// User.belongsToMany(Movie, {
-//     through: Watchlist,
-//     as: 'watchlisted_movies',
-//     foreignKey: 'user_id',
-//     onDelete: 'SET NULL'
-// });
+// create associations
+User.belongsToMany(Fragrance, {
+    through: UserFragrance,
+    as: 'watchlisted_fragrances',
+    foreignKey: 'user_id',
+    onDelete: 'SET NULL'
+});
 
-// Movie.belongsToMany(User, {
-//     through: Watchlist,
-//     as: 'watchlisted_movies',
-//     foreignKey: 'movie_id',
-//     onDelete: 'SET NULL'
-// });
+Fragrance.belongsToMany(User, {
+    through: UserFragrance,
+    as: 'watchlisted_fragrances',
+    foreignKey: 'fragrance_id',
+    onDelete: 'SET NULL'
+});
 
-// Review.belongsTo(User, {
-//     foreignKey: 'user_id',
-//     onDelete: 'SET NULL'
-// });
-
-// Review.belongsTo(Movie, {
-// foreignKey: 'movie_id',
-// onDelete: 'SET NULL'
-// });
-
-// User.hasMany(Review, {
-// foreignKey: 'user_id',
-// onDelete: 'SET NULL'
-// });
-
-// Movie.hasMany(Review, {
-// foreignKey: 'movie_id'
-// });
+FragranceListing.belongsTo(Fragrance, {
+    foreignKey: 'fragranceId',
+    onDelete: 'SET NULL'
+});
 
 
-module.exports = { User };
+module.exports = { User, Fragrance, FragranceListing, UserFragrance };
