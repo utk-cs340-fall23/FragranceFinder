@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { User } = require('../models');
-const Fragrance = require('../models/Fragrance');
 const { signToken, authMiddleware } = require('../utils/auth');
 
 
@@ -20,12 +19,12 @@ router.post('/', async (req, res) => {
     }
     catch (err) {
         if (err.original?.code == 'ER_DUP_ENTRY') {
-			console.log(err)
             res.status(400).json({
                 message: "An account already exists with that email!"
             });
             return;
         }
+        console.log(err);
         res.status(500).json({
             message: "An error occurred. Please try again."
         });
