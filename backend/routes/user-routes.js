@@ -19,7 +19,8 @@ router.post('/', async (req, res) => {
         });
     }
     catch (err) {
-        if (err.original.code == 'ER_DUP_ENTRY') {
+        if (err.original?.code == 'ER_DUP_ENTRY') {
+			console.log(err)
             res.status(400).json({
                 message: "An account already exists with that email!"
             });
