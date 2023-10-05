@@ -1,13 +1,14 @@
 const router = require('express').Router();
 const mailer = require('../config/mail');
+const {authMiddleware} = require('../utils/auth');
 
-router.post("/", (req, res) => {
+router.post("/", authMiddleware, (req, res) => {
 	const {email, title, body} = req.body;
 
-	if(!email || !title || !body){
+	if (!email || !title || !body){
 		return res.status(400).json({ error: "Email is required." });
 	}
-	else{
+	else {
 
 		const mail = {
 			from: process.env.EMAIL_USER,

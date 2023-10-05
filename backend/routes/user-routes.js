@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { User } = require('../models');
+const Fragrance = require('../models/Fragrance');
 const { signToken, authMiddleware } = require('../utils/auth');
 
 

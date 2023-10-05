@@ -11,12 +11,19 @@ const sequelize = require("./config/db");
 const spawn = require("child_process").spawn;
 
 function test(){
-	const pyproc = spawn("python", ["test.py"]);
+	try {
+		const pyproc = spawn("python", ["test.py"]);
 
-	pyproc.stdout.on("data", (data) => {
-		console.log(data.toString());
-	});
+		pyproc.stdout.on("data", (data) => {
+			console.log(data.toString());
+		});
+	}
+	catch (err) {
+		return;
+	}
 }
+
+test();
 
 setInterval(test, 3600000); // 1 hour
 
