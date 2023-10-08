@@ -14,7 +14,8 @@ with sync_playwright() as p:
     for i in ul_list:
         #parse li data here
         text = i.find("h3", class_="s__7GeSCC oJwdGxV---typography-11-runningText oJwdGxV---priority-7-primary syHtuvM FzO_a9")
-        print(text.decode_contents())
+        price = i.find("span", class_="cfpn1d")
+        print(text.decode_contents(), " ", price.decode_contents())
         
 # Extract 'data-currency-usd' attribute value
     #data_currency_usd = money_span.get('data-currency-usd')
