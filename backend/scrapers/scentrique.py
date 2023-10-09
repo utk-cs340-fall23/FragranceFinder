@@ -13,7 +13,7 @@ with sync_playwright() as p:
     ul_list = soup.find('ul', class_='S4WbK_ uQ5Uah c2Zj9x H1ux6p')
 
     for i in ul_list:
-        linksToScrape.append(i.find("a", class_="oQUvqL x5qIv3")["href"])
-    
-    
-    print(linksToScrape)
+        #linksToScrape.append(i.find("a", class_="oQUvqL x5qIv3")["href"])
+        subbrowser = p.chromium.launch(headless=False)
+        subpage = subbrowser.new_page()
+        subpage.goto(i.find("a", class_="oQUvqL x5qIv3")["href"])
