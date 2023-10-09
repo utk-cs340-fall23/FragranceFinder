@@ -6,21 +6,7 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const sequelize = require("./config/db");
-
-// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
-const spawn = require("child_process").spawn;
-
-function test(){
-	const pyproc = spawn("python", ["scrapers/scraperfaker.py"]);
-
-	pyproc.stdout.on("data", (data) => {
-		console.log(JSON.parse(data.toString()));
-	});
-}
-
-test();
-
-setInterval(test, 30000); // 1 hour
+const { Fragrance } = require("./models");
 
 app.use(express.json());
 
@@ -35,4 +21,30 @@ app.get('*', (req, res) => {
 
 sequelize.sync({ force: false }).then(() => {
 	app.listen(PORT, () => console.log('Now listening'));
+	
+	
+	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
+	const spawn = require("child_process").spawn;
+	
+	function scrapeWeb(){
+		const pyproc = spawn("python", ["scrapers/scraperfaker.py"]);
+
+		pyproc.stdout.on("data", (data) => {
+			ret = JSON.parse(data.toString());
+			
+			console.log(ret);
+			
+			//Check db records here
+			
+			//Fragrance.findAll().then(res => {
+			//	console.log(res[0].make);
+			//}).catch((error) => {
+			//	console.error("Cannot get data: ", error);
+			//});
+			
+		});
+	}
+	
+	setInterval(scrapeWeb, 5000);
+	
 });
