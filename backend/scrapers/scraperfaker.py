@@ -7,7 +7,7 @@ test = {
     "Discount": 50,
     "Quantity": 5,
     "Volume": 90,
-    "Reviews": "5/5",
+    "Reviews": 5,
     "Site": "example.com"
 }
 

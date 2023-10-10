@@ -6,7 +6,7 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const sequelize = require("./config/db");
-const { Fragrance } = require("./models");
+const { Fragrance, FragranceListing } = require("./models");
 
 app.use(express.json());
 
@@ -50,7 +50,17 @@ sequelize.sync({ force: false }).then(() => {
 				}
 				else{
 					console.log(res);
-					//check data for changes
+					
+					FragranceListing.findOne({
+						where:{
+							id: res.id,
+							site: ret.Site
+						}
+					}).then(res1 => {
+						console.log(res1);
+					}).catch((error) => {
+						console.error("Cannot get data: ", error);
+					});
 				}
 				
 			}).catch((error) => {
