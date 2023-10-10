@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const sequelize = require("./config/db");
 const { Fragrance, FragranceListing } = require("./models");
+const mailer = require('./config/mail');
 
 app.use(express.json());
 
@@ -108,6 +109,22 @@ sequelize.sync({ force: false }).then(() => {
 						
 						if(changes != 0){
 							console.log("\n\n"+subject+"\n"+body+"\n\n");
+							
+							const mail = {
+								from: process.env.EMAIL_USER,
+								to: process.env.EMAIL_USER,
+								subject: subject,
+								text: body
+							}
+							
+							mailer.sendMail(mail, function(error, info){
+								if(error){
+									console.log("An error has occurred while sending the email.\n" + error);
+								}
+								else{
+									console.log("Email sent: " + info.response);
+								}
+							});
 						}
 						
 					}).catch((error) => {
@@ -122,6 +139,7 @@ sequelize.sync({ force: false }).then(() => {
 		});
 	}
 	
-	setInterval(scrapeWeb, 5000);
+	scrapeWeb();
+	setInterval(scrapeWeb, 3600000);
 	
 });
