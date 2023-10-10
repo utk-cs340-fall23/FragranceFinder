@@ -32,15 +32,30 @@ sequelize.sync({ force: false }).then(() => {
 		pyproc.stdout.on("data", (data) => {
 			ret = JSON.parse(data.toString());
 			
-			console.log(ret);
+			//console.log(ret);
 			
 			//Check db records here
 			
-			//Fragrance.findAll().then(res => {
-			//	console.log(res[0].make);
-			//}).catch((error) => {
-			//	console.error("Cannot get data: ", error);
-			//});
+			Fragrance.findOne({
+				where:{
+					make: ret.Make,
+					model: ret.Model,
+					series: ret.Series
+				}
+			}).then(res => {
+				
+				if(res == null){
+					console.log("No data entry found");
+					//insert data where not found
+				}
+				else{
+					console.log(res);
+					//check data for changes
+				}
+				
+			}).catch((error) => {
+				console.error("Cannot get data: ", error);
+			});
 			
 		});
 	}
