@@ -33,9 +33,7 @@ sequelize.sync({ force: false }).then(() => {
 		pyproc.stdout.on("data", (data) => {
 			ret = JSON.parse(data.toString());
 			
-			//console.log(ret);
-			
-			//Check db records here
+			// IMPORTANT: The record in scrapers/scraperfaker.py must already exist in the database for the demo to work.
 			
 			Fragrance.findOne({
 				where:{
