@@ -49,32 +49,62 @@ sequelize.sync({ force: false }).then(() => {
 					//insert data where not found
 				}
 				else{
-					//console.log(res);
-					
 					FragranceListing.findOne({
 						where:{
 							id: res.id,
 							site: ret.Site
 						}
 					}).then(res1 => {
-						//console.log(res1);
+						changes = 0;
+						subject = "";
+						body = "";
 						
-						if(res1.price != ret.Price){
-							//send price alert
-							console.log("Price change");
+						if(res1.price != ret.Price) changes |= 1;
+						if(res1.discount == 0 && ret.Discount > 0) changes |= 2;
+						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)) changes |= 4;
+						
+						if(changes == 7){
+							//all conditions present
+							console.log("\nAll change\n");
+							subject = "Stock, discount, and price notification for an item on your watch list";
+							body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
 						}
-						
-						if(res1.discount == 0 && ret.Discount > 0){
-							// send discount alert
-							console.log("Discount change");
+						else if(changes == 3 || changes == 5 || changes == 6){
+							//two conditions present
+							if(changes == 3){
+								console.log("\nDiscount and price change\n");
+								subject = "Discount and price notification for an item on your watch list";
+								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price and discount change";
+							}
+							else if(changes == 5){
+								console.log("\nStock and price change\n");
+								subject = "Stock and price notification for an item on your watch list";
+								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price and stock change";
+							}
+							else if(changes == 6){
+								console.log("\nStock and discount change\n");
+								subject = "Stock and discount notification for an item on your watch list";
+								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a discount and stock change";
+							}
 						}
-						
-						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)){
-							//send stock notification
-							console.log("Stock change");
+						else if(changes == 1 || changes == 2 || changes == 4){
+							//one condition present
+							if(changes == 1){
+								console.log("\nPrice change\n");
+								subject = "Price notification for an item on your watch list";
+								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price change";
+							}
+							else if(changes == 2){
+								console.log("\nDiscount change\n");
+								subject = "Discount notification for an item on your watch list";
+								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a discount change";
+							}
+							else if(changes == 4){
+								console.log("\nStock change\n");
+								subject = "Stock notification for an item on your watch list";
+								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a stock change";
+							}
 						}
-						
-						
 						
 					}).catch((error) => {
 						console.error("Cannot get data: ", error);
