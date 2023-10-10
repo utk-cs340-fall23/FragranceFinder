@@ -67,24 +67,24 @@ sequelize.sync({ force: false }).then(() => {
 							//all conditions present
 							console.log("\nAll change\n");
 							subject = "Stock, discount, and price notification for an item on your watch list";
-							body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
+							body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
 						}
 						else if(changes == 3 || changes == 5 || changes == 6){
 							//two conditions present
 							if(changes == 3){
 								console.log("\nDiscount and price change\n");
 								subject = "Discount and price notification for an item on your watch list";
-								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price and discount change";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and discount change";
 							}
 							else if(changes == 5){
 								console.log("\nStock and price change\n");
 								subject = "Stock and price notification for an item on your watch list";
-								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price and stock change";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and stock change";
 							}
 							else if(changes == 6){
 								console.log("\nStock and discount change\n");
 								subject = "Stock and discount notification for an item on your watch list";
-								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a discount and stock change";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount and stock change";
 							}
 						}
 						else if(changes == 1 || changes == 2 || changes == 4){
@@ -92,18 +92,22 @@ sequelize.sync({ force: false }).then(() => {
 							if(changes == 1){
 								console.log("\nPrice change\n");
 								subject = "Price notification for an item on your watch list";
-								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a price change";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price change";
 							}
 							else if(changes == 2){
 								console.log("\nDiscount change\n");
 								subject = "Discount notification for an item on your watch list";
-								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a discount change";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount change";
 							}
 							else if(changes == 4){
 								console.log("\nStock change\n");
 								subject = "Stock notification for an item on your watch list";
-								body = "Hello, the item '"+res1.series+" "+res1.model+"' from the website '"+res1.site+"' has had a stock change";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a stock change";
 							}
+						}
+						
+						if(changes != 0){
+							console.log("\n\n"+subject+"\n"+body+"\n\n");
 						}
 						
 					}).catch((error) => {
