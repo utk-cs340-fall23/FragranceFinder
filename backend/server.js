@@ -49,7 +49,7 @@ sequelize.sync({ force: false }).then(() => {
 					//insert data where not found
 				}
 				else{
-					console.log(res);
+					//console.log(res);
 					
 					FragranceListing.findOne({
 						where:{
@@ -57,7 +57,25 @@ sequelize.sync({ force: false }).then(() => {
 							site: ret.Site
 						}
 					}).then(res1 => {
-						console.log(res1);
+						//console.log(res1);
+						
+						if(res1.price != ret.Price){
+							//send price alert
+							console.log("Price change");
+						}
+						
+						if(res1.discount == 0 && ret.Discount > 0){
+							// send discount alert
+							console.log("Discount change");
+						}
+						
+						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)){
+							//send stock notification
+							console.log("Stock change");
+						}
+						
+						
+						
 					}).catch((error) => {
 						console.error("Cannot get data: ", error);
 					});
