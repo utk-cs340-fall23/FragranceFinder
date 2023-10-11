@@ -4,13 +4,14 @@ Name: Lakelon Bailey:
 GitHub username: LakelonBailey or OutliersAdvantage
 Project: Fragrance Finder
 
+## IMPORTANT NOTE
+I realized that all of the commits I made originally to this project were made locally under OutliersAdvantage. This is a GitHub account I have for one of my jobs. That is why all of the commits in my commits.txt file will say OutliersAdvantage as the username. After this sprint, all commits will be under LakelonBailey, which is my personal GitHub username.
+
 ## What you planned to do:
 * Complete login page skeleton
 * Complete signup page skeleton
 * Complete authentication/authorization flow and middleware
 * Establish baseline database models
-
-
 
 # What you did not do:
 * N/A
