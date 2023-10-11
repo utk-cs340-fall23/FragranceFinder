@@ -1,7 +1,5 @@
 # Sprint 1
-William Duff
-Shm00py
-Fragrance Finder
+William Duff, Shm00py, Fragrance Finder
 
 ### What you planned to do
 - Scrape Men's fragrance data (brand, title, size, price, and availability) on giftexpress.com
