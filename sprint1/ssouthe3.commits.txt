@@ -103,61 +103,61 @@ ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 134) 			});
 039c3927 (ssouther          2023-10-10 15:38:20 -0400 139) 	scrapeWeb();
 039c3927 (ssouther          2023-10-10 15:38:20 -0400 140) 	setInterval(scrapeWeb, 3600000);
 30fbf996 (ssouther          2023-10-09 13:07:34 -0400 142) });
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	1) import json
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	2) test = {
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	3)     "Make": "TestMake",
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	4)     "Model": "TestModel",
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	5)     "Series": "TestSeries",
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	6)     "Price": 150.99,
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	7)     "Discount": 50,
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	8)     "Quantity": 5,
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  	9)     "Volume": 90,
-6a256bd6 (ssouther 			2023-10-10 11:06:46 -0400  10)     "Reviews": 5,
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  11)     "Site": "example.com"
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  12) }
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  13) 
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  14) jsonTest = json.dumps(test)
-679c88cc (ssouther 			2023-10-08 15:53:00 -0400  15) print(jsonTest)
-f123a627 (ssouther 			2023-10-09 15:15:11 -0400   1) import pandas as pd
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400   2) from playwright.sync_api import sync_playwright
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400   3) from bs4 import BeautifulSoup
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400   4) 
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400   5) with sync_playwright() as p:
-176ef5e9 (ssouther 			2023-10-09 15:31:48 -0400   6)     browser = p.chromium.launch(headless=True)
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400   7)     page = browser.new_page()
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400   8)     page.goto('https://www.scentrique.com/fragrances')
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400   9)     html = page.inner_html('#TPASection_jqwvt965')
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400  10)     soup = BeautifulSoup(html, 'html.parser')
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400  11)     ul_list = soup.find('ul', class_='S4WbK_ uQ5Uah c2Zj9x H1ux6p')
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400  12) 
-c1564233 (ssouther 			2023-10-08 13:56:20 -0400  13)     for i in ul_list:
-f123a627 (ssouther 			2023-10-09 15:15:11 -0400  14)         page.goto(i.find("a", class_="oQUvqL x5qIv3")["href"])
-f123a627 (ssouther 			2023-10-09 15:15:11 -0400  15)         html = page.inner_html('#TPAMultiSection_jqwvt9ch')
-f123a627 (ssouther 			2023-10-09 15:15:11 -0400  16)         soup = BeautifulSoup(html, 'html.parser')
-f123a627 (ssouther 			2023-10-09 15:15:11 -0400  17)         name = soup.find('h1', class_='_2qrJF')
-f123a627 (ssouther 			2023-10-09 15:15:11 -0400  18)         print(name.decode_contents())
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   1) const nodemail = require("nodemailer");
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   2) 
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   3) const mailer = nodemail.createTransport({
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   4) 	host: process.env.EMAIL_HOST,
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   5) 	port: process.env.EMAIL_PORT,
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   6) 	secure: process.env.EMAIL_SECURE,
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   7) 	auth: {
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   8) 		user: process.env.EMAIL_USER,
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400   9) 		pass: process.env.EMAIL_PASS
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  10) 	}
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  11) });
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  12) 
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  13) mailer.verify(function(error, success) {
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  14) 	if(error){
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  15) 		console.log("Failed to connect to mail host");
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  16) 	}
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  17) 	else{
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  18) 		console.log("Mail host connected");
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  19) 	}
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  20) });
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  21) 
-46025cd6 (ssouther 			2023-09-28 15:03:36 -0400  22) module.exports = mailer;
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	1) import json
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	2) test = {
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	3)     "Make": "TestMake",
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	4)     "Model": "TestModel",
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	5)     "Series": "TestSeries",
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	6)     "Price": 150.99,
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	7)     "Discount": 50,
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	8)     "Quantity": 5,
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	9)     "Volume": 90,
+6a256bd6 (ssouther 			    2023-10-10 11:06:46 -0400  10)     "Reviews": 5,
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  11)     "Site": "example.com"
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  12) }
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  13) 
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  14) jsonTest = json.dumps(test)
+679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  15) print(jsonTest)
+f123a627 (ssouther 			    2023-10-09 15:15:11 -0400   1) import pandas as pd
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   2) from playwright.sync_api import sync_playwright
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   3) from bs4 import BeautifulSoup
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   4) 
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   5) with sync_playwright() as p:
+176ef5e9 (ssouther 			    2023-10-09 15:31:48 -0400   6)     browser = p.chromium.launch(headless=True)
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   7)     page = browser.new_page()
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   8)     page.goto('https://www.scentrique.com/fragrances')
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   9)     html = page.inner_html('#TPASection_jqwvt965')
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  10)     soup = BeautifulSoup(html, 'html.parser')
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  11)     ul_list = soup.find('ul', class_='S4WbK_ uQ5Uah c2Zj9x H1ux6p')
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  12) 
+c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  13)     for i in ul_list:
+f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  14)         page.goto(i.find("a", class_="oQUvqL x5qIv3")["href"])
+f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  15)         html = page.inner_html('#TPAMultiSection_jqwvt9ch')
+f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  16)         soup = BeautifulSoup(html, 'html.parser')
+f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  17)         name = soup.find('h1', class_='_2qrJF')
+f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  18)         print(name.decode_contents())
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   1) const nodemail = require("nodemailer");
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   2) 
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   3) const mailer = nodemail.createTransport({
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   4) 	host: process.env.EMAIL_HOST,
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   5) 	port: process.env.EMAIL_PORT,
+46025cd6 (ssouther 		    	2023-09-28 15:03:36 -0400   6) 	secure: process.env.EMAIL_SECURE,
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   7) 	auth: {
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   8) 		user: process.env.EMAIL_USER,
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   9) 		pass: process.env.EMAIL_PASS
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  10) 	}
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  11) });
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  12) 
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  13) mailer.verify(function(error, success) {
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  14) 	if(error){
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  15) 		console.log("Failed to connect to mail host");
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  16) 	}
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  17) 	else{
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  18) 		console.log("Mail host connected");
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  19) 	}
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  20) });
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  21) 
+46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  22) module.exports = mailer;
 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   1) const router = require('express').Router();
 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   2) const mailer = require('../config/mail');
 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   4) 
@@ -237,6 +237,6 @@ dbfeddce (ssouther          2023-09-21 11:07:07 -0400  35)         </div>
 dbfeddce (ssouther          2023-09-21 11:07:07 -0400  36)     );
 dbfeddce (ssouther          2023-09-21 11:07:07 -0400  37) };
 dbfeddce (ssouther          2023-09-21 11:07:07 -0400  39) export default Email;
-85226006 (ssouther 			2023-09-21 15:27:42 -0400   1) div.body{
-85226006 (ssouther 			2023-09-21 15:27:42 -0400   2) 	text-align: center;
-85226006 (ssouther 			2023-09-21 15:27:42 -0400   3) }
+85226006 (ssouther 			    2023-09-21 15:27:42 -0400   1) div.body{
+85226006 (ssouther 			    2023-09-21 15:27:42 -0400   2) 	text-align: center;
+85226006 (ssouther 			    2023-09-21 15:27:42 -0400   3) }
