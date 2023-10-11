@@ -4,7 +4,7 @@ GitHub username: LakelonBailey or OutliersAdvantage
 Project: Fragrance Finder
 
 ## IMPORTANT NOTE
-I realized that all of the commits I made originally to this project were made locally under OutliersAdvantage. This is a GitHub account I have for one of my jobs. That is why all of the commits in my commits.txt file will say OutliersAdvantage as the username. After this sprint, all commits will be under LakelonBailey, which is my personal GitHub username. This doesn't apply to the remote repo, as my SSH key is tied to the correct account. It is only going to cause my commits.txt to look weird since the OutliersAdvantage account is only labeled as the author on my local machine.
+I realized that all of the local commits I made originally to this project were made locally under OutliersAdvantage. This is a GitHub account I have for one of my jobs. That is why all of the commits in my commits.txt file will say OutliersAdvantage as the username. After this sprint, all commits will be under LakelonBailey, which is my personal GitHub username. This doesn't apply to the remote repo, as my SSH key is tied to the correct account. It is only going to cause my commits.txt to look weird since the OutliersAdvantage account is only labeled as the author on my local machine.
 
 ## What you planned to do:
 * Complete login page skeleton
