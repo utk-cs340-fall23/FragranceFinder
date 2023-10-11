@@ -1,4 +1,50 @@
-frontend/package.json
+./README.md
+46b46502 (OutliersAdvantage 2023-09-18 09:23:16 -0400  1) # Fragrance Finder
+46b46502 (OutliersAdvantage 2023-09-18 09:23:16 -0400  2) ## Setup
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  3) ### Install Node
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  4) 1. Install the latest version of node at [NodeJs.org](https://nodejs.org)
+a05cdc7b (OutliersAdvantage 2023-09-20 11:57:29 -0400  5) ### Install MySQL
+a05cdc7b (OutliersAdvantage 2023-09-20 11:57:29 -0400  6) 1. Install the latest version of MySQL at [MySQL.com](https://www.mysql.com/downloads/)
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  7) ### Clone Repo
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  8) 2. Clone repository found at [github.com/utk-cs340-fall23/FragranceFinder](https://github.com/utk-cs340-fall23/FragranceFinder)
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  9) ### Install Dependencies
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400 10) 3. Open 2 separate terminals. One for the backend folder of the project, and one for the frontend folder of the project.
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400 11) 4. In each folder, run `npm i` to install respective dependencies. The backend and frontend both have their own dependenices. Information on these dependencies is found in their associated `package.json` files.
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400 12) ### Start servers
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 13) 5. Starting backend: run `npm run start` in the `backend` directory.
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 14) 6. Starting frontend: run `npm run start` in the `frontend` directory.
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 15) ### Using Web Scrapers
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 16) 7. Our web scraping scripts are written in Python. They require usage of a Python virtual environment. In order to create this, move to the `backend` directory and run `python3 -m venv venv`. This will create a virtual environment called `venv`. To activate the environment, run `source venv/bin/activate`. Finally, in order to install Python dependenices, run `pip install -r requirements.txt`.
+
+./package.json
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  1) {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  2)   "name": "fragrance-finder",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  3)   "version": "1.0.0",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  4)   "description": "1. Install the latest version of node at [NodeJs.org](https://nodejs.org) ### Install MySQL 1. Install the latest version of MySQL at [MySQL.com](https://www.mysql.com/downloads/) ### Clone Repo 2. Clone repository found at [github.com/utk-cs340-fall23/FragranceFinder](https://github.com/utk-cs340-fall23/FragranceFinder) ### Install Dependencies 3. Open 2 separate terminals. One for the backend folder of the project, and one for the frontend folder of the project. 4. In each folder, run `npm i` to install respective dependencies. The backend and frontend both have their own dependenices. Information on these dependencies is found in their associated `package.json` files. ### Load DB Schema 5. Run `npm run load-db-local` in the backend folder to load the database schema into MySQL `fragrance_finder_db` database. ### Start servers 6. In the backend folder, run `npm run start` 7. Now, in the frontend folder, run `npm run start`. This should open a browser window at http://localhost:3000. This is the location of the frontend. If the frontend says \"TEST API ENDPOINT SUCCESS\", this means your frontend is correctly interacting with the backend API.",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  5)   "main": "index.js",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  6)   "scripts": {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  7)     "test": "echo \"Error: no test specified\" && exit 1",
+e7e943c3 (OutliersAdvantage 2023-09-22 15:04:53 -0400  8)     "start:frontend": "cd frontend; npm run start;",
+e7e943c3 (OutliersAdvantage 2023-09-22 15:04:53 -0400  9)     "start:backend": "cd backend; npm run start;",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 10)     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 11)   },
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 12)   "repository": {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 13)     "type": "git",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 14)     "url": "git+https://github.com/utk-cs340-fall23/FragranceFinder.git"
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 15)   },
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 16)   "author": "",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 17)   "license": "ISC",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 18)   "bugs": {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 19)     "url": "https://github.com/utk-cs340-fall23/FragranceFinder/issues"
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 20)   },
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 21)   "homepage": "https://github.com/utk-cs340-fall23/FragranceFinder#readme",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 22)   "devDependencies": {
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 23)     "concurrently": "^8.2.1",
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 24)     "nodemon": "^3.0.1"
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 25)   }
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 26) }
+
+./frontend/package.json
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) {
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   "name": "fragrance-finder-ui",
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)   "version": "0.1.0",
@@ -40,7 +86,7 @@ frontend/package.json
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 40)   }
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 41) }
 
-frontend/src/reportWebVitals.js
+./frontend/src/reportWebVitals.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) const reportWebVitals = onPerfEntry => {
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   if (onPerfEntry && onPerfEntry instanceof Function) {
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)     import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
@@ -55,7 +101,7 @@ frontend/src/reportWebVitals.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 12) 
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 13) export default reportWebVitals;
 
-frontend/src/setupProxy.js
+./frontend/src/setupProxy.js
 74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  1) const { createProxyMiddleware } = require('http-proxy-middleware');
 74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  2) 
 74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  3) module.exports = function(app) {
@@ -68,7 +114,7 @@ frontend/src/setupProxy.js
 74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 10)   );
 74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 11) };
 
-frontend/src/App.css
+./frontend/src/App.css
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  1) @keyframes rainbow {
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  2)     0% {
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  3)         color: red;
@@ -109,7 +155,7 @@ frontend/src/App.css
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400 38)     animation: 5s rainbow linear infinite;
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400 39) }
 
-frontend/src/index.js
+./frontend/src/index.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) import React from 'react';
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2) import ReactDOM from 'react-dom/client';
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3) import './index.css';
@@ -128,7 +174,7 @@ frontend/src/index.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 16) // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 17) reportWebVitals();
 
-frontend/src/index.css
+./frontend/src/index.css
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) body {
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   margin: 0;
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -143,7 +189,7 @@ frontend/src/index.css
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 12)     monospace;
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 13) }
 
-frontend/src/App.test.js
+./frontend/src/App.test.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 1) import { render, screen } from '@testing-library/react';
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 2) import App from './App';
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 3) 
@@ -153,14 +199,14 @@ frontend/src/App.test.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 7)   expect(linkElement).toBeInTheDocument();
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 8) });
 
-frontend/src/setupTests.js
+./frontend/src/setupTests.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 1) // jest-dom adds custom jest matchers for asserting on DOM nodes.
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 2) // allows you to do things like:
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 3) // expect(element).toHaveTextContent(/react/i)
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 4) // learn more: https://github.com/testing-library/jest-dom
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 5) import '@testing-library/jest-dom';
 
-frontend/src/App.js
+./frontend/src/App.js
 17ccb666 (OutliersAdvantage 2023-09-20 13:49:11 -0400  2) 
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) import Login from './pages/Login';
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) import Signup from './pages/Signup';
@@ -174,7 +220,7 @@ frontend/src/App.js
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 28) 
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 29) export default App;
 
-frontend/src/utils/auth.js
+./frontend/src/utils/auth.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import decode from 'jwt-decode';
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) 
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) class AuthService {
@@ -227,7 +273,7 @@ frontend/src/utils/auth.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 50) 
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 51) export default instance;
 
-frontend/src/utils/requests.js
+./frontend/src/utils/requests.js
 47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  1) import AuthService from '../utils/auth';
 47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  2) 
 47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  3) 
@@ -275,7 +321,7 @@ frontend/src/utils/requests.js
 53690dff (OutliersAdvantage 2023-10-01 21:50:41 -0400 45)     return await setData(res);
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 46) }
 
-frontend/src/pages/index.js
+./frontend/src/pages/index.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import React, { useEffect, useState } from 'react';
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendGet } from '../utils/requests';
@@ -307,7 +353,7 @@ frontend/src/pages/index.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33)             )}
 9b64e8c8 (OutliersAdvantage 2023-09-21 11:23:01 -0400 37)
 
-frontend/src/pages/Signup.js
+./frontend/src/pages/Signup.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
@@ -377,7 +423,7 @@ frontend/src/pages/Signup.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 67) 
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 68) export default Signup;
 
-frontend/src/pages/Login.js
+./frontend/src/pages/Login.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
@@ -443,7 +489,7 @@ frontend/src/pages/Login.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 63) 
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 64) export default Login;
 
-frontend/src/pages/CSS/crudexample.css
+./frontend/src/pages/CSS/crudexample.css
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  1) @keyframes rainbow {
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  2)     0% {
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  3)         color: red;
@@ -484,7 +530,7 @@ frontend/src/pages/CSS/crudexample.css
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400 38)     animation: 5s rainbow linear infinite;
 73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400 39) }
 
-frontend/src/pages/demos/CrudExample.js
+./frontend/src/pages/demos/CrudExample.js
 9b64e8c8 frontend/src/pages/CrudExample.js       (OutliersAdvantage 2023-09-21 11:23:01 -0400   4) function CrudExample() {
 bea87e08 frontend/src/pages/CrudExample.js       (OutliersAdvantage 2023-09-22 15:02:19 -0400   9)     id: null,
 9b64e8c8 frontend/src/pages/CrudExample.js       (OutliersAdvantage 2023-09-21 11:23:01 -0400  37)   const handleFormSubmit = async (event) => {
@@ -554,13 +600,18 @@ bea87e08 frontend/src/pages/CrudExample.js       (OutliersAdvantage 2023-09-22 1
 bea87e08 frontend/src/pages/CrudExample.js       (OutliersAdvantage 2023-09-22 15:02:19 -0400 134)               </span>
 9b64e8c8 frontend/src/pages/CrudExample.js       (OutliersAdvantage 2023-09-21 11:23:01 -0400 143) export default CrudExample;
 
-frontend/src/pages/demos/email.js
+./frontend/src/pages/demos/email.js
 8dd1f3e6 frontend/src/pages/demos/email.js (OutliersAdvantage 2023-10-01 22:13:02 -0400  5) import { sendPost } from "../../utils/requests";
 8dd1f3e6 frontend/src/pages/demos/email.js (OutliersAdvantage 2023-10-01 22:13:02 -0400 13) 
 8dd1f3e6 frontend/src/pages/demos/email.js (OutliersAdvantage 2023-10-01 22:13:02 -0400 20) 
 8dd1f3e6 frontend/src/pages/demos/email.js (OutliersAdvantage 2023-10-01 22:13:02 -0400 23) 		await sendPost("/api/email/", form);
 8dd1f3e6 frontend/src/pages/demos/email.js (OutliersAdvantage 2023-10-01 22:13:02 -0400 25) 
-8dd1f3e6 frontend/src/pages/demos/email.js (OutliersAdvantage 2023-10-01 22:13:02 -0400 38)backend/requirements.txt
+8dd1f3e6 frontend/src/pages/demos/email.js (OutliersAdvantage 2023-10-01 22:13:02 -0400 38)
+
+./sprint1/lbaile31.md
+04b51eae (LakelonBailey 2023-10-11 17:48:20 -0400  4) GitHub username: LakelonBailey or OutliersAdvantage
+
+./backend/requirements.txt
 70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 1) beautifulsoup4==4.12.2
 70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 2) greenlet==2.0.2
 70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 3) playwright==1.38.0
@@ -568,7 +619,7 @@ frontend/src/pages/demos/email.js
 70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 5) soupsieve==2.5
 70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 6) typing-extensions==4.8.0
 
-backend/server.js
+./backend/server.js
 8facaea9 (OutliersAdvantage 2023-09-20 13:15:49 -0400   1) // Load environment variables
 8facaea9 (OutliersAdvantage 2023-09-20 13:15:49 -0400   2) require('dotenv').config();
 8facaea9 (OutliersAdvantage 2023-09-20 13:15:49 -0400   3) 
@@ -607,7 +658,7 @@ d8e62e0a (OutliersAdvantage 2023-10-10 22:00:51 -0400  31) 		const pyproc = spaw
 70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 138) 
 70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 141)
 
-backend/package.json
+./backend/package.json
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) {
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   "name": "fragrance-finder-api",
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)   "version": "1.0.0",
@@ -633,7 +684,7 @@ bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 23)     "nodemon": "^3.0.1
 74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 24)   }
 ^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 25) }
 
-backend/config/db.js
+./backend/config/db.js
 0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const Sequelize = require('sequelize');
 b66d0afe backend/config/connection.js (OutliersAdvantage 2023-09-22 15:21:26 -0400  2) 
 0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) require('dotenv').config();
@@ -647,7 +698,7 @@ b66d0afe backend/config/connection.js (OutliersAdvantage 2023-09-22 15:21:26 -04
 b66d0afe backend/config/connection.js (OutliersAdvantage 2023-09-22 15:21:26 -0400 11) 
 0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 12) module.exports = sequelize;
 
-backend/utils/auth.js
+./backend/utils/auth.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const jwt = require('jsonwebtoken');
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) require('dotenv').config();
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) 
@@ -682,7 +733,7 @@ backend/utils/auth.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32)   }
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33) };
 
-backend/models/Fragrance.js
+./backend/models/Fragrance.js
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  1) const { Model, DataTypes } = require('sequelize');
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  2) const sequelize = require('../config/db');
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) 
@@ -724,7 +775,7 @@ fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 38) );
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 39) 
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 40) module.exports = Fragrance;
 
-backend/models/User.js
+./backend/models/User.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const { Model, DataTypes } = require('sequelize');
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) const bcrypt = require('bcrypt');
 8dd1f3e6 (OutliersAdvantage 2023-10-01 22:13:02 -0400  3) const sequelize = require('../config/db');
@@ -789,7 +840,7 @@ backend/models/User.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 62) 
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 63) module.exports = User;
 
-backend/models/index.js
+./backend/models/index.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) // import the models
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) const User = require('./User');
 809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  3) const Fragrance = require('./Fragrance');
@@ -819,7 +870,7 @@ backend/models/index.js
 809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 27) 
 809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 28) module.exports = { User, Fragrance, FragranceListing, UserFragrance };
 
-backend/models/UserFragrance.js
+./backend/models/UserFragrance.js
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  1) const { Model, DataTypes } = require('sequelize');
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  2) const sequelize = require('../config/db');
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) 
@@ -862,7 +913,7 @@ fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 39) );
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 40) 
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 41) module.exports = UserFragrance;
 
-backend/models/FragranceListing.js
+./backend/models/FragranceListing.js
 fc1e18ae backend/models/FragraceListing.js (OutliersAdvantage 2023-10-05 13:51:01 -0400  1) const { Model, DataTypes } = require('sequelize');
 fc1e18ae backend/models/FragraceListing.js (OutliersAdvantage 2023-10-05 13:51:01 -0400  2) const sequelize = require('../config/db');
 fc1e18ae backend/models/FragraceListing.js (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) 
@@ -917,7 +968,7 @@ fc1e18ae backend/models/FragraceListing.js (OutliersAdvantage 2023-10-05 13:51:0
 fc1e18ae backend/models/FragraceListing.js (OutliersAdvantage 2023-10-05 13:51:01 -0400 52) 
 fc1e18ae backend/models/FragraceListing.js (OutliersAdvantage 2023-10-05 13:51:01 -0400 53) module.exports = FragranceListing;
 
-backend/routes/user-routes.js
+./backend/routes/user-routes.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const router = require('express').Router();
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) const { User } = require('../models');
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) const { signToken, authMiddleware } = require('../utils/auth');
@@ -990,13 +1041,13 @@ abf4187a (OutliersAdvantage 2023-10-05 13:52:05 -0400 27)         console.log(er
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 71) 
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 72) module.exports = router;
 
-backend/routes/mailRoutes.js
+./backend/routes/mailRoutes.js
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) const {authMiddleware} = require('../utils/auth');
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  5) router.post("/", authMiddleware, (req, res) => {
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  8) 	if (!email || !title || !body){
 fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 11) 	else {
 
-backend/routes/index.js
+./backend/routes/index.js
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const userRoutes = require('./user-routes.js');
 da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400  3) const router = require('express').Router();
 da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400  4) 
@@ -1010,7 +1061,7 @@ da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400  8)
 0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12) });
 da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400 13) module.exports = router;
 
-backend/routes/basicCrudRoutes.js
+./backend/routes/basicCrudRoutes.js
 b66d0afe (OutliersAdvantage 2023-09-22 15:21:26 -0400  1) const router = require('express').Router();
 b66d0afe (OutliersAdvantage 2023-09-22 15:21:26 -0400  3) 
 b66d0afe (OutliersAdvantage 2023-09-22 15:21:26 -0400  4) // Author: Lakelon Bailey
