@@ -1,5 +1,5 @@
 # Sprint 1
-Stephen Souther (ssouthe3) FragranceFinder
+Stephen Souther (ssouther) FragranceFinder
 
 ### What you planned to do
 - Enable multipage hosting on the frontend using React-Router
