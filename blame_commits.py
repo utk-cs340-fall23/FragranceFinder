@@ -30,13 +30,13 @@ def recursive_git_blame(directory, username, ignore_dirs=[], ignore_files=[], ig
                 continue
 
             file_path = os.path.join(root, f)
-            unique_files.add(
-                file_path
-                .replace('./', '')
-                .replace('.\\', '')
-            )
             blame_output = git_blame_for_file(file_path, username)
             if blame_output:
+                unique_files.add(
+                    file_path
+                    .replace('./', '')
+                    .replace('.\\', '')
+                )
                 results.append(blame_output)
 
     return ("\n\n".join(results), unique_files)
