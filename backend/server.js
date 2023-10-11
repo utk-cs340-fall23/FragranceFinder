@@ -28,7 +28,7 @@ sequelize.sync({ force: false }).then(() => {
 	const spawn = require("child_process").spawn;
 
 	function scrapeWeb(){
-		const pyproc = spawn("python", ["scrapers/scraperfaker.py"]);
+		const pyproc = spawn("venv/bin/python", ["scrapers/scraperfaker.py"]);
 
 		pyproc.stdout.on("data", (data) => {
 			ret = JSON.parse(data.toString());

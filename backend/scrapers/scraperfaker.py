@@ -12,5 +12,4 @@ test = {
 }
 
 jsonTest = json.dumps(test)
-
 print(jsonTest)
