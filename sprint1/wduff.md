@@ -19,7 +19,6 @@ William Duff, Shm00py, Fragrance Finder
 - [#16](https://github.com/utk-cs340-fall23/FragranceFinder/issues/16) Men's Scraping
 - [#17](https://github.com/utk-cs340-fall23/FragranceFinder/issues/17) Women's Scraping
 - [#19](https://github.com/utk-cs340-fall23/FragranceFinder/issues/19) Formatting Data
-- [#20](https://github.com/utk-cs340-fall23/FragranceFinder/issues/16) Databasing Results
 
 ### Files you worked on
 - giftExpress.py (FragranceFinder/backend/scrapers/giftExpress.py)
