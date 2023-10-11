@@ -2,25 +2,26 @@
 William Duff, Shm00py, Fragrance Finder
 
 ### What you planned to do
-- Scrape Men's fragrance data (brand, title, size, price, and availability) on giftexpress.com
-- Scrape Women's fragrance data (brand, title, size, price, and availability) on giftexpress.com
-- Format the data to fit the uniform style we decided on
-- Begin databasing the data
-(Give a short bulleted list of the items you planned to do for this sprint. Include the github issue number and link to the issue)
+- Scrape Men's fragrance data (brand, title, size, price, and availability) on giftexpress.com [#16](https://github.com/utk-cs340-fall23/FragranceFinder/issues/16)
+- Scrape Women's fragrance data (brand, title, size, price, and availability) on giftexpress.com [#17](https://github.com/utk-cs340-fall23/FragranceFinder/issues/17)
+- Format the data to fit the uniform style we decided on [#19](https://github.com/utk-cs340-fall23/FragranceFinder/issues/19)
+- Begin databasing the data [#20](https://github.com/utk-cs340-fall23/FragranceFinder/issues/20)
 
 ### What you did not do
 - I did not database the scraped information
+- There were a few pieces of information like concentration and gender that we had not initially discussed scraping that I am not scraping yet but would be easy to grab
 
 ### What problems you encountered
 - giftexpress.com had a decent amount of bugs that had to be accounted for i the code, making the coding aspect a little less straight forward
-- Formatting for the scraped data was different for each category of information, so there was a lot of time spent on figuring out what exactly needed to be formatted.
+- Formatting for the scraped data was different for each category of information, so there was a lot of time spent on figuring out what exactly needed to be formatted
 
 ### Issues you worked on
-(List the specific github issues that you worked on with a link to the issue (ex: [#1](https://github.com/utk-cs340-fall22/ClassInfo/issues/1) Sample Issue)
+- [#16](https://github.com/utk-cs340-fall23/FragranceFinder/issues/16) Men's Scraping
+- [#17](https://github.com/utk-cs340-fall23/FragranceFinder/issues/17) Women's Scraping
+- [#19](https://github.com/utk-cs340-fall23/FragranceFinder/issues/19) Formatting Data
 
 ### Files you worked on
-- giftExpress.py
-(Give a bulleted list of the files in your github repo that you worked on. Give the full pathname.)
+- giftExpress.py (FragranceFinder/backend/scrapers/giftExpress.py)
 
 ### What you accomplished
 I accomplished scraping the data for the men's and women's catalogs of products on giftexpress.com. To do this, I had the program open up the
