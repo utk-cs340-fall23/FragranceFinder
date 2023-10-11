@@ -15,7 +15,7 @@
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  15)     mensPrices = []
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  16)     mensStocks = []
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  17)     pageNumbers = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  18)     
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  18)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  19)     page.goto("https://www.giftexpress.com/mens-fragrances.html?p=1")
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  20)     html = page.inner_html('#maincontent')
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  21)     soup = BeautifulSoup(html, 'html.parser')
@@ -24,14 +24,14 @@
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  24)     pageNumbersFind = soup.find_all('span', class_='toolbar-number')
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  25)     for number in pageNumbersFind:
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  26)         pageNumbers.append(number.text)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  27)     
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  27)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  28)     totalFrags = pageNumbers[2]
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  29)     totalPages = int(-(-(int(totalFrags) / 20) // 1))
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  30)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  31)     # Men's fragrances on Gift Express
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  32)     for i in range(1, totalPages + 1):
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  33)         fragPages = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  34)         hrefs = []
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  34)         hrefs = [] 
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  35)         catalogPage = "https://www.giftexpress.com/mens-fragrances.html?p=" + str(i)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  36)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  37)         # Opening the catalog page
@@ -135,7 +135,7 @@
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 135)     womensSizes = []
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 136)     womensPrices = []
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 137)     womensStocks = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 138)     pageNumbers = []  
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 138)     pageNumbers = []
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 139)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 140)     page.goto("https://www.giftexpress.com/womens-fragrances.html?p=1")
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 141)     html = page.inner_html('#maincontent')
@@ -212,160 +212,30 @@
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 212)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 213)                         womensBrands.append(womensBrand)
 3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 214)                         womensTitles.append(womensTitle)
-3f821850 (Shmoopy 2023-10-11
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-~
-Examine: ...skipping...
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  78)                         size = str(sizes[k])
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  79)                         price = soup.find('span', {'class': 'price'}).text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  80)                         stock = str(stocks[k])
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  81)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  82)                         # Formatting the scraped data for uniformity
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  83)                         mensBrand = brand.replace('\n', "").rstrip(" ")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  84)                         position = title.find("by")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  85)                         mensTitle = title[:position - 1]
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  86)                         mensTitle = mensTitle.replace('\n', "")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  87)                         mensSize = size.replace('\n', "").replace("(", "").replace(")", "").replace("\xa0", "")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  88)                         position = mensSize.find('z')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  89)                         mensSize = mensSize[position + 1:]
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  90)                         mensPrice = price.replace('\n', "").rstrip(" ")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  91)                         mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  92)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  93)                         mensBrands.append(mensBrand)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  94)                         mensTitles.append(mensTitle)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  95)                         mensSizes.append(mensSize)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  96)                         mensPrices.append(mensPrice)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  97)                         mensStocks.append(mensStock)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  98)             else:
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400  99)                 brand = soup.find('td', {'class': 'col data'}).text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 100)                 title = soup.find('h2').text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 101)                 size = soup.find('span', {'class': 'pro-size'}).text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 102)                 price = soup.find('span', {'class': 'price'}).text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 103)                 stock = soup.find('div', {'class': 'pro-stock'})
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 104)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 105)                 mensBrand = brand.replace('\n', "").rstrip(" ")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 106)                 position = title.find("by")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 107)                 mensTitle = title[:position - 1]
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 108)                 mensTitle = mensTitle.replace('\n', "")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 109)                 mensSize = size.replace('\n', "").replace("(", "").replace(")", "").replace("\xa0", "")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 110)                 position = mensSize.find('z')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 111)                 mensSize = mensSize[position + 1:]
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 112)                 mensPrice = price.replace('\n', "").rstrip(" ")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 113)                 mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 114)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 115)                 mensBrands.append(mensBrand)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 116)                 mensTitles.append(mensTitle)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 117)                 mensSizes.append(mensSize)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 118)                 mensPrices.append(mensPrice)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 119)                 mensStocks.append(mensStock)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 120)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 121)             print("scraped size =  ", size)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 122)             print("formatted size =", mensSize)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 123)             print("scraped price =  ", price)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 124)             print("formatted price =", mensPrice)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 125)             print("scraped brand =  ", brand)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 126)             print("formatted brand =", mensBrand)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 127)             print("scraped title =  ", title)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 128)             print("formatted title =", mensTitle)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 129)             print("scraped stock =  ", stock)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 130)             print("formatted stock =", mensStock)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 131)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 132)    # Women's Fragrances from Gift Express
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 133)     womensBrands = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 134)     womensTitles = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 135)     womensSizes = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 136)     womensPrices = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 137)     womensStocks = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 138)     pageNumbers = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 139)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 140)     page.goto("https://www.giftexpress.com/womens-fragrances.html?p=1")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 141)     html = page.inner_html('#maincontent')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 142)     soup = BeautifulSoup(html, 'html.parser')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 143)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 144)     # Finding the total number of fragrances in the catalog to get the correct number of pages to scrape from
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 145)     pageNumbersFind = soup.find_all('span', class_='toolbar-number')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 146)     for number in pageNumbersFind:
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 147)         pageNumbers.append(number.text)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 148)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 149)     totalFrags = pageNumbers[2]
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 150)     totalPages = int(-(-(int(totalFrags) / 20) // 1))
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 151)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 152)     # Women's fragrances on Gift Express
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 153)     for i in range(1, totalPages + 1):
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 154)         fragPages = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 155)         hrefs = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 156)         catalogPage = "https://www.giftexpress.com/womens-fragrances.html?p=" + str(i)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 157)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 158)         # Opening the catalog page
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 159)         if i > 1:
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 160)             page.goto(catalogPage)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 161)             html = page.inner_html('#maincontent')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 162)             soup = BeautifulSoup(html, 'html.parser')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 163)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 164)         # Finding the ordered list of links
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 165)         targetOL = soup.find('ol', class_='products list items product-items')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 166)         listItems = targetOL.find_all('li')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 167)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 168)         # Collecting the links to individual fragrance pages
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 169)         for i in range(0, len(listItems), 3):
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 170)             a = listItems[i].find('a', class_='product photo product-item-photo')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 171)             href = a.get('href')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 172)             fragPages.append(href)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 173)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 174)         # Going to the individual fragrance page to scrap important data
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 175)         for j in range(0, len(fragPages)): 
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 176)             page.goto(fragPages[j])
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 177)             html = page.inner_html('#maincontent')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 178)             soup = BeautifulSoup(html, 'html.parser')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 179)             sizes = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 180)             stocks = []
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 181)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 182)             # Scraping individual data for each size, will create a new list item for each attribute being scraped
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 183)             sizeBoxes = soup.find('div', class_='products-detal')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 184)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 185)             if sizeBoxes.text is not None:
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 186)                 sizeInfo = sizeBoxes.find_all('span', class_='size')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 187)                 stockInfo = sizeBoxes.find_all('span', class_='prod-dtl-instock instock')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 188)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 189)                 for displayedSize in sizeInfo:
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 190)                     sizes.append(displayedSize.text)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 191)                 for displayedStock in stockInfo:
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 192)                     stocks.append(displayedStock.text)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 193)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 194)                 for k in range(0, len(sizes)):
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 195)                     if sizes[k] != "Standard":
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 196)                         brand = soup.find('td', {'class': 'col data'}).text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 197)                         title = soup.find('h2').text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 198)                         size = str(sizes[k])
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 199)                         price = soup.find('span', {'class': 'price'}).text
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 200)                         stock = str(stocks[k])
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 201)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 202)                         # Formatting the scraped data for uniformity
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 203)                         womensBrand = brand.replace('\n', "").rstrip(" ")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 204)                         position = title.find("by")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 205)                         womensTitle = title[:position - 1]
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 206)                         womensTitle = mensTitle.replace('\n', "")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 207)                         womensSize = size.replace('\n', "").replace("(", "").replace(")", "").replace("\xa0", "")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 208)                         position = womensSize.find('z')
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 209)                         womensSize = womensSize[position + 1:]
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 210)                         womensPrice = price.replace('\n', "").rstrip(" ")
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 211)                         womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")        
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 212)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 213)                         womensBrands.append(womensBrand)
-3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 214)                         womensTitles.append(womensTitle)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 215)                         womensSizes.append(womensSize)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 216)                         womensPrices.append(womensPrice)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 217)                         womensStocks.append(womensStock)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 218)             else:
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 219)                 brand = soup.find('td', {'class': 'col data'}).text
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 220)                 title = soup.find('h2').text
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 221)                 size = soup.find('span', {'class': 'pro-size'}).text
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 222)                 price = soup.find('span', {'class': 'price'}).text
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 223)                 stock = soup.find('div', {'class': 'pro-stock'})
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 224)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 225)                 womensBrand = brand.replace('\n', "").rstrip(" ")
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 226)                 position = title.find("by")
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 227)                 womensTitle = title[:position - 1]
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 228)                 womensTitle = mensTitle.replace('\n', "")
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 229)                 womensSize = size.replace('\n', "").replace("(", "").replace(")", "").replace("\xa0", "")
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 230)                 position = womensSize.find('z')
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 231)                 womensSize = womensSize[position + 1:]
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 232)                 womensPrice = price.replace('\n', "").rstrip(" ")
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 233)                 womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 234)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 235)                 womensBrands.append(womensBrand)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 236)                 womensTitles.append(womensTitle)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 237)                 womensSizes.append(womensSize)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 238)                 womensPrices.append(womensPrice)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 239)                 womensStocks.append(womensStock)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 240)
+3f821850 (Shmoopy 2023-10-11 07:50:00 -0400 241)     browser.close()
