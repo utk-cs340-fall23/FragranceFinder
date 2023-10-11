@@ -70,7 +70,7 @@ with sync_playwright() as p:
             print(f"Brand: {brand}")
             print(f"Price: {price}")
             print(f"Gender: {gender}")
-            print(f"Link: {baseurl}{link}")
+            print(f"Link: {link}")
             print(f"Savings: {savings}")
             print(f"Ratings: {ratings}")
             print("\n")
