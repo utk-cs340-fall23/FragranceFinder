@@ -22,19 +22,18 @@ app.get('*', (req, res) => {
 
 sequelize.sync({ force: false }).then(() => {
 	app.listen(PORT, () => console.log('Now listening'));
-	
-	
+
+
 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 	const spawn = require("child_process").spawn;
-	
+
 	function scrapeWeb(){
 		const pyproc = spawn("python", ["scrapers/scraperfaker.py"]);
 
 		pyproc.stdout.on("data", (data) => {
 			ret = JSON.parse(data.toString());
-			
 			// IMPORTANT: The record in scrapers/scraperfaker.py must already exist in the database for the demo to work.
-			
+
 			Fragrance.findOne({
 				where:{
 					make: ret.Make,
@@ -42,7 +41,7 @@ sequelize.sync({ force: false }).then(() => {
 					series: ret.Series
 				}
 			}).then(res => {
-				
+
 				if(res == null){
 					console.log("No data entry found");
 					//insert data where not found
@@ -57,11 +56,11 @@ sequelize.sync({ force: false }).then(() => {
 						changes = 0;
 						subject = "";
 						body = "";
-						
+
 						if(res1.price != ret.Price) changes |= 1;
 						if(res1.discount == 0 && ret.Discount > 0) changes |= 2;
 						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)) changes |= 4;
-						
+
 						if(changes == 7){
 							//all conditions present
 							console.log("\nAll change\n");
@@ -104,17 +103,17 @@ sequelize.sync({ force: false }).then(() => {
 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a stock change";
 							}
 						}
-						
+
 						if(changes != 0){
 							console.log("\n\n"+subject+"\n"+body+"\n\n");
-							
+
 							const mail = {
 								from: process.env.EMAIL_USER,
 								to: process.env.EMAIL_USER,
 								subject: subject,
 								text: body
 							}
-							
+
 							mailer.sendMail(mail, function(error, info){
 								if(error){
 									console.log("An error has occurred while sending the email.\n" + error);
@@ -124,20 +123,20 @@ sequelize.sync({ force: false }).then(() => {
 								}
 							});
 						}
-						
+
 					}).catch((error) => {
 						console.error("Cannot get data: ", error);
 					});
 				}
-				
+
 			}).catch((error) => {
 				console.error("Cannot get data: ", error);
 			});
-			
+
 		});
 	}
-	
+
 	scrapeWeb();
 	setInterval(scrapeWeb, 3600000);
-	
+
 });
