@@ -1,9 +1,12 @@
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages';
-import Email from './pages/email';
-import CrudExample from './pages/CrudExample';
-import Navbar from './pages/navigation';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import DemoHome from './pages/demos';
+import DemoEmail from './pages/demos/email';
+import DemoCrudExample from './pages/demos/CrudExample';
+import DemoNavbar from './pages/demos/navigation';
 import "./App.css";
 
 function App() {
@@ -12,9 +15,12 @@ function App() {
 		<Router>
 			<Routes>
 				<Route exact path='/' element={<Home />} />
-				<Route path='/email' element={<Email />} />
-				<Route path='/crud' element={<CrudExample />} />
-				<Route path='/nav' element={<Navbar />} />
+				<Route path='/login' element={<Login />} />
+				<Route path='/signup' element={<Signup />} />
+				<Route exact path='/demos/' element={<DemoHome />} />
+				<Route path='/demos/email' element={<DemoEmail />} />
+				<Route path='/demos/crud' element={<DemoCrudExample />} />
+				<Route path='/demos/nav' element={<DemoNavbar />} />
 			</Routes>
 		</Router>
 	);

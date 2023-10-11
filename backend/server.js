@@ -3,71 +3,140 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
-const nodemail = require("nodemailer");
 const PORT = process.env.PORT || 3001;
 const app = express();
-const db = require('./config/connection');
+const sequelize = require("./config/db");
+const { Fragrance, FragranceListing } = require("./models");
+const mailer = require('./config/mail');
+
 app.use(express.json());
 
-// Author: Stephen Souther
-const mailer = nodemail.createTransport({
-	host: process.env.EMAIL_HOST,
-	port: process.env.EMAIL_PORT,
-	secure: process.env.EMAIL_SECURE,
-	auth: {
-		user: process.env.EMAIL_USER,
-		pass: process.env.EMAIL_PASS
-	}
-});
-
-// Author: Stephen Souther
-mailer.verify(function(error, success) {
-	if(error){
-		console.log("Failed to connect to mail host");
-	}
-	else{
-		console.log("Mail host connected");
-	}
-});
-
-// Author: Stephen Souther
-app.post("/api/email", (req, res) => {
-	const email = req.body;
-
-	if(!email){
-		return res.status(400).json({ error: "Email is required." });
-	}
-	else{
-
-		const mail = {
-			from: process.env.EMAIL_USER,
-			to: email.email,
-			subject: "Hello Plus Email Demo",
-			text: "This is a hello world demo for the FragranceFinder website."
-		};
-
-		mailer.sendMail(mail, function(error, info) {
-			if(error){
-				console.log("An error has occurred while sending the email.\n" + error);
-			}
-			else{
-				console.log("Email sent: " + info.response);
-			}
-		});
-
-		return res.status(200).json({ message: email });
-	}
-})
-
-app.use(require('./routes'));
-
-// Author: Send static requests to build folder
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+// Direct all routes starting with api to the API's routes
+app.use('/api', require('./routes'));
 
 // All other GET requests not handled before will return to our React app for frontend routing
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
-app.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
+
+sequelize.sync({ force: false }).then(() => {
+	app.listen(PORT, () => console.log('Now listening'));
+
+
+	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
+	const spawn = require("child_process").spawn;
+
+	function scrapeWeb(){
+		const pyproc = spawn("venv/bin/python", ["scrapers/scraperfaker.py"]);
+
+		pyproc.stdout.on("data", (data) => {
+			ret = JSON.parse(data.toString());
+			// IMPORTANT: The record in scrapers/scraperfaker.py must already exist in the database for the demo to work.
+
+			Fragrance.findOne({
+				where:{
+					make: ret.Make,
+					model: ret.Model,
+					series: ret.Series
+				}
+			}).then(res => {
+
+				if(res == null){
+					console.log("No data entry found");
+					//insert data where not found
+				}
+				else{
+					FragranceListing.findOne({
+						where:{
+							id: res.id,
+							site: ret.Site
+						}
+					}).then(res1 => {
+						changes = 0;
+						subject = "";
+						body = "";
+
+						if(res1.price != ret.Price) changes |= 1;
+						if(res1.discount == 0 && ret.Discount > 0) changes |= 2;
+						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)) changes |= 4;
+
+						if(changes == 7){
+							//all conditions present
+							console.log("\nAll change\n");
+							subject = "Stock, discount, and price notification for an item on your watch list";
+							body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
+						}
+						else if(changes == 3 || changes == 5 || changes == 6){
+							//two conditions present
+							if(changes == 3){
+								console.log("\nDiscount and price change\n");
+								subject = "Discount and price notification for an item on your watch list";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and discount change";
+							}
+							else if(changes == 5){
+								console.log("\nStock and price change\n");
+								subject = "Stock and price notification for an item on your watch list";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and stock change";
+							}
+							else if(changes == 6){
+								console.log("\nStock and discount change\n");
+								subject = "Stock and discount notification for an item on your watch list";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount and stock change";
+							}
+						}
+						else if(changes == 1 || changes == 2 || changes == 4){
+							//one condition present
+							if(changes == 1){
+								console.log("\nPrice change\n");
+								subject = "Price notification for an item on your watch list";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price change";
+							}
+							else if(changes == 2){
+								console.log("\nDiscount change\n");
+								subject = "Discount notification for an item on your watch list";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount change";
+							}
+							else if(changes == 4){
+								console.log("\nStock change\n");
+								subject = "Stock notification for an item on your watch list";
+								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a stock change";
+							}
+						}
+
+						if(changes != 0){
+							console.log("\n\n"+subject+"\n"+body+"\n\n");
+
+							const mail = {
+								from: process.env.EMAIL_USER,
+								to: process.env.EMAIL_USER,
+								subject: subject,
+								text: body
+							}
+
+							mailer.sendMail(mail, function(error, info){
+								if(error){
+									console.log("An error has occurred while sending the email.\n" + error);
+								}
+								else{
+									console.log("Email sent: " + info.response);
+								}
+							});
+						}
+
+					}).catch((error) => {
+						console.error("Cannot get data: ", error);
+					});
+				}
+
+			}).catch((error) => {
+				console.error("Cannot get data: ", error);
+			});
+
+		});
+	}
+
+	scrapeWeb();
+	setInterval(scrapeWeb, 3600000);
+
 });

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('../config/connection');
+const db = require('../config/db');
 
 // Author: Lakelon Bailey
 // CRUD Example endpoints: Provide ability to Create, Retrieve, Update, and Delete posts.
