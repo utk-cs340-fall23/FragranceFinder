@@ -28,5 +28,7 @@ it makes it tough to have 1 program work for many websites.
 - index.js (frontend/src/pages/demos/index.js)
 
 ### What you accomplished
-- I was able to get a local webpage working (Thank you Lakelon) and demo a simple navigation bar
-- I can webscrape a decent amount of data from fragrancenet and display it in a more user-friendly format
+- I was able to get a local webpage working with the help of Lakelon because he set most of it up. I also created demo a simple navigation bar. 
+I can now webscrape a decent amount of data from fragrancenet and display it in a more user-friendly format. I ran to a lot of random bugs because
+I had to download some extensions, such as playwright, beautifulsoup, and selenium. I did a bunch of trial and error to get things to work, and most
+of us decided to use playwright to webscrape our chosen websites. I will figure out how to get the prices and then start databasing after that.
