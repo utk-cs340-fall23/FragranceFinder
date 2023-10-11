@@ -1,0 +1,35 @@
+.\sprint1\knguye34.md
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  1) # Sprint 1
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  2) Kien Nguyen, KienKong, FragranceFinder
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  3) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  4) ### What you planned to do
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  5) - Worked with React and NodeJS to create a local webpage and display a demo navigation bar
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  6) - Scrape fragrance data (name, brand, price, gender, link, savings, ratings, etc.) on fragrancenet.com
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  7) - Displaying the data from the jumbly html format to a nice print format that is easy to see
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  8) - Begin databasing the data after collecting it from the website
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  9) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 10) ### What you did not do
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 11) - I have not listed the price correctly yet
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 12) - I did not database since I am still looking into it (and our group is deciding how we want to do it)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 13) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 14) ### What problems you encountered
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 15) - Because the price is not listed in the default first page (and shows the available sizes instead), 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 16) I have to find a way to go into the product link and extract data from there. The only caveat is that
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 17) the website blocks that from happening, so I have to figure my way around to get the pricing.
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 18) - I want to make it to apply to multiple websites, but because most websites are formatted differently,
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 19) it makes it tough to have 1 program work for many websites.
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 20) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 21) ### Issues you worked on
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 22) - I have not worked on the issue with the pricing yet, so I will post that into the github issue section.
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 23) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 24) ### Files you worked on
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 25) - fragrancenet.py (backend/scrapers/fragrancenet.py)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 26) - navbar.css (frontend/src/pages/CSS/navbar.css)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 27) - navigation.js (frontend/src/pages/demos/navigation.js)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 28) - index.js (frontend/src/pages/demos/index.js)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 29) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 30) ### What you accomplished
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 31) - I was able to get a local webpage working with the help of Lakelon because he set most of it up. I also created demo a simple navigation bar. 
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 32) I can now webscrape a decent amount of data from fragrancenet and display it in a more user-friendly format. I ran to a lot of random bugs because
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 33) I had to download some extensions, such as playwright, beautifulsoup, and selenium. I did a bunch of trial and error to get things to work, and most
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 34) of us decided to use playwright to webscrape our chosen websites. I will figure out how to get the prices and then start databasing after that.
