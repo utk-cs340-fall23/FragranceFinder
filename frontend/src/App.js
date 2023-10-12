@@ -1,12 +1,9 @@
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import Home from './pages';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import DemoHome from './pages/demos';
-import DemoEmail from './pages/demos/email';
-import DemoCrudExample from './pages/demos/CrudExample';
-import DemoNavbar from './pages/demos/navigation';
+import Hero from './pages/hero/hero';
+import Home from './pages/fullFront';
+import Best from './pages/bestsellers';
+import Navbar from './pages/fullFront';
+import React from 'react'
 import "./App.css";
 
 function App() {
@@ -15,13 +12,10 @@ function App() {
 		<Router>
 			<Routes>
 				<Route exact path='/' element={<Home />} />
-				<Route path='/login' element={<Login />} />
-				<Route path='/signup' element={<Signup />} />
-				<Route exact path='/demos/' element={<DemoHome />} />
-				<Route path='/demos/email' element={<DemoEmail />} />
-				<Route path='/demos/crud' element={<DemoCrudExample />} />
-				<Route path='/demos/nav' element={<DemoNavbar />} />
+				<Route path='/best' element={<Best />} />
 			</Routes>
+			<Navbar/>
+			<Hero/>
 		</Router>
 	);
 }
