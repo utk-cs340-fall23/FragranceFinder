@@ -14,9 +14,9 @@ Jacob Kennedy, BlueNinja420, Fragrance Finder
 - Getting the searchbar to do something
 
 ### Issues you worked on
-- [#16](https://github.com/utk-cs340-fall23/FragranceFinder/issues/16) Men's Scraping
-- [#17](https://github.com/utk-cs340-fall23/FragranceFinder/issues/17) Women's Scraping
-- [#19](https://github.com/utk-cs340-fall23/FragranceFinder/issues/19) Formatting Data
+- [#16](https://github.com/utk-cs340-fall23/FragranceFinder/issues/11) Making Facia
+- [#17](https://github.com/utk-cs340-fall23/FragranceFinder/issues/12) Linking to other Sites
+- [#19](https://github.com/utk-cs340-fall23/FragranceFinder/issues/13) Search Bar
 
 ### Files you worked on
 - App.js
