@@ -37,7 +37,6 @@ async def scrapeGiftExpress():
         # Men's scraping   
         for i in range(1, totalPages + 1):
             fragPages = []
-            hrefs = [] 
             catalogPage = "https://www.giftexpress.com/mens-fragrances.html?p=" + str(i) + "&perfume_type=2893%2C2894%2C2895%2C2916"
         
             # Opening the catalog page, the first page was already opened
@@ -203,7 +202,6 @@ async def scrapeGiftExpress():
         # Women's scraping
         for i in range(1, totalPages + 1):    
             fragPages = []
-            hrefs = [] 
             catalogPage = "https://www.giftexpress.com/womens-fragrances.html?p=" + str(i) + "&perfume_type=2893%2C2894%2C2895%2C2916"
         
             # Opening the catalog page
