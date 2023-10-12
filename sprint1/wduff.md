@@ -2,14 +2,13 @@
 William Duff, Shm00py, Fragrance Finder
 
 ### What you planned to do
-- Scrape Men's fragrance data (brand, title, size, price, and availability) on giftexpress.com [#16](https://github.com/utk-cs340-fall23/FragranceFinder/issues/16)
-- Scrape Women's fragrance data (brand, title, size, price, and availability) on giftexpress.com [#17](https://github.com/utk-cs340-fall23/FragranceFinder/issues/17)
+- Scrape Men's fragrance data (brand, title, concentration, size, price, gender, availability, and link to the page) on giftexpress.com [#16](https://github.com/utk-cs340-fall23/FragranceFinder/issues/16)
+- Scrape Women's fragrance data (brand, title, concentration, size, price, gender, availability, and link to the page) on giftexpress.com [#17](https://github.com/utk-cs340-fall23/FragranceFinder/issues/17)
 - Format the data to fit the uniform style we decided on [#19](https://github.com/utk-cs340-fall23/FragranceFinder/issues/19)
 - Begin databasing the data [#20](https://github.com/utk-cs340-fall23/FragranceFinder/issues/20)
 
 ### What you did not do
 - I did not database the scraped information
-- There were a few pieces of information like concentration and gender that we had not initially discussed scraping that I am not scraping yet but would be easy to grab
 
 ### What problems you encountered
 - giftexpress.com had a decent amount of bugs that had to be accounted for i the code, making the coding aspect a little less straight forward
