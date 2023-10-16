@@ -8,6 +8,8 @@ function Signup() {
     email: '',
     password: '',
     username: '',
+    first_name: '',
+    last_name: '',
   });
 
   const [error, setError] = useState(null);
@@ -50,6 +52,8 @@ function Signup() {
           flexDirection: 'column',
           width: '500px',
         }}>
+            <input name="first_name" value={formState.first_name} placeholder="First Name" required onChange={handleFormChange}></input>
+            <input name="last_name" value={formState.last_name} placeholder="Last Name" required onChange={handleFormChange}></input>
             <input name="username" value={formState.username} placeholder="Username" required onChange={handleFormChange}></input>
             <input name="email" value={formState.email} placeholder="Email" required onChange={handleFormChange}></input>
             <input name="password" value={formState.password} placeholder="Password" required onChange={handleFormChange}></input>

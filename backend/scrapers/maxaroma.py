@@ -35,8 +35,8 @@ async def scrape_maxaroma():
                 # name_div contains both the brand and the name of the fragrance
                 name_div = product_parser.find('div', class_='dtl_name asa')
                 brand = name_div.find('h1').get_text()
-                name = next(name_div.find('div').stripped_strings)                
-          
+                name = next(name_div.find('div').stripped_strings)
+
                 concentration = product_parser.find('small',class_='vtype').text.strip()
 
                 # table_div contains size and gender
@@ -46,8 +46,8 @@ async def scrape_maxaroma():
                 size = size_row.find_next('td').find('div').text.strip()
                 gender_row = table_div.find('th', string='Gender:')
 
-                gender = gender_row.find_next('td').find('span').text.strip() 
-              
+                gender = gender_row.find_next('td').find('span').text.strip()
+
 
                 price_div = product_parser.find('div',class_='dtl_salestext')
                 # The product will either be on sale or it won't be.
@@ -90,7 +90,7 @@ async def scrape_maxaroma():
 
                 print(f"Brand: {brand}")
                 print(f"Product Name: {name}")
-                print(f"Concentration: {concentration}")    
+                print(f"Concentration: {concentration}")
                 print(f"Price: {price}")
                 print(f"Size: {size}")
                 print(f"Gender: {gender}")

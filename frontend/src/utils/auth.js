@@ -4,7 +4,11 @@ class AuthService {
 
     // Return user information found in the token
     getProfile() {
-        return decode(this.getToken());
+        const token = this.getToken();
+        if (token) {
+            return decode(this.getToken()).data;
+        }
+        return null;
     }
 
     // If token exists and is not expired, user is logged in

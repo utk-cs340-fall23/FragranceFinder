@@ -20,7 +20,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: false, alter: true }).then(() => {
 	app.listen(PORT, () => console.log('Now listening'));
 
 
