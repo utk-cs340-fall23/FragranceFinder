@@ -27,10 +27,13 @@ FragranceListing.init(
     discount: {
       type: DataTypes.INTEGER
     },
-    quantity: {
+    stock: {
       type: DataTypes.INTEGER
     },
-    volume: {
+    sizeoz: {
+      type: DataTypes.FLOAT
+    },
+    sizeml: {
       type: DataTypes.FLOAT
     },
     reviews: {

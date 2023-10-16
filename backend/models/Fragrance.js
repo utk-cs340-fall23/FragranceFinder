@@ -26,6 +26,9 @@ Fragrance.init(
     photoLink: {
       type: DataTypes.STRING
     },
+    gender: {
+      type: DataTypes.STRING
+    }, 
   },
   {
     hooks: {},
