@@ -1,6 +1,6 @@
 # William Duff
 # This program scrapes men's and women's fragrance information from aurafragrance.com
-# Last updated 10/16/2023
+# Last updated 10/18/2023
 
 import asyncio
 from playwright.async_api import async_playwright
@@ -22,7 +22,7 @@ async def scrapeAura():
         mensLinks = []
         pageNumbers = []'''
     
-        await page.goto("https://www.aurafragrance.com/collections/mens-fragrances?page=1")
+        await page.goto("https://www.aurafragrance.com/collections/mens-fragrances?page=1", timeout = 600000)
         html = await page.inner_html('#shopify-section-collection-template')
         soup = BeautifulSoup(html, 'html.parser')
 
@@ -42,7 +42,7 @@ async def scrapeAura():
             catalogPage = "https://www.aurafragrance.com/collections/mens-fragrances?page=" + str(i)
         
             # Opening the catalog page
-            await page.goto(catalogPage)
+            await page.goto(catalogPage, timeout = 600000)
             html = await page.inner_html('#shopify-section-collection-template')
             soup = BeautifulSoup(html, 'html.parser')
         
@@ -59,42 +59,53 @@ async def scrapeAura():
             for j in range(0, len(fragPages)):
                 fragPage = "https://www.aurafragrance.com" + fragPages[j]
                 
-                await page.goto(fragPage)
+                await page.goto(fragPage, timeout = 600000)
                 html = await page.inner_html('#shopify-section-product-template')
                 soup = BeautifulSoup(html, 'html.parser')
                 sizes = []
-                #stocks = []
+                stocks = []
                 prices = []
-
-                print(fragPage)
                 
-                # I think you will have to scrape the variants out of the scripts from the individual fragrance page
-                # Once you have done that, loop through on each page and scrape the data if the variant exists
-                    # You might run into the program staopping if the page cannot be found (timeout)
-                    
-                # There has to be a more optimal way of scraping the size and price than this ^^
-                # Keep checking if there is a way to scrape size and price using the page info, idk why sizeBoxes continues to be empty
+                sizeBoxes = soup.find('select', class_='product-variants')
                 
-                
-                
-                
-                sizeBoxes = soup.find_all('li', class_='swatch-view-item')
-                
-                print(sizeBoxes)
-                
-                sizeInfo = sizeBoxes.find('div', class_='swatch-button-title-text')
-                #stockInfo = sizeBoxes.find('span', class_='prod-dtl-instock instock')
-                priceInfo = sizeBoxes.find('div', class_='swatch-button-price-hidden')
+                sizeInfo = sizeBoxes.find_all('option')
                 
                 for displayedSize in sizeInfo:
                     sizes.append(displayedSize.text)
-                #for displayedStock in stockInfo:
-                    #stocks.append(displayedStock.text)
-                for hiddenPrice in priceInfo:
-                    prices.append(hiddenPrice.text)
+                    stocks.append(displayedSize.text)
+                    prices.append(displayedSize.text)
                 
-                print(sizeInfo)
-                print(priceInfo)
+                for k in range(0, len(sizes)):
+                    size = str(sizes[k])
+                    stock = str(stocks[k])
+                    price = str(prices[k])
+                    
+                    print("initial:", size) ###############
+                    
+                    # Formatting size
+                    if ((("x" in size or "X" in size) and ("total" in size or "Samples" in size or "Sample" in size))
+                        or " & " in size or "oz" not in size or "OZ" not in size):
+                        continue
+                    
+                    size = size.replace("\n", "").replace('z', 'Z').replace('o', 'O').replace(" ", "")
+                    position = size.find('Z')
+                    size = size[:position + 1]
+                    
+                    if size[0] == ".":
+                        size = "0" + size
+                        
+                    size = size[:3] + " " + size[3:]
+                    
+                    # Formatting Stock and Price
+                    if '$' in stock:
+                        stock = "In Stock"
+                        
+                        position = price.find('$')
+                        price = price[position:]
+                        price = price.replace(" USD", "")
+                    else:
+                        stock = "Sold Out"
+                        price = "NA"
             
         browser.close()
         
