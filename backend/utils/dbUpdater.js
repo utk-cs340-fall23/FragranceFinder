@@ -10,7 +10,7 @@ sequelize.sync({ force: false, alter: true }).then(() => {
 	const spawn = require("child_process").spawn;
 
 	function scrapeWeb(){
-		const pyproc = spawn("python", ["scrapers/scraperfaker.py"]);
+		const pyproc = spawn("python", ["../scrapers/scraperfaker.py"]);
 
 		pyproc.stdout.on("data", (data) => {
 			ret = JSON.parse(data.toString());
@@ -18,9 +18,9 @@ sequelize.sync({ force: false, alter: true }).then(() => {
 
 			Fragrance.findOne({
 				where:{
-					make: ret.Make,
-					model: ret.Model,
-					series: ret.Series
+					brand: ret.Make,
+					title: ret.Model,
+					concentration: ret.Series
 				}
 			}).then(res => {
 
@@ -41,30 +41,30 @@ sequelize.sync({ force: false, alter: true }).then(() => {
 
 						if(res1.price != ret.Price) changes |= 1;
 						if(res1.discount == 0 && ret.Discount > 0) changes |= 2;
-						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)) changes |= 4;
+						if(res1.stock == 0 && (ret.Quantity > 0 || ret.Quantity == -1)) changes |= 4;
 
 						if(changes == 7){
 							//all conditions present
 							console.log("\nAll change\n");
 							subject = "Stock, discount, and price notification for an item on your watch list";
-							body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
+							body = "Hello, the item '"+res.concentration+" "+res.title+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
 						}
 						else if(changes == 3 || changes == 5 || changes == 6){
 							//two conditions present
 							if(changes == 3){
 								console.log("\nDiscount and price change\n");
 								subject = "Discount and price notification for an item on your watch list";
-								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and discount change";
+								body = "Hello, the item '"+res.concentration+" "+res.title+"' from the website '"+res1.site+"' has had a price and discount change";
 							}
 							else if(changes == 5){
 								console.log("\nStock and price change\n");
 								subject = "Stock and price notification for an item on your watch list";
-								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and stock change";
+								body = "Hello, the item '"+res.concentration+" "+res.title+"' from the website '"+res1.site+"' has had a price and stock change";
 							}
 							else if(changes == 6){
 								console.log("\nStock and discount change\n");
 								subject = "Stock and discount notification for an item on your watch list";
-								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount and stock change";
+								body = "Hello, the item '"+res.concentration+" "+res.title+"' from the website '"+res1.site+"' has had a discount and stock change";
 							}
 						}
 						else if(changes == 1 || changes == 2 || changes == 4){
@@ -72,17 +72,17 @@ sequelize.sync({ force: false, alter: true }).then(() => {
 							if(changes == 1){
 								console.log("\nPrice change\n");
 								subject = "Price notification for an item on your watch list";
-								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price change";
+								body = "Hello, the item '"+res.concentration+" "+res.title+"' from the website '"+res1.site+"' has had a price change";
 							}
 							else if(changes == 2){
 								console.log("\nDiscount change\n");
 								subject = "Discount notification for an item on your watch list";
-								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount change";
+								body = "Hello, the item '"+res.concentration+" "+res.title+"' from the website '"+res1.site+"' has had a discount change";
 							}
 							else if(changes == 4){
 								console.log("\nStock change\n");
 								subject = "Stock notification for an item on your watch list";
-								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a stock change";
+								body = "Hello, the item '"+res.concentration+" "+res.title+"' from the website '"+res1.site+"' has had a stock change";
 							}
 						}
 
