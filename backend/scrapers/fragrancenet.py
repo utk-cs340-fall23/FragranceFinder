@@ -1,5 +1,6 @@
 import asyncio
 import re
+import os
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 
@@ -45,20 +46,42 @@ async def get_product_info(browser, product):
         else:
             size = "Not found"
         
+        # Extract the original price
         price = pricing_element.find('div', class_='pricing').text.strip()
-        print(f"Price: {price}, Size: {size}")
+
+        # Extract the discount percentage
+        discount_element = pricing_element.find('div', class_='fnet-offer')
+        discount = discount_element.text.strip() if discount_element else "0% OFF"
+
+        # Calculate the discounted price
+        original_price = float(re.search(r'(\d+\.\d+)', price).group(1))
+        discount_percentage = float(re.search(r'(\d+)% OFF', discount).group(1)) / 100
+        discounted_price = original_price * (1 - discount_percentage)
+
+        print(f"Price: ${discounted_price:.2f}, Size: {size}, Discount: {discount}")
 
     # Close the product page
     await page.close()
 
 async def main():
     # Launch the Playwright browser
+        
     async with async_playwright() as p:
+        # trying to get it run through without incognito (to grab proper pricing)
+        # but it doesn't bypass through the bot security check
+        """
+        app_data_path = os.getenv("LOCALAPPDATA")
+        user_data_path = os.path.join(app_data_path, 'Chromium\\User_Data\\Default')
+        context = await p.chromium.launch_persistent_context(user_data_path, headless=False, channel="chrome", user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+        # Create a new page in the browser
+        page = await context.new_page()
+        """
+        
         browser = await p.chromium.launch(headless=False)
         
         # Create a new page in the browser
         page = await browser.new_page()
-
+        
         # Iterate through the specified number of pages
         for page_number in range(1, num_pages + 1):
             # Generate the search URL for each page
@@ -94,7 +117,7 @@ async def main():
                     brand = brand_element.text.strip()
                 except AttributeError:
                     brand = "Brand not available"
-
+                
                 # Extract the price of the product
                 price_element = product.find('span', class_='price types')
                 price = price_element.find_next('span').text.strip() if price_element else "Price not available"
@@ -118,11 +141,11 @@ async def main():
                 print(f"Link: {link}")
                 print(f"Savings: {savings}")
                 print(f"Ratings: {ratings}")
-
+                
                 # Get pricing and size details from the product page
                 await get_product_info(browser, product)
                 print("\n")
-
+                
         # Close the browser when done
         await browser.close()
 
