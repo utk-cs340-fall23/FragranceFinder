@@ -1,10 +1,15 @@
 const { Fragrance, FragranceListing } = require("../models");
 const sequelize = require("../config/db");
+const PORT = process.env.PORT || 3001;
+const express = require('express');
+const app = express();
+
 require('dotenv').config();
 
-//app.listen(PORT, () => console.log('Now listening'));
 
 sequelize.sync({ force: false, alter: true }).then(() => {
+
+	app.listen(PORT, () => console.log('Now listening'));
 	
 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 	const spawn = require("child_process").spawn;
