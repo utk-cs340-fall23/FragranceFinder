@@ -3,6 +3,7 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import Card from 'react-bootstrap/Card';
 import Col from "react-bootstrap/Col";
 import Placeholder from 'react-bootstrap/Placeholder';
+import 'holderjs';
 
 const FragranceListings = ({xs, count}) => {
     const range = [...Array(count).keys()];
@@ -10,12 +11,12 @@ const FragranceListings = ({xs, count}) => {
     return (
         <Col xs={xs} style={{
             maxHeight: '100%',
-            overflowY: 'scroll',
+            overflowY: 'auto',
         }}>
             <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}} style={{maxWidth: '95%'}}>
             <Masonry columnsCount={3} gutter="10px">
                 {range.map((i) => (
-                <Card key={i} style={{ width: '18rem' }}>
+                <Card key={i} style={{}}>
                     <Card.Img variant="top" src="holder.js/100px180" />
                     <Card.Body>
                     <Placeholder as={Card.Title} animation="glow">

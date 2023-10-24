@@ -21,7 +21,7 @@ const Browsing = () => {
             searchObject={searchObject}
             setSearchObject={setSearchObject}
             />
-            <FragranceListings xs={10} count={100}/>
+            <FragranceListings xs={10} count={13}/>
           </Row>
         </Container>
     );
