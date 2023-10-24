@@ -7,8 +7,8 @@ import pandas as pd
 
 async def scrape_jomashop():
     async with async_playwright() as p:
-        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link"])
-    
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+
         data_list = []
         browser = await p.chromium.launch(headless = False)
         page = await browser.new_page()
@@ -36,11 +36,13 @@ async def scrape_jomashop():
             name = product_item.find('span', class_='name-out-brand')
             price = product_item.find('div', class_='now-price')
             link = product_item.find('a', class_='productName-link')
+            photoLink = product_item.find('img', class_='productImg')
+            photoLink = photoLink.get('src') if photoLink else None
             gender = ""
             size = ""
             concentration = ""
             formattedName = ""
-            
+
             if brand:
                 brand = brand.text.strip()
             else:
@@ -63,7 +65,7 @@ async def scrape_jomashop():
                     gender = "Female"
                 else:
                     gender = "Unisex"
-                
+
                 # Bottle Size Formatting
                 if "oz" in name:
                     # Regular expression pattern
@@ -101,7 +103,7 @@ async def scrape_jomashop():
                     # All keywords that indicate the name of the fragrance name has finished
                     elif re.match(r'.*(edp|edt|eau|parfum|perfume|/)$', word.lower()) or i == len(name_words):
                         break # Fragrance Concentration means we have finished storing the name
-                    # by can be used to indicate a fragrance by a brand, 
+                    # by can be used to indicate a fragrance by a brand,
                     # or may be the actual title of a fragrance
                     elif re.match(r'.*(by|for)$', word.lower()) and i < len(name_words) - 1:
                         if name_words[i+1] == brand:
@@ -124,16 +126,16 @@ async def scrape_jomashop():
 
             if price:
                 price = price.find('span')
-                price = price.text.strip()      
+                price = price.text.strip()
             else:
-                price = "N/A"  
+                price = "N/A"
 
             if link:
                 link = link.get('href')
                 link = "https://www.jomashop.com" + link
             else:
                 link = "N/A"
- 
+
             #print("Brand:", brand)
             #print("Name:", name)
             #print("FormatName:", formattedName)
@@ -143,9 +145,9 @@ async def scrape_jomashop():
             #print("Size:", size)
             #print("Link:",link)
             #print("-" * 30)
-            
+
             #["brand", "title", "concentration", "gender", "size", "price", "link"]
-            
-            df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link]
-    
+
+            df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link, photoLink]
+
     return df.to_json(orient="columns")

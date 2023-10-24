@@ -41,6 +41,9 @@ FragranceListing.init(
     },
     site: {
       type: DataTypes.STRING
+    },
+    link: {
+      type: DataTypes.STRING
     }
   },
   {
