@@ -18,3 +18,7 @@ app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
+
+sequelize.sync({ force: false, alter: true, logging: false }).then(() => {
+	app.listen(PORT, () => console.log('Now listening'));
+});

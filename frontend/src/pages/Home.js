@@ -1,13 +1,13 @@
 import React from 'react';
 import Navigation from '../components/Navigation';
+import Browsing from '../components/Browsing';
 
 const Home = () => {
     return (
-        <main>
-            <header>
-                <Navigation></Navigation>
-            </header>
-        </main>
+        <>
+            <Navigation></Navigation>
+            <Browsing></Browsing>
+        </>
     );
 };
 
