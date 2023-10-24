@@ -15,20 +15,8 @@ router.get('/', async (req, res) => {
         gender
     } = req.query;
 
-    const brandNames = brands.split(',');
-    const getAllBrands = brandNames.includes('all') || brandNames[0] == '';
-
-    let fragranceWhere = {}
-    if (!getAllBrands) {
-        fragranceWhere.brand = {
-            [Op.in]: brandNames
-        }
-    }
-
-    if (gender != 'All') {
-        fragranceWhere.gender = gender;
-    }
-
+    // Initialize model filters
+    const fragranceWhere = {}
     const fragranceListingWhere = {
         price: {
             [Op.between]: [parseFloat(price_start), parseFloat(price_end)],
@@ -38,6 +26,21 @@ router.get('/', async (req, res) => {
         }
     }
 
+    // Only filter on brands if some are provided
+    const getAllBrands = brands == '';
+    if (!getAllBrands) {
+        fragranceWhere.brand = {
+            [Op.in]: brands.split(',')
+        }
+    }
+
+    // Only filter on gender if a specific one
+    // is selected
+    if (gender != 'All') {
+        fragranceWhere.gender = gender;
+    }
+
+    // Get data and return
     const fragranceListings = await FragranceListing.findAll({
         where: fragranceListingWhere,
         include: {
@@ -55,6 +58,8 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/search-defaults', async (req, res) => {
+
+    // Aggregate max price and max size
     const aggregates = await sequelize.query(`
         SELECT
             MAX(price) as maxPrice,
@@ -63,6 +68,8 @@ router.get('/search-defaults', async (req, res) => {
             fragrance_listing
     `, { type: Sequelize.QueryTypes.SELECT });
 
+    // Group listings by brand and count the occurrences for
+    // each brand
     const brandGrouping = await FragranceListing.findAll({
         attributes: [
             [Sequelize.fn('COUNT', Sequelize.col('fragrance_listing.id')), 'listingCount'],
@@ -75,6 +82,7 @@ router.get('/search-defaults', async (req, res) => {
         group: ['fragrance.brand'],
     })
 
+    // Return search defaults
     res.json({
         success: true,
         data: {

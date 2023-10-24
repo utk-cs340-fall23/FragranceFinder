@@ -9,6 +9,8 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 const SMALL_SCREEN_CUTOFF = 800;
 
 const Browsing = ({style}) => {
+
+    // Handle screen size changes with the next few variables/functions
     const [useOffcanvasFilters, setUseOffcanvasFilters] = useState(
       window.innerWidth < SMALL_SCREEN_CUTOFF
     );
@@ -22,12 +24,12 @@ const Browsing = ({style}) => {
     useEffect(() => {
         window.addEventListener('resize', updateScreenState);
 
-        // Cleanup function to remove the event listener
         return () => {
             window.removeEventListener('resize', updateScreenState);
         }
     }, []);
 
+    // Initialize variables related to searching
     const [searchDefaults, setSearchDefaults] = useState({
       maxPrice: 1000,
       maxSize: 100,
@@ -39,13 +41,14 @@ const Browsing = ({style}) => {
       price_end: searchDefaults.maxPrice,
       size_start: 0,
       size_end: searchDefaults.maxSize,
-      brands: [],
+      brands: searchDefaults.brands,
       gender: 'All'
     });
 
     const [searchObject, setSearchObject] = useState(defaultSearchObject);
     const [fragranceListings, setFragranceListings] = useState(null);
 
+    // Use searchObject to search for fragrances
     const searchFragrances = async (params) => {
       const url = '/api/fragrance-listings';
       const response = await sendGet(
@@ -56,7 +59,7 @@ const Browsing = ({style}) => {
       }
     }
 
-    const getMaxPrice = async () => {
+    const getSearchDefaults = async () => {
       const response = await sendGet('/api/fragrance-listings/search-defaults');
       const searchDefaultsData = response.data.data;
       const newMaxPrice = Math.round(searchDefaultsData.maxPrice);
@@ -77,10 +80,12 @@ const Browsing = ({style}) => {
       });
     }
 
+    // Get search defaults
     useEffect(() => {
-      getMaxPrice();
+      getSearchDefaults();
     }, []);
 
+    // Search fragrances again when defaultSearchObject is completed
     useEffect(
       () => {
         searchFragrances(defaultSearchObject);

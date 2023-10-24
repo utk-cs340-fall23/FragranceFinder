@@ -28,6 +28,9 @@ function FilterBar({
         updateSearchObject(event.target.name, event.target.value);
     }
 
+    // Range values are only 1-100. Normalize the value with its
+    // associated max value. There is similiar logic in each of the
+    // next two functions
     const handleRangeChange = (event, normalizer) => {
         const newVal = Math.round(
             (parseInt(event.target.value) / 100) * normalizer
@@ -40,6 +43,7 @@ function FilterBar({
         return newVal;
     }
 
+    // Set search object to defaults and search fragrances again
     const resetSearchObject = () => {
         setSearchObject(defaultSearchObject);
         searchFragrances(defaultSearchObject);
@@ -48,6 +52,7 @@ function FilterBar({
         }
     }
 
+    // Apply new filters to search.
     const handleApplyClick = () => {
         searchFragrances(searchObject);
         if (hideFilters) {
@@ -55,6 +60,9 @@ function FilterBar({
         }
     }
 
+    // When brands are checked/unchecked, we need
+    // to toggle their presence in the 'brands'
+    // field of searchObject
     const handleBrandChange = (event) => {
         if (allBrandsChecked) {
             return;
@@ -69,23 +77,16 @@ function FilterBar({
         else if (!brands.includes(brandName)) {
             brands.push(brandName);
         }
-
-        setSearchObject({
-            ...searchObject,
-            brands: brands
-        });
+        updateSearchObject('brands', brands);
     }
 
     const [allBrandsChecked, setAllBrandsChecked] = useState(!searchObject.brands.length);
 
+    // If all brands are checked, empty brands in searchObject
     useEffect(() => {
         if (allBrandsChecked) {
-            setSearchObject({
-                ...searchObject,
-                brands: []
-            });
+            updateSearchObject('brands', []);
         }
-
     }, [allBrandsChecked]);
 
 

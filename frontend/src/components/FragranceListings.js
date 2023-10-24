@@ -33,6 +33,7 @@ const FragranceListings = ({xs, fragranceListings, showFilters, useOffcanvasFilt
             </Card.Body>
         </Card>
     ))
+
     const resultsCount = fragranceListings?.length;
 
     return (
