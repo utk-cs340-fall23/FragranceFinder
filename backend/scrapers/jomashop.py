@@ -3,9 +3,12 @@ import asyncio
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 import re
+import pandas as pd
 
 async def scrape_jomashop():
     async with async_playwright() as p:
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link"])
+    
         data_list = []
         browser = await p.chromium.launch(headless = False)
         page = await browser.new_page()
@@ -131,15 +134,22 @@ async def scrape_jomashop():
             else:
                 link = "N/A"
  
-            print("Brand:", brand)
-            print("Name:", name)
-            print("FormatName:", formattedName)
-            print("Concentration:", concentration)
-            print("Price:", price)
-            print("Gender:", gender)
-            print("Size:", size)
-            print("Link:",link)
-            print("-" * 30)
+            #print("Brand:", brand)
+            #print("Name:", name)
+            #print("FormatName:", formattedName)
+            #print("Concentration:", concentration)
+            #print("Price:", price)
+            #print("Gender:", gender)
+            #print("Size:", size)
+            #print("Link:",link)
+            #print("-" * 30)
+            
+            #["brand", "title", "concentration", "gender", "size", "price", "link"]
+            
+            df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link]
+    
+    print(df.to_json(orient="columns"))
+            
 
 if __name__ == "__main__":
     asyncio.run(scrape_jomashop())
