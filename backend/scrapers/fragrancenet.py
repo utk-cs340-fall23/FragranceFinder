@@ -1,80 +1,154 @@
-from playwright.sync_api import sync_playwright
+import asyncio
+import re
+import os
+from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 
 # The base URL of the website
 baseurl = "https://www.fragrancenet.com/"
-
 # The number of pages to scrape
-num_pages = 3
+num_pages = 1
 
-# Launch the Playwright browser
-with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
+# List of brand names to ignore in product names
+brand_names = ["Dolce & Gabbana", "Gianni Versace"]  # Add more brand names as needed
 
-    # Iterate through the specified number of pages
-    for page_number in range(1, num_pages + 1):
-        # Generate the search URL for each page
-        search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
+async def get_product_info(browser, product):
+    # Extract the link to the product
+    link = product.find('a', href=True)['href']
 
-        # Open a new page in the browser
-        page = browser.new_page()
+    # Create a new page in the browser
+    page = await browser.new_page()
 
-        # Navigate to the search URL
-        page.goto(search_url)
+    # Navigate to the product page
+    await page.goto(link)
 
-        # Wait for the page to load
-        page.wait_for_load_state()
+    # Wait for the page to load
+    await page.wait_for_selector('.pricing')
 
-        # Extract the HTML content of the result set
-        product_data = page.inner_html('#resultSet')
+    # Extract the HTML content of the product page
+    product_page_data = await page.content()
 
-        # Close the page to free up resources
-        page.close()
+    # Parse the product page using BeautifulSoup
+    product_soup = BeautifulSoup(product_page_data, 'html.parser')
 
-        # Parse the HTML content using BeautifulSoup
-        soup = BeautifulSoup(product_data, 'html.parser')
+    # Extract pricing and size details
+    pricing_elements = product_soup.find_all('div', class_='variantText solo')
 
-        # Find all product items on the page
-        product_items = soup.find_all('div', class_='resultItem heightSync')
+    for pricing_element in pricing_elements:
+        dimname_span = pricing_element.find('div', class_='dimname').find('span', class_='text')
+        size_text = dimname_span.text.strip()
 
-        # Iterate through each product on the page
-        for product in product_items:
-            # Extract the name of the product
-            name = product.find('span', class_='brand-name').text.strip()
+        # Use regular expression to extract the numeric part for the size
+        size_match = re.search(r'(\d+\.\d+)', size_text)
+        
+        if size_match:
+            size = size_match.group(1)
+        else:
+            size = "Not found"
+        
+        # Extract the original price
+        price = pricing_element.find('div', class_='pricing').text.strip()
 
-            # Extract the brand with a try-except block
-            try:
-                brand_element = product.find('p', class_='des').find('a')
-                brand = brand_element.text.strip()
-            except AttributeError:
-                brand = "Brand not available"
+        # Extract the discount percentage
+        discount_element = pricing_element.find('div', class_='fnet-offer')
+        discount = discount_element.text.strip() if discount_element else "0% OFF"
 
-            # Extract the price of the product
-            price_element = product.find('span', class_='price types')
-            price = price_element.find_next('span').text.strip() if price_element else "Price not available"
+        # Calculate the discounted price
+        original_price = float(re.search(r'(\d+\.\d+)', price).group(1))
+        discount_percentage = float(re.search(r'(\d+)% OFF', discount).group(1)) / 100
+        discounted_price = original_price * (1 - discount_percentage)
 
-            # Extract the gender information
-            gender = product.find('span', class_='gender-badge').text.strip()
+        print(f"Price: ${discounted_price:.2f}, Size: {size}, Discount: {discount}")
 
-            # Extract the link to the product
-            link = product.find('a', href=True)['href']
+    # Close the product page
+    await page.close()
 
-            # Extract the savings information
-            savings = product.find('span', class_='savings').text.strip()
+async def main():
+    # Launch the Playwright browser
+        
+    async with async_playwright() as p:
+        # trying to get it run through without incognito (to grab proper pricing)
+        # but it doesn't bypass through the bot security check
+        """
+        app_data_path = os.getenv("LOCALAPPDATA")
+        user_data_path = os.path.join(app_data_path, 'Chromium\\User_Data\\Default')
+        context = await p.chromium.launch_persistent_context(user_data_path, headless=False, channel="chrome", user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+        # Create a new page in the browser
+        page = await context.new_page()
+        """
+        
+        browser = await p.chromium.launch(headless=False)
+        
+        # Create a new page in the browser
+        page = await browser.new_page()
+        
+        # Iterate through the specified number of pages
+        for page_number in range(1, num_pages + 1):
+            # Generate the search URL for each page
+            search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
 
-            # Extract the ratings information
-            ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
+            # Navigate to the search URL
+            await page.goto(search_url)
 
-            # Print the extracted data
-            print(f"Name: {name}")
-            print(f"Brand: {brand}")
-            print(f"Price: {price}")
-            print(f"Gender: {gender}")
-            print(f"Link: {link}")
-            print(f"Savings: {savings}")
-            print(f"Ratings: {ratings}")
-            print("\n")
+            # Wait for the page to load
+            await page.wait_for_selector('.resultItem.heightSync')
 
-    # Close the browser when done
-    browser.close()
+            # Extract the HTML content of the result set
+            product_data = await page.inner_html('#resultSet')
 
+            # Parse the HTML content using BeautifulSoup
+            soup = BeautifulSoup(product_data, 'html.parser')
+
+            # Find all product items on the page
+            product_items = soup.find_all('div', class_='resultItem heightSync')
+
+            # Iterate through each product on the page
+            for product in product_items:
+                # Extract the name of the product
+                name = product.find('span', class_='brand-name').text.strip()
+
+                # Check if any brand names should be ignored
+                for brand_name in brand_names:
+                    name = name.replace(brand_name, "").strip()
+
+                # Extract the brand with a try-except block
+                try:
+                    brand_element = product.find('p', class_='des').find('a')
+                    brand = brand_element.text.strip()
+                except AttributeError:
+                    brand = "Brand not available"
+                
+                # Extract the price of the product
+                price_element = product.find('span', class_='price types')
+                price = price_element.find_next('span').text.strip() if price_element else "Price not available"
+
+                # Extract the gender information
+                gender = product.find('span', class_='gender-badge').text.strip()
+
+                # Extract the link to the product
+                link = product.find('a', href=True)['href']
+
+                # Extract the savings information
+                savings = product.find('span', class_='savings').text.strip()
+
+                # Extract the ratings information
+                ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
+                
+                # Print the extracted data
+                print(f"Name: {name}")
+                print(f"Brand: {brand}")
+                print(f"Gender: {gender}")
+                print(f"Link: {link}")
+                print(f"Savings: {savings}")
+                print(f"Ratings: {ratings}")
+                
+                # Get pricing and size details from the product page
+                await get_product_info(browser, product)
+                print("\n")
+                
+        # Close the browser when done
+        await browser.close()
+
+# Run the main function
+if __name__ == "__main__":
+    asyncio.run(main())
