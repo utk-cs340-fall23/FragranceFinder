@@ -1,9 +1,11 @@
-const userRoutes = require('./user-routes.js');
-const mailRoutes = require('./mailRoutes');
+const userRoutes = require('./userRoutes.js');
+const mailRoutes = require('./mailRoutes.js');
+const fragranceListingRoutes = require('./fragranceListingRoutes.js');
 const router = require('express').Router();
 
 
 router.use('/users', userRoutes);
+router.use('/fragrance-listings', fragranceListingRoutes);
 router.use('/email', mailRoutes);
 
 // This middleware handles any request that starts with /api and is not handled above

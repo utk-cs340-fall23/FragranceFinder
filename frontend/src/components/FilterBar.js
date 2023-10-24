@@ -8,7 +8,9 @@ import Col from 'react-bootstrap/Col';
 function FilterBar({searchObject, setSearchObject, xs}) {
 
     return (
-        <Col xs={xs}>
+        <Col xs={xs} style={{
+            borderRight: '1px solid lightgray'
+        }}>
             <h3>Filters</h3>
         </Col>
     )

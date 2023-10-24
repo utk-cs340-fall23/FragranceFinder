@@ -6,14 +6,14 @@ import auth from '../utils/auth';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {FaCog} from 'react-icons/fa';
 
-function Navigation() {
+function Navigation({style}) {
     const profile = auth.getProfile();
     const fullName = profile ? (
         `${profile.firstName} ${profile.lastName}`
     ) : '';
 
   return (
-    <Navbar className="bg-body-tertiary">
+    <Navbar className="bg-body-tertiary" style={style}>
       <Container>
         <Navbar.Brand href="/"><h2>Fragrance Finder</h2></Navbar.Brand>
         <Navbar.Toggle />

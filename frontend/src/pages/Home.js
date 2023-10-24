@@ -5,8 +5,15 @@ import Browsing from '../components/Browsing';
 const Home = () => {
     return (
         <>
-            <Navigation></Navigation>
-            <Browsing></Browsing>
+            <Navigation style={{
+                height: '8%',
+                width: '100%',
+            }} />
+            <Browsing style={{
+                height: '92%',
+                width: '100%',
+                padding: '12px'
+            }}/>
         </>
     );
 };
