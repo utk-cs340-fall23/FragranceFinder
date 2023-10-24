@@ -3,20 +3,19 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import auth from '../utils/auth';
-import Button from 'react-bootstrap/Button';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {FaCog} from 'react-icons/fa';
 
 function Navigation() {
     const profile = auth.getProfile();
     const fullName = profile ? (
-        `${profile.first_name} ${profile.last_name}`
+        `${profile.firstName} ${profile.lastName}`
     ) : '';
 
   return (
     <Navbar className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="/">Fragrance Finder</Navbar.Brand>
+        <Navbar.Brand href="/"><h2>Fragrance Finder</h2></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
         {auth.loggedIn()
