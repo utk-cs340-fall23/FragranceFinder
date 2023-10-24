@@ -8,14 +8,14 @@ const UserFragrance = require('./UserFragrance');
 User.belongsToMany(Fragrance, {
     through: UserFragrance,
     as: 'watchlisted_fragrances',
-    foreignKey: 'user_id',
+    foreignKey: 'userId',
     onDelete: 'SET NULL'
 });
 
 Fragrance.belongsToMany(User, {
     through: UserFragrance,
     as: 'watchlisted_fragrances',
-    foreignKey: 'fragrance_id',
+    foreignKey: 'fragranceId',
     onDelete: 'SET NULL'
 });
 

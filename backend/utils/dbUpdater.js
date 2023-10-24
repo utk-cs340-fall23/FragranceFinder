@@ -6,11 +6,7 @@ const app = express();
 
 require('dotenv').config();
 
-
-sequelize.sync({ force: false, alter: true }).then(() => {
-
-	app.listen(PORT, () => console.log('Now listening'));
-	
+function dbUpdate() {
 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 	const spawn = require("child_process").spawn;
 
@@ -125,4 +121,6 @@ sequelize.sync({ force: false, alter: true }).then(() => {
 
 	scrapeWeb();
 	setInterval(scrapeWeb, 3600000);
-});
+}
+
+module.exports = dbUpdate;

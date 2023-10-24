@@ -1,12 +1,13 @@
 // Load environment variables
 require('dotenv').config();
-require('./utils/dbUpdater')
+const dbUpdate = require('./utils/dbUpdater');
 
 const path = require('path');
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const mailer = require('./config/mail');
+const sequelize = require('./config/db');
 
 app.use(express.json());
 
@@ -19,6 +20,8 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 
-sequelize.sync({ force: false, alter: true, logging: false }).then(() => {
+sequelize.sync({ force: false, alter: true }).then(() => {
 	app.listen(PORT, () => console.log('Now listening'));
+	dbUpdate();
+
 });
