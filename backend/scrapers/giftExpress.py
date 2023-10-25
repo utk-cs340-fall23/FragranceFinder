@@ -9,7 +9,7 @@ import pandas as pd
 
 async def scrapeGiftExpress():
     async with async_playwright() as p:
-        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "sizeOZ", "sizeML", "price", "stock", "link", "photoLink"])
         
         browser = await p.chromium.launch(headless = False)
         page = await browser.new_page()
@@ -119,8 +119,8 @@ async def scrapeGiftExpress():
                             else:
                                 mensConcentration = "NA"
                                 
-                            df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), float(mensPrice), str(mensStock),
-                                                round(float(mensSizeOZ), 2), round(float(mensPrice), 2), str(mensLink), str(mensImageLink)]
+                            df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
+                                               round(float(mensPrice), 2), float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
                     title = soup.find('div', class_='b-name').text
@@ -164,8 +164,8 @@ async def scrapeGiftExpress():
                     else:
                         mensConcentration = "NA"
                             
-                    df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), float(mensPrice), str(mensStock),
-                                        round(float(mensSizeOZ), 2), round(float(mensPrice), 2), str(mensLink), str(mensImageLink)]
+                    df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
+                                        round(float(mensPrice), 2), float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
 
         # Women's Fragrances from Gift Express
         pageNumbers = []
@@ -271,8 +271,8 @@ async def scrapeGiftExpress():
                             else:
                                 womensConcentration = "NA"
                                 
-                            df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), float(womensPrice), str(womensStock),
-                                                round(float(womensSizeOZ), 2), round(float(womensPrice), 2), str(womensLink), str(womensImageLink)]
+                            df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
+                                               round(float(womensPrice), 2), float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
                     title = soup.find('div', class_='b-name').text
@@ -316,8 +316,8 @@ async def scrapeGiftExpress():
                     else:
                         womensConcentration = "NA"
                             
-                    df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), float(womensPrice), str(womensStock),
-                                        round(float(womensSizeOZ), 2), round(float(womensPrice), 2), str(womensLink), str(womensImageLink)]
+                    df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
+                                        round(float(womensPrice), 2), float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
                     
         browser.close()
 
