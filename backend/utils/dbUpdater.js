@@ -17,10 +17,25 @@ function dbUpdate() {
 			
 			ret = JSON.parse(data.toString());
 			
-			
-			
-			console.log(ret);
-
+			for(i = 0; i < ret.length; i++){
+				Fragrance.findOne({
+					where:{
+						brand: ret[i].brand,
+						title: ret[i].title,
+						concentration: ret[i].concentration,
+						gender: ret[i].gender
+					}
+				}).then(res => {
+					if(res == null){
+						console.log("Data not found");
+					}
+					else{
+						//
+					}
+				}).catch((error) => {
+					console.log("Error: Cannot fetch data: ", error);
+				});
+			}
 		});
 	}
 
