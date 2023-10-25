@@ -115,8 +115,6 @@ async def scrapeAura():
                     position = size.find('O')
                     sizeOZ = size[:position]
                     
-                    sizeML = float(sizeOZ) * 29.5735
-                    
                     # Formatting the rest of the information
                     if '$' in stock:
                         stock = "In Stock"
@@ -177,7 +175,7 @@ async def scrapeAura():
                         
                     # Databasing th results
                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                        round(float(sizeML), 2), float(price), str(stock), str(link), str(imageLink)]
+                                        float(price), str(stock), str(link), str(imageLink)]
                         
         # Women's Fragrances from Aura Fragrance
         # Opening the Aura Fragrance women's catalog page, timeout required due to potential long loading times
@@ -281,8 +279,6 @@ async def scrapeAura():
                     position = size.find('O')
                     sizeOZ = size[:position]
                     
-                    sizeML = float(sizeOZ) * 29.5735
-                    
                     # Formatting the rest of the information
                     if '$' in stock:
                         stock = "In Stock"
@@ -343,7 +339,7 @@ async def scrapeAura():
                         
                     # Databasing th results
                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                        round(float(sizeML), 2), float(price), str(stock), str(link), str(imageLink)]
+                                        float(price), str(stock), str(link), str(imageLink)]
                     
         browser.close()
         
