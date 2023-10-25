@@ -11,7 +11,7 @@ async def scrapeAura():
         browser = await p.chromium.launch(headless = False)
         page = await browser.new_page()
     
-        '''# Men's Fragrances from Aura Fragrance
+        # Men's Fragrances from Aura Fragrance
         mensBrands = []
         mensTitles = []
         mensConcentrations = []
@@ -107,7 +107,8 @@ async def scrapeAura():
                         size = size.replace("O7", "OZ")
                     
                     if ((("x" in size or "X" in size) and ("total" in size or "Samples" in size or "Sample" in size))
-                        or ("Samples" in size or "Sample" in size) and ("OZ" not in size or "oz" not in size)):
+                        or ("Samples" in size or "Sample" in size) and ("OZ" not in size or "oz" not in size)
+                        or ("1/3" in size) or (" Set " in infoCluster or " set " in infoCluster)):
                         continue
                     
                     size = size.replace("\n", "").replace('z', 'Z').replace('o', 'O').replace(" ", "")
@@ -117,6 +118,9 @@ async def scrapeAura():
                     if size[0] == ".":
                         size = "0" + size
                     
+                    if size[0].isalpha():
+                        position = size.find('/')
+                        size = size[position + 1:]
                     position = size.find('O')
                     sizeOZ = size[:position]
                     
@@ -193,7 +197,7 @@ async def scrapeAura():
                     mensGenders.append(str(gender))
                     mensStocks.append(str(stock))
                     mensLinks.append(str(link))
-                    mensImageLinks.append(str(imageLink))'''
+                    mensImageLinks.append(str(imageLink))
                         
         # Women's Fragrances from Aura Fragrance
         womensBrands = []
@@ -291,7 +295,8 @@ async def scrapeAura():
                         size = size.replace("O7", "OZ")
                     
                     if ((("x" in size or "X" in size) and ("total" in size or "Samples" in size or "Sample" in size))
-                        or ("Samples" in size or "Sample" in size) and ("OZ" not in size or "oz" not in size)):
+                        or ("Samples" in size or "Sample" in size) and ("OZ" not in size or "oz" not in size)
+                        or ("1/3" in size) or (" Set " in infoCluster or " set " in infoCluster)):
                         continue
                     
                     size = size.replace("\n", "").replace('z', 'Z').replace('o', 'O').replace(" ", "")
@@ -301,6 +306,9 @@ async def scrapeAura():
                     if size[0] == ".":
                         size = "0" + size
                     
+                    if size[0].isalpha():
+                        position = size.find('/')
+                        size = size[position + 1:]
                     position = size.find('O')
                     sizeOZ = size[:position]
                     
@@ -316,10 +324,6 @@ async def scrapeAura():
                     else:
                         stock = "Sold Out"
                         price = "NA"
-                        
-                        
-                    print("INFO CLUSTER =", infoCluster)
-                    
                     
                     if "EDP" in infoCluster:
                         concentration = "EDP"
@@ -367,15 +371,6 @@ async def scrapeAura():
                                 continue
                         
                         title = infoCluster
-                        
-                    print(brand)
-                    print(title)
-                    print(concentration)
-                    print(gender)
-                    print(float(sizeOZ))
-                    print(float(sizeML))
-                    print(price)
-                    print("----------------------------------")
                         
                     # Appending the information to lists to be databased
                     womensBrands.append(str(brand))
