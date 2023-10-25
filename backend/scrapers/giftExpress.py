@@ -304,5 +304,7 @@ async def scrapeGiftExpress():
                     
         browser.close()
 
+        return df.to_json(orient="columns")
+
 if __name__ == "__main__":
     asyncio.run(scrapeGiftExpress())
