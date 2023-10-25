@@ -1,28 +1,19 @@
 # William Duff
 # This program scrapes men's and women's fragrance information from aurafragrance.com
-# Last updated 10/18/2023
+# Last updated 10/25/2023
 
 import asyncio
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
+import pandas as pd
 
 async def scrapeAura():
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless = False)
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "sizeOZ", "sizeML", "price", "stock", "link", "photoLink"])
+        browser = await p.chromium.launch()
         page = await browser.new_page()
     
         # Men's Fragrances from Aura Fragrance
-        mensBrands = []
-        mensTitles = []
-        mensConcentrations = []
-        mensSizesOZ = []
-        mensSizeML = []
-        mensPrices = []
-        mensGenders = []
-        mensStocks = []
-        mensLinks = []
-        mensImageLinks = []
-    
         # Opening the Aura Fragrance men's catalog page, timeout required due to potential long loading times
         await page.goto("https://www.aurafragrance.com/collections/mens-fragrances?page=1", timeout = 600000)
         html = await page.inner_html('#shopify-section-collection-template')
@@ -135,7 +126,7 @@ async def scrapeAura():
                         price = price.replace(" USD", "")
                     else:
                         stock = "Sold Out"
-                        price = "NA"
+                        price = -1
                         
                     if "EDP" in infoCluster:
                         concentration = "EDP"
@@ -184,34 +175,12 @@ async def scrapeAura():
                         
                         title = infoCluster
                         
-                    # Appending the information to lists to be databased
-                    mensBrands.append(str(brand))
-                    mensTitles.append(str(title))
-                    mensConcentrations.append(str(concentration))
-                    mensSizesOZ.append(float(sizeOZ))
-                    mensSizeML.append(float(sizeML))
-                    if price == "NA":
-                        mensPrices.append(str(price))
-                    else:
-                        mensPrices.append(float(price))
-                    mensGenders.append(str(gender))
-                    mensStocks.append(str(stock))
-                    mensLinks.append(str(link))
-                    mensImageLinks.append(str(imageLink))
+                    # Databasing th results
+                    df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
+                                        round(float(sizeML), 2), float(price), str(stock), str(link), str(imageLink)]
                         
         # Women's Fragrances from Aura Fragrance
-        womensBrands = []
-        womensTitles = []
-        womensConcentrations = []
-        womensSizesOZ = []
-        womensSizeML = []
-        womensPrices = []
-        womensGenders = []
-        womensStocks = []
-        womensLinks = []
-        womensImageLinks = []
-    
-        # Opening the Aura Fragrance men's catalog page, timeout required due to potential long loading times
+        # Opening the Aura Fragrance women's catalog page, timeout required due to potential long loading times
         await page.goto("https://www.aurafragrance.com/collections/womens-fragrances?page=1", timeout = 600000)
         html = await page.inner_html('#shopify-section-collection-template')
         soup = BeautifulSoup(html, 'html.parser')
@@ -323,7 +292,7 @@ async def scrapeAura():
                         price = price.replace(" USD", "")
                     else:
                         stock = "Sold Out"
-                        price = "NA"
+                        price = -1
                     
                     if "EDP" in infoCluster:
                         concentration = "EDP"
@@ -372,20 +341,9 @@ async def scrapeAura():
                         
                         title = infoCluster
                         
-                    # Appending the information to lists to be databased
-                    womensBrands.append(str(brand))
-                    womensTitles.append(str(title))
-                    womensConcentrations.append(str(concentration))
-                    womensSizesOZ.append(float(sizeOZ))
-                    womensSizeML.append(float(sizeML))
-                    if price == "NA":
-                        womensPrices.append(str(price))
-                    else:
-                        womensPrices.append(float(price))
-                    womensGenders.append(str(gender))
-                    womensStocks.append(str(stock))
-                    womensLinks.append(str(link))
-                    womensImageLinks.append(str(imageLink))
+                    # Databasing th results
+                    df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
+                                        round(float(sizeML), 2), float(price), str(stock), str(link), str(imageLink)]
                     
         browser.close()
         
