@@ -150,4 +150,4 @@ async def scrape_jomashop():
 
             df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link, photoLink]
 
-    return df.to_json(orient="columns")
+    return df.to_json(orient="records")

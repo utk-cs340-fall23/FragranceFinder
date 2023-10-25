@@ -1,27 +1,21 @@
 # William Duff
 # This program scrapes men's and women's fragrance information from giftexpress.com
-# Last updated 10/12/2023
+# Last updated 10/25/2023
 
 import asyncio
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
+import pandas as pd
 
 async def scrapeGiftExpress():
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless = False)
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "stock", "link", "photoLink"])
+        browser = await p.chromium.launch()
         page = await browser.new_page()
-
+        
         # Men's Fragrances from Gift Express
-        mensBrands = []
-        mensTitles = []
-        mensConcentrations = []
-        mensSizes = []
-        mensPrices = []
-        mensGenders = []
-        mensStocks = []
-        mensLinks = []
         pageNumbers = []
-
+        
         await page.goto("https://www.giftexpress.com/mens-fragrances.html?perfume_type=2893%2C2894%2C2895%2C2916")
         html = await page.inner_html('#maincontent')
         soup = BeautifulSoup(html, 'html.parser')
@@ -83,13 +77,15 @@ async def scrapeGiftExpress():
                     for k in range(0, len(sizes)):
                         if sizes[k] != "Standard":
                             brand = soup.find('td', {'class': 'col data'}).text
-                            title = soup.find('h2').text
+                            title = soup.find('div', class_='b-name').text
                             concentration = soup.find('div', {'class': 'pro-perfume-type pb5'}).text
                             size = str(sizes[k])
-                            gender = soup.find('h2').text
+                            gender = soup.find('div', class_='b-name').text
                             price = str(prices[k])
                             stock = str(stocks[k])
-                            link = fragPages[j]
+                            mensLink = fragPages[j]
+                            mensImgTag = soup.find('img')
+                            mensImageLink = mensImgTag.get('src')
 
                             # Formatting the scraped data for uniformity
                             mensBrand = brand.replace('\n', "").rstrip(" ")
@@ -97,46 +93,40 @@ async def scrapeGiftExpress():
                             mensTitle = title[:position - 1]
                             mensTitle = mensTitle.replace('\n', "")
                             mensConcentration = concentration.replace('\n', "").replace("Type: ", "")
-                            mensSize = size.replace('\n', "").replace("(Tester) ", "")
-                            position = mensSize.find('z')
-                            mensSize = mensSize[:position + 1]
-                            position = gender.find("for")
-                            mensGender = gender[position + 4:]
-                            mensGender = mensGender.replace('\n', "")
-                            mensPrice = price.replace('\n', "").rstrip(" ")
+                            size = size.replace('\n', "").replace("(Tester) ", "")
+                            position = size.find("oz")
+                            mensSizeOZ = size[:position - 1]
+                            if "Unisex" in gender:
+                                mensGender = "Unisex"
+                            else:
+                                mensGender = "Male"
+                            mensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
                             mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
-                            mensBrands.append(mensBrand)
-                            mensTitles.append(mensTitle)
                             if mensConcentration == "Eau De Cologne":
-                                mensConcentrations.append("EDC")
+                                mensConcentration = "EDC"
                             elif mensConcentration == "Eau De Toilette":
-                                mensConcentrations.append("EDT")
+                                mensConcentration = "EDT"
                             elif mensConcentration == "Eau De Parfum":
-                                mensConcentrations.append("EDP")
+                                mensConcentration = "EDP"
                             elif mensConcentration == "Parfum":
-                                mensConcentrations.append(mensConcentration)
+                                mensConcentration = mensConcentration
                             else:
-                                mensConcentrations.append(mensConcentration)
-                            mensSizes.append(mensSize)
-                            if mensGender == "Men":
-                                mensGenders.append("Male")
-                            elif mensGender == ("Unisex"):
-                                mensGenders.append('Unisex')
-                            else:
-                                mensGenders.append(mensGender)
-                            mensPrices.append(mensPrice)
-                            mensStocks.append(mensStock)
-                            mensLinks.append(link)
+                                mensConcentration = "NA"
+                                
+                            df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
+                                               float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
-                    title = soup.find('h2').text
+                    title = soup.find('div', class_='b-name').text
                     concentration = soup.find('div', {'class': 'pro-perfume-type pb5'}).text
                     size = soup.find('span', {'class': 'pro-size'}).text
-                    gender = soup.find('h2').text
+                    gender = soup.find('div', class_='b-name').text
                     price = soup.find('span', {'class': 'price'}).text
                     stock = soup.find('div', {'class': 'pro-stock'})
-                    link = fragPages[j]
+                    mensLink = fragPages[j]
+                    mensImgTag = soup.find('img')
+                    mensImageLink = mensImgTag.get('src')
 
                     # Formatting, same as above
                     mensBrand = brand.replace('\n', "").rstrip(" ")
@@ -144,47 +134,31 @@ async def scrapeGiftExpress():
                     mensTitle = title[:position - 1]
                     mensTitle = mensTitle.replace('\n', "")
                     mensConcentration = concentration.replace('\n', "").replace("Type: ", "")
-                    mensSize = size.replace('\n', "").replace("(Tester) ", "")
-                    position = mensSize.find('z')
-                    mensSize = mensSize[:position + 1]
-                    position = gender.find("for")
-                    mensGender = gender[position + 4:]
-                    mensGender = mensGender.replace('\n', "")
-                    mensPrice = price.replace('\n', "").rstrip(" ")
+                    size = size.replace('\n', "").replace("(Tester) ", "")
+                    position = size.find("oz")
+                    mensSizeOZ = size[:position - 1]
+                    if "Unisex" in gender:
+                        mensGender = "Unisex"
+                    else:
+                        mensGender = "Male"
+                    mensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
                     mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
-                    mensBrands.append(mensBrand)
-                    mensTitles.append(mensTitle)
                     if mensConcentration == "Eau De Cologne":
-                        mensConcentrations.append("EDC")
+                        mensConcentration = "EDC"
                     elif mensConcentration == "Eau De Toilette":
-                        mensConcentrations.append("EDT")
+                        mensConcentration = "EDT"
                     elif mensConcentration == "Eau De Parfum":
-                        mensConcentrations.append("EDP")
+                        mensConcentration = "EDP"
                     elif mensConcentration == "Parfum":
-                        mensConcentrations.append(mensConcentration)
+                        mensConcentration = mensConcentration
                     else:
-                        mensConcentrations.append(mensConcentration)
-                    mensSizes.append(mensSize)
-                    if mensGender == "Men":
-                        mensGenders.append("Male")
-                    elif mensGender == ("Unisex"):
-                        mensGenders.append('Unisex')
-                    else:
-                        mensGenders.append(mensGender)
-                    mensPrices.append(mensPrice)
-                    mensStocks.append(mensStock)
-                    mensLinks.append(link)
+                        mensConcentration = "NA"
+                            
+                    df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
+                                        float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
 
         # Women's Fragrances from Gift Express
-        womensBrands = []
-        womensTitles = []
-        womensConcentrations = []
-        womensSizes = []
-        womensPrices = []
-        womensGenders = []
-        womensStocks = []
-        womensLinks = []
         pageNumbers = []
 
         await page.goto("https://www.giftexpress.com/womens-fragrances.html?perfume_type=2893%2C2894%2C2895%2C2916")
@@ -247,13 +221,15 @@ async def scrapeGiftExpress():
                     for k in range(0, len(sizes)):
                         if sizes[k] != "Standard":
                             brand = soup.find('td', {'class': 'col data'}).text
-                            title = soup.find('h2').text
+                            title = soup.find('div', class_='b-name').text
                             concentration = soup.find('div', {'class': 'pro-perfume-type pb5'}).text
                             size = str(sizes[k])
-                            gender = soup.find('h2').text
+                            gender = soup.find('div', class_='b-name').text
                             price = str(prices[k])
                             stock = str(stocks[k])
-                            link = fragPages[j]
+                            womensLink = fragPages[j]
+                            womensImgTag = soup.find('img')
+                            womensImageLink = womensImgTag.get('src')
 
                             # Formatting the scraped data for uniformity
                             womensBrand = brand.replace('\n', "").rstrip(" ")
@@ -261,46 +237,40 @@ async def scrapeGiftExpress():
                             womensTitle = title[:position - 1]
                             womensTitle = womensTitle.replace('\n', "")
                             womensConcentration = concentration.replace('\n', "").replace("Type: ", "")
-                            womensSize = size.replace('\n', "").replace("(Tester) ", "")
-                            position = womensSize.find('z')
-                            mensSize = womensSize[:position + 1]
-                            position = gender.find("for")
-                            womensGender = gender[position + 4:]
-                            womensGender = womensGender.replace('\n', "")
-                            womensPrice = price.replace('\n', "").rstrip(" ")
+                            size = size.replace('\n', "").replace("(Tester) ", "")
+                            position = size.find("oz")
+                            womensSizeOZ = size[:position - 1]
+                            if "Unisex" in gender:
+                                womensGender = "Unisex"
+                            else:
+                                womensGender = "Female"
+                            womensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
                             womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
-                            womensBrands.append(womensBrand)
-                            womensTitles.append(womensTitle)
                             if womensConcentration == "Eau De Cologne":
-                                womensConcentrations.append("EDC")
+                                womensConcentration = "EDC"
                             elif womensConcentration == "Eau De Toilette":
-                                womensConcentrations.append("EDT")
+                                womensConcentration = "EDT"
                             elif womensConcentration == "Eau De Parfum":
-                                womensConcentrations.append("EDP")
+                                womensConcentration = "EDP"
                             elif womensConcentration == "Parfum":
-                                womensConcentrations.append(womensConcentration)
+                                womensConcentration = womensConcentration
                             else:
-                                womensConcentrations.append(womensConcentration)
-                            womensSizes.append(womensSize)
-                            if womensGender == "Women":
-                                womensGenders.append("Female")
-                            elif womensGender == ("Unisex"):
-                                womensGenders.append('Unisex')
-                            else:
-                                womensGenders.append(womensGender)
-                            womensPrices.append(womensPrice)
-                            womensStocks.append(womensStock)
-                            womensLinks.append(link)
+                                womensConcentration = "NA"
+                                
+                            df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
+                                               float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
-                    title = soup.find('h2').text
+                    title = soup.find('div', class_='b-name').text
                     concentration = soup.find('div', {'class': 'pro-perfume-type pb5'}).text
                     size = soup.find('span', {'class': 'pro-size'}).text
-                    gender = soup.find('h2').text
+                    gender = soup.find('div', class_='b-name').text
                     price = soup.find('span', {'class': 'price'}).text
                     stock = soup.find('div', {'class': 'pro-stock'})
-                    link = fragPages[j]
+                    womensLink = fragPages[j]
+                    womensImgTag = soup.find('img')
+                    womensImageLink = womensImgTag.get('src')
 
                     # Formatting, same as above
                     womensBrand = brand.replace('\n', "").rstrip(" ")
@@ -308,39 +278,33 @@ async def scrapeGiftExpress():
                     womensTitle = title[:position - 1]
                     womensTitle = womensTitle.replace('\n', "")
                     womensConcentration = concentration.replace('\n', "").replace("Type: ", "")
-                    womensSize = size.replace('\n', "").replace("(Tester) ", "")
-                    position = womensSize.find('z')
-                    womensSize = womensSize[:position + 1]
-                    position = gender.find("for")
-                    womensGender = gender[position + 4:]
-                    womensGender = womensGender.replace('\n', "")
-                    womensPrice = price.replace('\n', "").rstrip(" ")
+                    size = size.replace('\n', "").replace("(Tester) ", "")
+                    position = size.find("oz")
+                    womensSizeOZ = size[:position - 1]
+                    if "Unisex" in gender:
+                        womensGender = "Unisex"
+                    else:
+                        womensGender = "Female"
+                    womensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
                     womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
-                    womensBrands.append(womensBrand)
-                    womensTitles.append(womensTitle)
                     if womensConcentration == "Eau De Cologne":
-                        womensConcentrations.append("EDC")
+                        womensConcentration = "EDC"
                     elif womensConcentration == "Eau De Toilette":
-                        womensConcentrations.append("EDT")
+                        womensConcentration = "EDT"
                     elif womensConcentration == "Eau De Parfum":
-                        womensConcentrations.append("EDP")
+                        womensConcentration = "EDP"
                     elif womensConcentration == "Parfum":
-                        womensConcentrations.append(womensConcentration)
+                        womensConcentration = womensConcentration
                     else:
-                        womensConcentrations.append(womensConcentration)
-                    womensSizes.append(mensSize)
-                    if womensGender == "Women":
-                        womensGenders.append("Female")
-                    elif womensGender == ("Unisex"):
-                        womensGenders.append('Unisex')
-                    else:
-                        womensGenders.append(womensGender)
-                    womensPrices.append(womensPrice)
-                    womensStocks.append(womensStock)
-                    womensLinks.append(link)
-
+                        womensConcentration = "NA"
+                            
+                    df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
+                                        float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
+                    
         browser.close()
+
+        return df.to_json(orient="columns")
 
 if __name__ == "__main__":
     asyncio.run(scrapeGiftExpress())
