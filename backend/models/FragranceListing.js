@@ -21,7 +21,7 @@ FragranceListing.init(
       }
     },
     price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false
     },
     discount: {
@@ -31,13 +31,13 @@ FragranceListing.init(
       type: DataTypes.INTEGER
     },
     sizeoz: {
-      type: DataTypes.FLOAT
+      type: DataTypes.STRING
     },
     sizeml: {
-      type: DataTypes.FLOAT
+      type: DataTypes.STRING
     },
     reviews: {
-      type: DataTypes.FLOAT
+      type: DataTypes.STRING
     },
     site: {
       type: DataTypes.STRING
