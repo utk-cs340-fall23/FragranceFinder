@@ -9,7 +9,7 @@ import pandas as pd
 
 async def scrapeGiftExpress():
     async with async_playwright() as p:
-        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "sizeOZ", "sizeML", "price", "stock", "link", "photoLink"])
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "stock", "link", "photoLink"])
         browser = await p.chromium.launch()
         page = await browser.new_page()
         
@@ -96,10 +96,6 @@ async def scrapeGiftExpress():
                             size = size.replace('\n', "").replace("(Tester) ", "")
                             position = size.find("oz")
                             mensSizeOZ = size[:position - 1]
-                            position = size.find("(")
-                            mensSizeML = size[position + 1:]
-                            position = mensSizeML.find(" ")
-                            mensSizeML = mensSizeML[:position]
                             if "Unisex" in gender:
                                 mensGender = "Unisex"
                             else:
@@ -119,7 +115,7 @@ async def scrapeGiftExpress():
                                 mensConcentration = "NA"
                                 
                             df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
-                                               round(float(mensSizeML), 2), float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
+                                               float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
                     title = soup.find('div', class_='b-name').text
@@ -141,10 +137,6 @@ async def scrapeGiftExpress():
                     size = size.replace('\n', "").replace("(Tester) ", "")
                     position = size.find("oz")
                     mensSizeOZ = size[:position - 1]
-                    position = size.find("(")
-                    mensSizeML = size[position + 1:]
-                    position = mensSizeML.find(" ")
-                    mensSizeML = mensSizeML[:position]
                     if "Unisex" in gender:
                         mensGender = "Unisex"
                     else:
@@ -164,7 +156,7 @@ async def scrapeGiftExpress():
                         mensConcentration = "NA"
                             
                     df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
-                                        round(float(mensSizeML), 2), float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
+                                        float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
 
         # Women's Fragrances from Gift Express
         pageNumbers = []
@@ -248,14 +240,10 @@ async def scrapeGiftExpress():
                             size = size.replace('\n', "").replace("(Tester) ", "")
                             position = size.find("oz")
                             womensSizeOZ = size[:position - 1]
-                            position = size.find("(")
-                            womensSizeML = size[position + 1:]
-                            position = womensSizeML.find(" ")
-                            womensSizeML = womensSizeML[:position]
                             if "Unisex" in gender:
                                 womensGender = "Unisex"
                             else:
-                                wmensGender = "Female"
+                                womensGender = "Female"
                             womensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
                             womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
@@ -271,7 +259,7 @@ async def scrapeGiftExpress():
                                 womensConcentration = "NA"
                                 
                             df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
-                                               round(float(womensSizeML), 2), float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
+                                               float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
                     title = soup.find('div', class_='b-name').text
@@ -293,10 +281,6 @@ async def scrapeGiftExpress():
                     size = size.replace('\n', "").replace("(Tester) ", "")
                     position = size.find("oz")
                     womensSizeOZ = size[:position - 1]
-                    position = size.find("(")
-                    womensSizeML = size[position + 1:]
-                    position = womensSizeML.find(" ")
-                    womensSizeML = womensSizeML[:position]
                     if "Unisex" in gender:
                         womensGender = "Unisex"
                     else:
@@ -316,7 +300,7 @@ async def scrapeGiftExpress():
                         womensConcentration = "NA"
                             
                     df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
-                                        round(float(womensSizeML), 2), float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
+                                        float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
                     
         browser.close()
 
