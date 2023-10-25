@@ -21,7 +21,10 @@ def recursive_git_blame(directory, username, ignore_dirs=[], ignore_files=[], ig
     results = []
     unique_files = set()
     for root, dirs, files in os.walk(directory):
-        dirs[:] = [d for d in dirs if d not in ignore_dirs]
+        dirs[:] = [
+            d for d in dirs if
+            d not in ignore_dirs and 'sprint' not in d
+        ]
         for f in files:
             ext = f.split('.')[-1]
             if ext in ignore_extensions:
