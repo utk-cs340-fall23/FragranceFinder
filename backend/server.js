@@ -21,5 +21,4 @@ app.get('*', (req, res) => {
 
 sequelize.sync({ force: false, alter: true }).then(() => {
 	app.listen(PORT, () => console.log('Now listening'));
-	dbUpdate();
 });

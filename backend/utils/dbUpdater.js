@@ -11,13 +11,19 @@ function dbUpdate() {
 	const spawn = require("child_process").spawn;
 
 	function scrapeWeb(){
-		const pyproc = spawn("python", ["./scrapers/MasterScript.py"]);
+		const pyproc = spawn("python", ["./scrapers/MasterScript.py"], {
+			maxBuffer: 1000 * 1000 * 10 // 10 MB
+		});
 
-		pyproc.stdout.on("data", (data) => {
-			
-			ret = JSON.parse(data.toString());
-			
-			for(i = 0; i < ret.length; i++){
+		let output = '';
+		pyproc.stdout.on('data', (data) => {
+			output += data.toString();
+		});
+
+		pyproc.stdout.on("end", (data) => {
+			const ret = JSON.parse(output);
+
+			for(let i = 0; i < ret.length; i++){
 				Fragrance.findOne({
 					where:{
 						brand: ret[i].brand,
@@ -28,9 +34,9 @@ function dbUpdate() {
 				}).then(res => {
 					if(res == null){
 						console.log("Data not found");
-						
+
 						//insert new data
-						
+
 						Fragrance.create({
 							brand: ret[i].brand,
 							title: ret[i].title,
@@ -49,7 +55,6 @@ function dbUpdate() {
 	}
 
 	scrapeWeb();
-	setInterval(scrapeWeb, 3600000);
 }
 
 module.exports = dbUpdate;
