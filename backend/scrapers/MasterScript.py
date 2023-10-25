@@ -9,6 +9,6 @@ if not os.path.exists(os.path.join(os.getcwd(), 'data')):
 
 
 temp = asyncio.run(scrape_jomashop())
-df = pd.read_json(temp, orient="columns")
+df = pd.read_json(temp, orient="records")
 df.to_json('data/jomashop.json', orient='records')
-print(df)
+print(df.to_json(orient='records'))

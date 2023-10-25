@@ -11,10 +11,10 @@ function dbUpdate() {
 	const spawn = require("child_process").spawn;
 
 	function scrapeWeb(){
-		const pyproc = spawn("python", ["../scrapers/scraperfaker.py"]);
+		const pyproc = spawn("python", ["./scrapers/MasterScript.py"]);
 
 		pyproc.stdout.on("data", (data) => {
-			ret = JSON.parse(data.toString());
+			/*ret = JSON.parse(data.toString());
 			// IMPORTANT: The record in scrapers/scraperfaker.py must already exist in the database for the demo to work.
 
 			Fragrance.findOne({
@@ -114,7 +114,11 @@ function dbUpdate() {
 
 			}).catch((error) => {
 				console.error("Cannot get data: ", error);
-			});
+			});*/
+
+			ret = JSON.parse(data.toString());
+
+			console.log(ret[0])
 
 		});
 	}
