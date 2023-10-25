@@ -342,6 +342,8 @@ async def scrapeAura():
                                         float(price), str(stock), str(link), str(imageLink)]
                     
         browser.close()
+
+        return df.to_json(orient="columns")
         
 if __name__ == "__main__":
     asyncio.run(scrapeAura())
