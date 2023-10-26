@@ -37,9 +37,9 @@ async def scrape_maxaroma():
                 data_page = data_page.find('a', class_='list-more d-block')
                 data_page = int(data_page['data-page'])
                 if (data_page >= 365):
-                    print(f"Data Page Num: {data_page}")
+                    #print(f"Data Page Num: {data_page}")
                     break
-                print(f"Data Page: {data_page}")
+                #print(f"Data Page: {data_page}")
                 # Wait 7 seconds then click top left corner to close popup ad
                 if data_page == 1:
                     await page.wait_for_timeout(7000)
