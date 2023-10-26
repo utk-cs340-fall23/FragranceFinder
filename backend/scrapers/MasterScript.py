@@ -8,14 +8,14 @@ import os
 #if not os.path.exists(os.path.join(os.getcwd(), 'data')):
 #    os.mkdir('data', 0x774)
 
+frames = [
+    pd.read_json(asyncio.run(scrape_jomashop()), orient="records"),
+    pd.read_json(asyncio.run(scrape_maxaroma()), orient="records")
+]
 
-temp = asyncio.run(scrape_jomashop())
-df = pd.read_json(temp, orient="records")
-#df.to_json('data/jomashop.json', orient='records')
+#frames[0].to_json('data/jomashop.json', orient='records')
+#frames[1].to_json('data/jomashop.json', orient='records')
 
-temp1 = asyncio.run(scrape_maxaroma())
-df1 = pd.read_json(temp1, orient="records")
-#df1.to_json('data/maxaroma.json', orient='records')
+gdf = pd.concat(frames)
 
-print(df.to_json(orient='records'))
-print(df1.to_json(orient='records'))
+print(gdf.to_json(orient='records'))

@@ -21,48 +21,45 @@ function dbUpdate() {
 		});
 
 		pyproc.stdout.on("end", (data) => {
-			//const ret = JSON.parse(output);
-			// Parse the data into separate jsons to be iterated through
-			const [jomashopOut, maxaromaOut] = output.split("\n");	
-			const json1 = JSON.parse(jomashopOut);
-			const json2 = JSON.parse(maxaromaOut);
+			const ret = JSON.parse(output);
 
-			[json1, json2].forEach(ret => {
-				for(let i = 0; i < ret.length; i++){
-					if(ret[i].brand != "N/A" && ret[i].title != "N/A" && ret[i].concentration != "N/A" && ret[i].gender != "N/A"){
-						Fragrance.findOne({
-							where:{
+			for(let i = 0; i < ret.length; i++){
+				if(ret[i].brand != "N/A" && ret[i].title != "N/A" && ret[i].concentration != "N/A" && ret[i].gender != "N/A"){
+					Fragrance.findOne({
+						where:{
+							brand: ret[i].brand,
+							title: ret[i].title,
+							concentration: ret[i].concentration,
+							gender: ret[i].gender
+						}
+					}).then(res => {
+						if(res == null){
+							// Creates new record of item
+							Fragrance.create({
 								brand: ret[i].brand,
 								title: ret[i].title,
 								concentration: ret[i].concentration,
+								photoLink: ret[i].photoLink,
 								gender: ret[i].gender
-							}
-						}).then(res => {
-							if(res == null){
-								Fragrance.create({
-									brand: ret[i].brand,
-									title: ret[i].title,
-									concentration: ret[i].concentration,
-									photoLink: ret[i].photoLink,
-									gender: ret[i].gender
-								}).then(ins => {
-									FragranceListing.create({
-										fragranceId: ins.id,
-										price: ret[i].price,
-										link: ret[i].link,
-										sizeoz: ret[i].size
-									});
+							}).then(ins => {
+								FragranceListing.create({
+									fragranceId: ins.id,
+									price: ret[i].price,
+									link: ret[i].link,
+									sizeoz: ret[i].size
 								});
-							}
-							else{
-								console.log("data found");
-							}
-						}).catch((error) => {
-							console.log("Error: Cannot fetch data: ", error);
-						});
-					}
+							});
+						}
+						else{
+							console.log("data found");
+							// Append existing element
+							
+						}
+					}).catch((error) => {
+						console.log("Error: Cannot fetch data: ", error);
+					});
 				}
-			});
+			}
 		});
 	}
 
