@@ -33,19 +33,15 @@ function dbUpdate() {
 					}
 				}).then(res => {
 					if(res == null){
-						//console.log("Data not found");
-
-						//insert new data
-
 						Fragrance.create({
 							brand: ret[i].brand,
 							title: ret[i].title,
 							concentration: ret[i].concentration,
-							gender: ret[i].gender,
-							photo_link: ret[i].photoLink
+							photoLink: ret[i].photoLink,
+							gender: ret[i].gender
 						}).then(ins => {
 							FragranceListing.create({
-								fragrance_id: ins.id,
+								fragranceId: ins.id,
 								price: ret[i].price,
 								link: ret[i].link,
 								sizeoz: ret[i].size
