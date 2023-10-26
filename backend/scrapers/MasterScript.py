@@ -14,7 +14,7 @@ frames = [
 ]
 
 #frames[0].to_json('data/jomashop.json', orient='records')
-#frames[1].to_json('data/jomashop.json', orient='records')
+#frames[1].to_json('data/maxaroma.json', orient='records')
 
 gdf = pd.concat(frames)
 
