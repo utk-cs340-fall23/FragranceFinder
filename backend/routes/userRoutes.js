@@ -7,11 +7,7 @@ router.post('/', async (req, res) => {
 
     // Try to create user. Return token if successful
     try {
-        const newUser = await User.create({
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password
-        });
+        const newUser = await User.create(req.body);
 
         res.json({
             token: signToken(newUser)

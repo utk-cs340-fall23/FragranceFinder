@@ -1,0 +1,963 @@
+./blame_commits.py
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  1) import subprocess
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  2) import os
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  3) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  4) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  5) def git_blame_for_file(file_path, username):
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  6)     try:
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  7)         command = f"git blame {file_path} | grep -i {username}"
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  8)         blame_output = subprocess.check_output(
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  9)             command,
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 10)             stderr=subprocess.STDOUT,
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 11)             shell=True
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 12)         ).decode('utf-8').strip()
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 13) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 14)         return f"\n{file_path}\n{blame_output}".strip()
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 15) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 16)     except subprocess.CalledProcessError:
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 17)         return ""
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 18) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 19) 
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 20) def recursive_git_blame(directory, username, ignore_dirs=[], ignore_files=[], ignore_extensions=[]):
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 21)     results = []
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 22)     unique_files = set()
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 23)     for root, dirs, files in os.walk(directory):
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 28)         for f in files:
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 29)             ext = f.split('.')[-1]
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 30)             if ext in ignore_extensions:
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 31)                 continue
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 32)             if f in ignore_files:
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 33)                 continue
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 34) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 35)             file_path = os.path.join(root, f)
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 36)             blame_output = git_blame_for_file(file_path, username)
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 37)             if blame_output:
+04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 38)                 unique_files.add(
+04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 39)                     file_path
+04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 40)                     .replace('./', '')
+04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 41)                     .replace('.\\', '')
+04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 42)                 )
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 43)                 results.append(blame_output)
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 44) 
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 45)     return ("\n\n".join(results), unique_files)
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 46) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 47) 
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 48) if __name__ == "__main__":
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 49)     netid = input("Enter your NetID: ").lower()
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 50)     username = input("Enter your GitHub username: ").lower()
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 51)     sprint_num = int(input("Enter the sprint number: "))
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 52) 
+a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 53)     directories_to_ignore = ['venv', 'node_modules', 'public', 'build', '__pycache__', '.git']
+a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 54)     files_to_ignore = ['package-lock.json', '.gitignore', '.DS_Store']
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 55)     extensions_to_ignore = ['svg', 'env']
+a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 56)     result, files = recursive_git_blame(
+a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 57)         '.',
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 58)         username,
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 59)         ignore_dirs=directories_to_ignore,
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 60)         ignore_files=files_to_ignore,
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 61)         ignore_extensions=extensions_to_ignore
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 62)     )
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 63) 
+a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 64)     files_string = "\n".join(files)
+afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 65)     with open(f"sprint{sprint_num}/{netid}.commits.txt", 'w') as fl:
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 66)         fl.write(result)
+ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 67) 
+a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 68)     print(f"\nFiles worked on:\n{files_string}")
+
+./frontend/package.json
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400  9)     "bootstrap": "^5.3.2",
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400 10)     "holderjs": "^2.9.9",
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 14)     "react-bootstrap": "^2.9.0",
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 16)     "react-icons": "^4.11.0",
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 17)     "react-responsive-masonry": "^2.1.7",
+
+./frontend/src/App.css
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 1) #root {
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 2)     height: 100vh;
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 3) }
+
+./frontend/src/App.js
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400  3) import Home from './pages/Home';
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400  7) import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+./frontend/src/utils/auth.js
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400  7)         const token = this.getToken();
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400  8)         if (token) {
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400  9)             return decode(this.getToken()).data;
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 10)         }
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 11)         return null;
+
+./frontend/src/components/FilterBar.js
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   1) import React, {useEffect, useState} from 'react';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   2) import Container from 'react-bootstrap/Container';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   3) import Row from 'react-bootstrap/Row';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   4) import Col from 'react-bootstrap/Col';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   5) import Form from 'react-bootstrap/Form';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   6) import InputGroup from 'react-bootstrap/InputGroup';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   7) import Button from 'react-bootstrap/Button';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   8) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   9) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  10) function FilterBar({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  11)     searchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  12)     setSearchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  13)     searchFragrances,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  14)     defaultSearchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  15)     searchDefaults,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  16)     xs,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  17)     useSidebarFilter,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  18)     hideFilters
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  19) }) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  20)     const updateSearchObject = (name, value) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  21)         setSearchObject({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  22)             ...searchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  23)             [name]: value
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  24)         });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  25)     }
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  26) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  27)     const handleFormChange = (event) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  28)         updateSearchObject(event.target.name, event.target.value);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  29)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  30) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  31)     // Range values are only 1-100. Normalize the value with its
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  32)     // associated max value. There is similiar logic in each of the
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  33)     // next two functions
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  34)     const handleRangeChange = (event, normalizer) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  35)         const newVal = Math.round(
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  36)             (parseInt(event.target.value) / 100) * normalizer
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  37)         );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  38)         updateSearchObject(event.target.name, newVal);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  39)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  40) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  41)     const getRangeValue = (val, normalizer) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  42)         const newVal = Math.round((val / normalizer) * 100);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  43)         return newVal;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  44)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  45) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  46)     // Set search object to defaults and search fragrances again
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  47)     const resetSearchObject = () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  48)         setSearchObject(defaultSearchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  49)         searchFragrances(defaultSearchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  50)         if (hideFilters) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  51)             hideFilters();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  52)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  53)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  54) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  55)     // Apply new filters to search.
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  56)     const handleApplyClick = () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  57)         searchFragrances(searchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  58)         if (hideFilters) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  59)             hideFilters();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  60)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  61)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  62) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  63)     // When brands are checked/unchecked, we need
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  64)     // to toggle their presence in the 'brands'
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  65)     // field of searchObject
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  66)     const handleBrandChange = (event) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  67)         if (allBrandsChecked) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  68)             return;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  69)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  70) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  71)         const brandName = event.target.name;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  72)         const brands = [...searchObject.brands];
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  73) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  74)         if (brands.includes(brandName) && !allBrandsChecked) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  75)             brands.splice(brands.indexOf(brandName), 1);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  76)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  77)         else if (!brands.includes(brandName)) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  78)             brands.push(brandName);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  79)         }
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  80)         updateSearchObject('brands', brands);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  81)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  82) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  83)     const [allBrandsChecked, setAllBrandsChecked] = useState(!searchObject.brands.length);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  84) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  85)     // If all brands are checked, empty brands in searchObject
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  86)     useEffect(() => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  87)         if (allBrandsChecked) {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  88)             updateSearchObject('brands', []);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  89)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  90)     }, [allBrandsChecked]);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  91) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  92) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  93)     const {maxSize, maxPrice} = searchDefaults;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  94)     const genderOptions = ['All', 'Unisex', 'Male', 'Female'];
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  95) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  96)     return (
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  97)         <Col xs={xs} style={{
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  98)             borderRight: '1px solid lightgray'
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  99)         }}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 100)             {!useSidebarFilter && (<h4>Filters</h4>)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 101)             <Form>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 102)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 103)                     <Form.Label><strong>Price</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 104)                     <Form.Group style={{marginLeft: '8px'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 105)                         <Form.Label>Min:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 106)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 107)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 108)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 109)                                 name='price_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 110)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 111)                                 value={getRangeValue(searchObject.price_start, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 112)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 113)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 114)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 115)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 116)                                     <InputGroup.Text>$</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 117)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 118)                                     name='price_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 119)                                     value={searchObject.price_start}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 120)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 121)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 122)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 123)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 124)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 125)                         <Form.Label>Max:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 126)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 127)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 128)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 129)                                 name='price_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 130)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 131)                                 value={getRangeValue(searchObject.price_end, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 132)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 133)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 134)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 135)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 136)                                     <InputGroup.Text>$</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 137)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 138)                                     name='price_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 139)                                     value={searchObject.price_end}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 140)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 141)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 142)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 143)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 144)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 145)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 146)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 147)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 148)                     <Form.Label><strong>Size</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 149)                     <Form.Group style={{marginLeft: '8px'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 150)                     <Form.Label>Min:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 151)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 152)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 153)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 154)                                 name='size_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 155)                                 onChange={(event) => handleRangeChange(event, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 156)                                 value={getRangeValue(searchObject.size_start, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 157)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 158)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 159)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 160)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 161)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 162)                                     name='size_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 163)                                     value={searchObject.size_start}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 164)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 165)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 166)                                     <InputGroup.Text>oz</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 167)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 168)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 169)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 170)                         <Form.Label>Max:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 171)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 172)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 173)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 174)                                 name='size_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 175)                                 onChange={(event) => handleRangeChange(event, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 176)                                 value={getRangeValue(searchObject.size_end, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 177)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 178)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 179)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 180)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 181)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 182)                                     name='size_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 183)                                     value={searchObject.size_end}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 184)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 185)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 186)                                     <InputGroup.Text>oz</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 187)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 188)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 189)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 190)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 191)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 192)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 193)                     <Form.Label><strong>Gender</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 194)                     <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 195)                         <Form.Select name='gender' onChange={handleFormChange} value={searchObject.gender}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 196)                             {genderOptions.map((option, i) => (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 197)                                 <option key={i} value={option}>{option}</option>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 198)                             ))}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 199)                         </Form.Select>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 200)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 201)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 202)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 203)                     <Form.Label><strong>Brand</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 204)                     <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 205)                         <Form.Check
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 206)                             type='checkbox'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 207)                             name='all'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 208)                             label={'All'}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 209)                             checked={allBrandsChecked}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 210)                             onChange={() => setAllBrandsChecked(!allBrandsChecked)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 211)                         />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 212)                         {searchDefaults.brands.map((brand, i) => (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 213)                             <Form.Check
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 214)                                 key={i}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 215)                                 type='checkbox'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 216)                                 name={brand.brand}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 217)                                 label={`${brand.brand} (${brand.listingCount})`}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 218)                                 checked={searchObject.brands.includes(brand.brand) || allBrandsChecked}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 219)                                 onChange={handleBrandChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 220)                             />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 221)                         ))}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 222)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 223)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 224)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 225)                     <span>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 226)                         <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 227)                     </span>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 228)                     <span>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 229)                         <Button size='sm' onClick={handleApplyClick}>Apply</Button>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 230)                     </span>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 231)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 232)             </Form>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 233)         </Col>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 234)     )
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 235) }
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 236) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 237) export default FilterBar;
+
+./frontend/src/components/Browsing.js
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400   1) import React, {useEffect, useState} from 'react';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   2) import Container from 'react-bootstrap/Container';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   3) import Row from 'react-bootstrap/Row';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   4) import FilterBar from './FilterBar';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   5) import FragranceListings from './FragranceListings';
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400   6) import { sendGet } from '../utils/requests';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   7) import Offcanvas from 'react-bootstrap/Offcanvas';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   8) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   9) const SMALL_SCREEN_CUTOFF = 800;
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  10) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  11) const Browsing = ({style}) => {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  12) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  13)     // Handle screen size changes with the next few variables/functions
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  14)     const [useOffcanvasFilters, setUseOffcanvasFilters] = useState(
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  15)       window.innerWidth < SMALL_SCREEN_CUTOFF
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  16)     );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  17) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  18)     const updateScreenState = () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  19)         setUseOffcanvasFilters(
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  20)             window.innerWidth < SMALL_SCREEN_CUTOFF
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  21)         );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  22)     };
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  23) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  24)     useEffect(() => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  25)         window.addEventListener('resize', updateScreenState);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  26) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  27)         return () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  28)             window.removeEventListener('resize', updateScreenState);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  29)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  30)     }, []);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  31) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  32)     // Initialize variables related to searching
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  33)     const [searchDefaults, setSearchDefaults] = useState({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  34)       maxPrice: 1000,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  35)       maxSize: 100,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  36)       brands: []
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  37)     });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  38) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  39)     const [defaultSearchObject, setDefaultSearchObject] = useState({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  40)       price_start: 0,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  41)       price_end: searchDefaults.maxPrice,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  42)       size_start: 0,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  43)       size_end: searchDefaults.maxSize,
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  44)       brands: searchDefaults.brands,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  45)       gender: 'All'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  46)     });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  47) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  48)     const [searchObject, setSearchObject] = useState(defaultSearchObject);
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  49)     const [fragranceListings, setFragranceListings] = useState(null);
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  50) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  51)     // Use searchObject to search for fragrances
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  52)     const searchFragrances = async (params) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  53)       const url = '/api/fragrance-listings';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  54)       const response = await sendGet(
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  55)         `${url}?${new URLSearchParams(params).toString()}`
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  56)       );
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  57)       if (response.ok && response.data.success) {
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  58)         setFragranceListings(response.data.data);
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  59)       }
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  60)     }
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  61) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  62)     const getSearchDefaults = async () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  63)       const response = await sendGet('/api/fragrance-listings/search-defaults');
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  64)       const searchDefaultsData = response.data.data;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  65)       const newMaxPrice = Math.round(searchDefaultsData.maxPrice);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  66)       const newMaxSize = Math.round(searchDefaultsData.maxSize);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  67) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  68)       setSearchDefaults(searchDefaultsData);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  69) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  70)       setSearchObject({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  71)         ...searchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  72)         price_end: newMaxPrice,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  73)         size_end: newMaxSize
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  74)       });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  75) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  76)       setDefaultSearchObject({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  77)         ...defaultSearchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  78)         price_end: newMaxPrice,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  79)         size_end: newMaxSize
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  80)       });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  81)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  82) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  83)     // Get search defaults
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  84)     useEffect(() => {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  85)       getSearchDefaults();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  86)     }, []);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  87) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  88)     // Search fragrances again when defaultSearchObject is completed
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  89)     useEffect(
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  90)       () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  91)         searchFragrances(defaultSearchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  92)       },
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  93)       [defaultSearchObject]
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  94)     );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  95) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  96) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  97)     const [showSidebar, setShowSidebar] = useState(false);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  98) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  99)     if (useOffcanvasFilters) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 100)       const showFilters = () => setShowSidebar(true);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 101)       const hideFilters = () => setShowSidebar(false);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 102) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 103)       return (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 104)           <Container style={style}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 105)             <Row style={{
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 106)               height: '100%'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 107)             }}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 108)             <Offcanvas show={showSidebar} onHide={hideFilters}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 109)               <Offcanvas.Header closeButton>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 110)                 <Offcanvas.Title>Filters</Offcanvas.Title>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 111)               </Offcanvas.Header>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 112)               <Offcanvas.Body>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 113)                 <FilterBar
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 114)                 xs={12}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 115)                 searchObject={searchObject}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 116)                 setSearchObject={setSearchObject}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 117)                 searchFragrances={searchFragrances}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 118)                 defaultSearchObject={defaultSearchObject}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 119)                 searchDefaults={searchDefaults}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 120)                 useSidebarFilter={useOffcanvasFilters}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 121)                 hideFilters={hideFilters}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 122)                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 123)               </Offcanvas.Body>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 124)             </Offcanvas>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 125)               <FragranceListings
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 126)               xs={12}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 127)               fragranceListings={fragranceListings}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 128)               showFilters={showFilters}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 129)               useOffcanvasFilters={true}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 130)               />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 131)             </Row>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 132)           </Container>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 133)       );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 134)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 135)     else {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 136)       return (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 137)           <Container style={style}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 138)             <Row style={{
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 139)               height: '100%'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 140)             }}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 141)               <FilterBar
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 142)               xs={4}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 143)               searchObject={searchObject}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 144)               setSearchObject={setSearchObject}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 145)               searchFragrances={searchFragrances}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 146)               defaultSearchObject={defaultSearchObject}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 147)               searchDefaults={searchDefaults}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 148)               />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 149)               <FragranceListings xs={8} fragranceListings={fragranceListings}/>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 150)             </Row>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 151)           </Container>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 152)       );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 153)     }
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 154) };
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 155) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 156) export default Browsing;
+
+./frontend/src/components/Navigation.js
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  1) import React from 'react';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  2) import Container from 'react-bootstrap/Container';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  3) import Navbar from 'react-bootstrap/Navbar';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  4) import Nav from 'react-bootstrap/Nav';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  5) import auth from '../utils/auth';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  6) import NavDropdown from 'react-bootstrap/NavDropdown';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  7) import {FaCog} from 'react-icons/fa';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  8) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  9) function Navigation({style}) {
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 10)     const profile = auth.getProfile();
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 11)     const fullName = profile ? (
+4de2b28b (LakelonBailey 2023-10-24 10:42:07 -0400 12)         `${profile.firstName} ${profile.lastName}`
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 13)     ) : '';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 14) 
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 15)   return (
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 16)     <Navbar className="bg-body-tertiary" style={style}>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 17)       <Container>
+4de2b28b (LakelonBailey 2023-10-24 10:42:07 -0400 18)         <Navbar.Brand href="/"><h2>Fragrance Finder</h2></Navbar.Brand>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 19)         <Navbar.Toggle />
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 20)         <Navbar.Collapse className="justify-content-end">
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 21)         {auth.loggedIn()
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 22)         ? (
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 23)           <Nav className='me-auto'>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 24)               <Navbar.Text>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 25)                Signed in as: {fullName}
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 26)              </Navbar.Text>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 27)              <NavDropdown title={<FaCog />}>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 28)               <NavDropdown.Item href="#logout" onClick={auth.logout}>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 29)               Log Out
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 30)               </NavDropdown.Item>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 31)             </NavDropdown>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 32)           </Nav>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 33)             )
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 34)         : (
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 35)           <Nav>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 36)             <Nav.Link href="/login">Login</Nav.Link>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 37)             <Nav.Link href="/signup">Signup</Nav.Link>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 38)           </Nav>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 39)         )}
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 40)         </Navbar.Collapse>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 41)       </Container>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 42)     </Navbar>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 43)   );
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 44) }
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 45) 
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 46) export default Navigation;
+
+./frontend/src/components/FragranceListings.js
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  1) import React from "react";
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  2) import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  3) import Card from 'react-bootstrap/Card';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  4) import Col from "react-bootstrap/Col";
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  5) import Placeholder from 'react-bootstrap/Placeholder';
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  6) import Button from "react-bootstrap/Button";
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  7) import { FaFilter } from 'react-icons/fa';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  8) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  9) const FragranceListings = ({xs, fragranceListings, showFilters, useOffcanvasFilters}) => {
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 10)     const range = [...Array(50).keys()];
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 11) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 12)     const viewFragranceListing = (fragranceListing) => {
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 13)         window.open(fragranceListing.link, '_blank');
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 14)     }
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 15) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 16)     const genderMapper = {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 17)         'Male': "Men's",
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 18)         'Female': "Women's",
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 19)         'Unisex': "Unisex",
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 20)     }
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 21)     const placeholders = range.map(i => (
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 22)         <Card key={i} style={{}}>
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 23)             <Card.Img variant="top" src="holder.js/100px180" />
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 24)             <Card.Body>
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 25)             <Placeholder as={Card.Title} animation="glow">
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 26)                 <Placeholder xs={6} />
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 27)             </Placeholder>
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 28)             <Placeholder as={Card.Text} animation="glow">
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 29)                 <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 30)                 <Placeholder xs={6} /> <Placeholder xs={8} />
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 31)             </Placeholder>
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 32)             <Placeholder.Button variant="primary" xs={6} />
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 33)             </Card.Body>
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 34)         </Card>
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 35)     ))
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 36) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 37)     const resultsCount = fragranceListings?.length;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 38) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 39)     return (
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 40)         <Col xs={xs} style={{
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 41)             maxHeight: '100%',
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 42)         }}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 43)             <h4>Results {resultsCount == null ? '' : `(${resultsCount})`} {useOffcanvasFilters && (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 44)                 <Button variant="secondary" onClick={showFilters}><FaFilter /> Filters</Button>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 45)             )}</h4>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 46)             <div style={{maxHeight: '95%', overflowY: 'auto'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 47)                 <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}} style={{maxWidth: '95%'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 48)                 <Masonry columnsCount={3} gutter="10px">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 49)                     {fragranceListings == null ? placeholders :
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 50)                     (fragranceListings.length
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 51)                         ? fragranceListings.map((f, i) => (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 52)                             <Card key={i}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 53)                                 <Card.Img  style={{cursor: 'pointer'}} variant="top" src={f.fragrance.photoLink} onClick={() => window.open(f.link, '_blank')} />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 54)                                 <Card.Body>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 55)                                 <Card.Title>{f.fragrance.title} ({f.sizeoz} oz)</Card.Title>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 56)                                 <div style={{marginLeft: '8px'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 57)                                     <Card.Subtitle>{f.fragrance.brand} ({genderMapper[f.fragrance.gender]})</Card.Subtitle>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 58)                                     <Card.Subtitle style={{marginTop: '4px'}}><strong>${f.price.toFixed(2)}</strong></Card.Subtitle>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 59)                                 </div>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 60)                                 <Button style={{marginTop: '12px'}} onClick={() => viewFragranceListing(f)} variant="primary" size="sm">See on {f.site}</Button>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 61)                                 </Card.Body>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 62)                             </Card>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 63)                         ))
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 64)                         : (<p>No Results</p>)
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 65)                     )}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 66)                 </Masonry>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 67)                 </ResponsiveMasonry>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 68)             </div>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 69)         </Col>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 70)     )
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 71) };
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 72) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 73) export default FragranceListings;
+
+./frontend/src/assets/js/holder.min.js
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  1) /*!
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  2) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  3) Holder - client side image placeholders
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  4) Version 2.9.7+5g5ho
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  5) © 2020 Ivan Malopinsky - https://imsky.co
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  6) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  7) Site:     http://holderjs.com
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  8) Issues:   https://github.com/imsky/holder/issues
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  9) License:  MIT
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 10) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 11) */
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 12) !function(e){if(e.document){var t=e.document;t.querySelectorAll||(t.querySelectorAll=function(n){var r,i=t.createElement("style"),a=[];for(t.documentElement.firstChild.appendChild(i),t._qsa=[],i.styleSheet.cssText=n+"{x-qsa:expression(document._qsa && document._qsa.push(this))}",e.scrollBy(0,0),i.parentNode.removeChild(i);t._qsa.length;)r=t._qsa.shift(),r.style.removeAttribute("x-qsa"),a.push(r);return t._qsa=null,a}),t.querySelector||(t.querySelector=function(e){var n=t.querySelectorAll(e);return n.length?n[0]:null}),t.getElementsByClassName||(t.getElementsByClassName=function(e){return e=String(e).replace(/^|\s+/g,"."),t.querySelectorAll(e)}),Object.keys||(Object.keys=function(e){if(e!==Object(e))throw TypeError("Object.keys called on non-object");var t,n=[];for(t in e)Object.prototype.hasOwnProperty.call(e,t)&&n.push(t);return n}),Array.prototype.forEach||(Array.prototype.forEach=function(e){if(void 0===this||null===this)throw TypeError();var t=Object(this),n=t.length>>>0;if("function"!=typeof e)throw TypeError();var r,i=arguments[1];for(r=0;n>r;r++)r in t&&e.call(i,t[r],r,t)}),function(e){var t="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";e.atob=e.atob||function(e){e=String(e);var n,r=0,i=[],a=0,o=0;if(e=e.replace(/\s/g,""),e.length%4===0&&(e=e.replace(/=+$/,"")),e.length%4===1)throw Error("InvalidCharacterError");if(/[^+\/0-9A-Za-z]/.test(e))throw Error("InvalidCharacterError");for(;r<e.length;)n=t.indexOf(e.charAt(r)),a=a<<6|n,o+=6,24===o&&(i.push(String.fromCharCode(a>>16&255)),i.push(String.fromCharCode(a>>8&255)),i.push(String.fromCharCode(255&a)),o=0,a=0),r+=1;return 12===o?(a>>=4,i.push(String.fromCharCode(255&a))):18===o&&(a>>=2,i.push(String.fromCharCode(a>>8&255)),i.push(String.fromCharCode(255&a))),i.join("")},e.btoa=e.btoa||function(e){e=String(e);var n,r,i,a,o,s,l,h=0,u=[];if(/[^\x00-\xFF]/.test(e))throw Error("InvalidCharacterError");for(;h<e.length;)n=e.charCodeAt(h++),r=e.charCodeAt(h++),i=e.charCodeAt(h++),a=n>>2,o=(3&n)<<4|r>>4,s=(15&r)<<2|i>>6,l=63&i,h===e.length+2?(s=64,l=64):h===e.length+1&&(l=64),u.push(t.charAt(a),t.charAt(o),t.charAt(s),t.charAt(l));return u.join("")}}(e),Object.prototype.hasOwnProperty||(Object.prototype.hasOwnProperty=function(e){var t=this.__proto__||this.constructor.prototype;return e in this&&(!(e in t)||t[e]!==this[e])}),function(){if("performance"in e==!1&&(e.performance={}),Date.now=Date.now||function(){return(new Date).getTime()},"now"in e.performance==!1){var t=Date.now();performance.timing&&performance.timing.navigationStart&&(t=performance.timing.navigationStart),e.performance.now=function(){return Date.now()-t}}}(),e.requestAnimationFrame||(e.webkitRequestAnimationFrame&&e.webkitCancelAnimationFrame?!function(e){e.requestAnimationFrame=function(t){return webkitRequestAnimationFrame(function(){t(e.performance.now())})},e.cancelAnimationFrame=e.webkitCancelAnimationFrame}(e):e.mozRequestAnimationFrame&&e.mozCancelAnimationFrame?!function(e){e.requestAnimationFrame=function(t){return mozRequestAnimationFrame(function(){t(e.performance.now())})},e.cancelAnimationFrame=e.mozCancelAnimationFrame}(e):!function(e){e.requestAnimationFrame=function(t){return e.setTimeout(t,1e3/60)},e.cancelAnimationFrame=e.clearTimeout}(e))}}(this),function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.Holder=t():e.Holder=t()}(this,function(){return function(e){function t(r){if(n[r])return n[r].exports;var i=n[r]={exports:{},id:r,loaded:!1};return e[r].call(i.exports,i,i.exports,t),i.loaded=!0,i.exports}var n={};return t.m=e,t.c=n,t.p="",t(0)}([function(e,t,n){e.exports=n(1)},function(e,t,n){(function(t){function r(e,t,n,r){var o=i(n.substr(n.lastIndexOf(e.domain)),e);o&&a({mode:null,el:r,flags:o,engineSettings:t})}function i(e,t){var n={theme:T(O.settings.themes.gray,null),stylesheets:t.stylesheets,instanceOptions:t},r=e.indexOf("?"),i=[e];-1!==r&&(i=[e.slice(0,r),e.slice(r+1)]);var a=i[0].split("/");n.holderURL=e;var o=a[1],s=o.match(/([\d]+p?)x([\d]+p?)/);if(!s)return!1;if(n.fluid=-1!==o.indexOf("p"),n.dimensions={width:s[1].replace("p","%"),height:s[2].replace("p","%")},2===i.length){var l=v.parse(i[1]);if(w.truthy(l.ratio)){n.fluid=!0;var h=parseFloat(n.dimensions.width.replace("%","")),u=parseFloat(n.dimensions.height.replace("%",""));u=Math.floor(100*(u/h)),h=100,n.dimensions.width=h+"%",n.dimensions.height=u+"%"}if(n.auto=w.truthy(l.auto),l.bg&&(n.theme.bg=w.parseColor(l.bg)),l.fg&&(n.theme.fg=w.parseColor(l.fg)),l.bg&&!l.fg&&(n.autoFg=!0),l.theme&&n.instanceOptions.themes.hasOwnProperty(l.theme)&&(n.theme=T(n.instanceOptions.themes[l.theme],null)),l.text&&(n.text=l.text),l.textmode&&(n.textmode=l.textmode),l.size&&parseFloat(l.size)&&(n.size=parseFloat(l.size)),l.font&&(n.font=l.font),l.align&&(n.align=l.align),l.lineWrap&&(n.lineWrap=l.lineWrap),n.nowrap=w.truthy(l.nowrap),n.outline=w.truthy(l.outline),w.truthy(l.random)){O.vars.cache.themeKeys=O.vars.cache.themeKeys||Object.keys(n.instanceOptions.themes);var d=O.vars.cache.themeKeys[0|Math.random()*O.vars.cache.themeKeys.length];n.theme=T(n.instanceOptions.themes[d],null)}}return n}function a(e){var t=e.mode,n=e.el,r=e.flags,i=e.engineSettings,a=r.dimensions,s=r.theme,l=a.width+"x"+a.height;t=null==t?r.fluid?"fluid":"image":t;var d=/holder_([a-z]+)/g,c=!1;if(null!=r.text&&(s.text=r.text,"object"===n.nodeName.toLowerCase())){for(var f=s.text.split("\\n"),p=0;p<f.length;p++)f[p]=w.encodeHtmlEntity(f[p]);s.text=f.join("\\n")}if(s.text){var g=s.text.match(d);null!==g&&g.forEach(function(e){"holder_dimensions"===e&&(s.text=s.text.replace(e,l))})}var m=r.holderURL,v=T(i,null);if(r.font&&(s.font=r.font,!v.noFontFallback&&"img"===n.nodeName.toLowerCase()&&O.setup.supportsCanvas&&"svg"===v.renderer&&(v=T(v,{renderer:"canvas"}))),r.font&&"canvas"==v.renderer&&(v.reRender=!0),"background"==t)null==n.getAttribute("data-background-src")&&x.setAttr(n,{"data-background-src":m});else{var y={};y[O.vars.dataAttr]=m,x.setAttr(n,y)}r.theme=s,n.holderData={flags:r,engineSettings:v},("image"==t||"fluid"==t)&&x.setAttr(n,{alt:s.text?c?s.text:s.text+" ["+l+"]":l});var b={mode:t,el:n,holderSettings:{dimensions:a,theme:s,flags:r},engineSettings:v};"image"==t?(r.auto||(n.style.width=a.width+"px",n.style.height=a.height+"px"),"html"==v.renderer?n.style.backgroundColor=s.bg:(o(b),"exact"==r.textmode&&(n.holderData.resizeUpdate=!0,O.vars.resizableImages.push(n),h(n)))):"background"==t&&"html"!=v.renderer?o(b):"fluid"==t&&(n.holderData.resizeUpdate=!0,"%"==a.height.slice(-1)?n.style.height=a.height:null!=r.auto&&r.auto||(n.style.height=a.height+"px"),"%"==a.width.slice(-1)?n.style.width=a.width:null!=r.auto&&r.auto||(n.style.width=a.width+"px"),("inline"==n.style.display||""===n.style.display||"none"==n.style.display)&&(n.style.display="block"),u(n),"html"==v.renderer?n.style.backgroundColor=s.bg:(O.vars.resizableImages.push(n),h(n)))}function o(e){function n(){var t=null;switch(l.renderer){case"canvas":t=E(u,e);break;case"svg":t=C(u,e);break;default:throw"Holder: invalid renderer: "+l.renderer}return t}var r=null,i=e.mode,a=e.el,o=e.holderSettings,l=e.engineSettings;switch(l.renderer){case"svg":if(!O.setup.supportsSVG)return;break;case"canvas":if(!O.setup.supportsCanvas)return;break;default:return}var h={width:o.dimensions.width,height:o.dimensions.height,theme:o.theme,flags:o.flags},u=s(h);if(r=n(),null==r)throw"Holder: couldn't render placeholder";"background"==i?(a.style.backgroundImage="url("+r+")",l.noBackgroundSize||(a.style.backgroundSize=h.width+"px "+h.height+"px")):("img"===a.nodeName.toLowerCase()?x.setAttr(a,{src:r}):"object"===a.nodeName.toLowerCase()&&x.setAttr(a,{data:r,type:"image/svg+xml"}),l.reRender&&t.setTimeout(function(){var e=n();if(null==e)throw"Holder: couldn't render placeholder";"img"===a.nodeName.toLowerCase()?x.setAttr(a,{src:e}):"object"===a.nodeName.toLowerCase()&&x.setAttr(a,{data:e,type:"image/svg+xml"})},150)),x.setAttr(a,{"data-holder-rendered":!0})}function s(e){function t(e,t,n,r){t.width=n,t.height=r,e.width=Math.max(e.width,t.width),e.height+=t.height}var n=O.defaults.size;switch(parseFloat(e.theme.size)?n=e.theme.size:parseFloat(e.flags.size)&&(n=e.flags.size),e.font={family:e.theme.font?e.theme.font:"Arial, Helvetica, Open Sans, sans-serif",size:l(e.width,e.height,n,O.defaults.scale),units:e.theme.units?e.theme.units:O.defaults.units,weight:e.theme.fontweight?e.theme.fontweight:"bold"},e.text=e.theme.text||Math.floor(e.width)+"x"+Math.floor(e.height),e.noWrap=e.theme.nowrap||e.flags.nowrap,e.align=e.theme.align||e.flags.align||"center",e.flags.textmode){case"literal":e.text=e.flags.dimensions.width+"x"+e.flags.dimensions.height;break;case"exact":if(!e.flags.exactDimensions)break;e.text=Math.floor(e.flags.exactDimensions.width)+"x"+Math.floor(e.flags.exactDimensions.height)}var r=e.flags.lineWrap||O.setup.lineWrapRatio,i=e.width*r,a=i,o=new y({width:e.width,height:e.height}),s=o.Shape,h=new s.Rect("holderBg",{fill:e.theme.bg});if(h.resize(e.width,e.height),o.root.add(h),e.flags.outline){var u=new S(h.properties.fill);u=u.lighten(u.lighterThan("7f7f7f")?-.1:.1),h.properties.outline={fill:u.toHex(!0),width:2}}var d=e.theme.fg;if(e.flags.autoFg){var c=new S(h.properties.fill),f=new S("fff"),p=new S("000",{alpha:.285714});d=c.blendAlpha(c.lighterThan("7f7f7f")?p:f).toHex(!0)}var g=new s.Group("holderTextGroup",{text:e.text,align:e.align,font:e.font,fill:d});g.moveTo(null,null,1),o.root.add(g);var m=g.textPositionData=z(o);if(!m)throw"Holder: staging fallback not supported yet.";g.properties.leading=m.boundingBox.height;var v=null,w=null;if(m.lineCount>1){var b,x=0,A=0,C=0;w=new s.Group("line"+C),("left"===e.align||"right"===e.align)&&(a=e.width*(1-2*(1-r)));for(var E=0;E<m.words.length;E++){var T=m.words[E];v=new s.Text(T.text);var k="\\n"==T.text;!e.noWrap&&(x+T.width>=a||k===!0)&&(t(g,w,x,g.properties.leading),g.add(w),x=0,A+=g.properties.leading,C+=1,w=new s.Group("line"+C),w.y=A),k!==!0&&(v.moveTo(x,0),x+=m.spaceWidth+T.width,w.add(v))}if(t(g,w,x,g.properties.leading),g.add(w),"left"===e.align)g.moveTo(e.width-i,null,null);else if("right"===e.align){for(b in g.children)w=g.children[b],w.moveTo(e.width-w.width,null,null);g.moveTo(0-(e.width-i),null,null)}else{for(b in g.children)w=g.children[b],w.moveTo((g.width-w.width)/2,null,null);g.moveTo((e.width-g.width)/2,null,null)}g.moveTo(null,(e.height-g.height)/2,null),(e.height-g.height)/2<0&&g.moveTo(null,0,null)}else v=new s.Text(e.text),w=new s.Group("line0"),w.add(v),g.add(w),"left"===e.align?g.moveTo(e.width-i,null,null):"right"===e.align?g.moveTo(0-(e.width-i),null,null):g.moveTo((e.width-m.boundingBox.width)/2,null,null),g.moveTo(null,(e.height-m.boundingBox.height)/2,null);return o}function l(e,t,n,r){var i=parseInt(e,10),a=parseInt(t,10),o=Math.max(i,a),s=Math.min(i,a),l=.8*Math.min(s,o*r);return Math.round(Math.max(n,l))}function h(e){var t;t=null==e||null==e.nodeType?O.vars.resizableImages:[e];for(var n=0,r=t.length;r>n;n++){var i=t[n];if(i.holderData){var a=i.holderData.flags,s=k(i);if(s){if(!i.holderData.resizeUpdate)continue;if(a.fluid&&a.auto){var l=i.holderData.fluidConfig;switch(l.mode){case"width":s.height=s.width/l.ratio;break;case"height":s.width=s.height*l.ratio}}var h={mode:"image",holderSettings:{dimensions:s,theme:a.theme,flags:a},el:i,engineSettings:i.holderData.engineSettings};"exact"==a.textmode&&(a.exactDimensions=s,h.holderSettings.dimensions=a.dimensions),o(h)}else f(i)}}}function u(e){if(e.holderData){var t=k(e);if(t){var n=e.holderData.flags,r={fluidHeight:"%"==n.dimensions.height.slice(-1),fluidWidth:"%"==n.dimensions.width.slice(-1),mode:null,initialDimensions:t};r.fluidWidth&&!r.fluidHeight?(r.mode="width",r.ratio=r.initialDimensions.width/parseFloat(n.dimensions.height)):!r.fluidWidth&&r.fluidHeight&&(r.mode="height",r.ratio=parseFloat(n.dimensions.width)/r.initialDimensions.height),e.holderData.fluidConfig=r}else f(e)}}function d(){var e,n=[],r=Object.keys(O.vars.invisibleImages);r.forEach(function(t){e=O.vars.invisibleImages[t],k(e)&&"img"==e.nodeName.toLowerCase()&&(n.push(e),delete O.vars.invisibleImages[t])}),n.length&&j.run({images:n}),setTimeout(function(){t.requestAnimationFrame(d)},10)}function c(){O.vars.visibilityCheckStarted||(t.requestAnimationFrame(d),O.vars.visibilityCheckStarted=!0)}function f(e){e.holderData.invisibleId||(O.vars.invisibleId+=1,O.vars.invisibleImages["i"+O.vars.invisibleId]=e,e.holderData.invisibleId=O.vars.invisibleId)}function p(e){O.vars.debounceTimer||e.call(this),O.vars.debounceTimer&&t.clearTimeout(O.vars.debounceTimer),O.vars.debounceTimer=t.setTimeout(function(){O.vars.debounceTimer=null,e.call(this)},O.setup.debounce)}function g(){p(function(){h(null)})}var m=n(2),v=n(3),y=n(6),w=n(7),b=n(8),x=n(9),S=n(10),A=n(11),C=n(12),E=n(15),T=w.extend,k=w.dimensionCheck,F=A.svg_ns,j={version:A.version,addTheme:function(e,t){return null!=e&&null!=t&&(O.settings.themes[e]=t),delete O.vars.cache.themeKeys,this},addImage:function(e,t){var n=x.getNodeArray(t);return n.forEach(function(t){var n=x.newEl("img"),r={};r[O.setup.dataAttr]=e,x.setAttr(n,r),t.appendChild(n)}),this},setResizeUpdate:function(e,t){e.holderData&&(e.holderData.resizeUpdate=!!t,e.holderData.resizeUpdate&&h(e))},run:function(e){e=e||{};var n={},o=T(O.settings,e);O.vars.preempted=!0,O.vars.dataAttr=o.dataAttr||O.setup.dataAttr,n.renderer=o.renderer?o.renderer:O.setup.renderer,-1===O.setup.renderers.join(",").indexOf(n.renderer)&&(n.renderer=O.setup.supportsSVG?"svg":O.setup.supportsCanvas?"canvas":"html");var s=x.getNodeArray(o.images),l=x.getNodeArray(o.bgnodes),h=x.getNodeArray(o.stylenodes),u=x.getNodeArray(o.objects);return n.stylesheets=[],n.svgXMLStylesheet=!0,n.noFontFallback=!!o.noFontFallback,n.noBackgroundSize=!!o.noBackgroundSize,h.forEach(function(e){if(e.attributes.rel&&e.attributes.href&&"stylesheet"==e.attributes.rel.value){var t=e.attributes.href.value,r=x.newEl("a");r.href=t;var i=r.protocol+"//"+r.host+r.pathname+r.search;n.stylesheets.push(i)}}),l.forEach(function(e){if(t.getComputedStyle){var r=t.getComputedStyle(e,null).getPropertyValue("background-image"),s=e.getAttribute("data-background-src"),l=s||r,h=null,u=o.domain+"/",d=l.indexOf(u);if(0===d)h=l;else if(1===d&&"?"===l[0])h=l.slice(1);else{var c=l.substr(d).match(/([^\"]*)"?\)/);if(null!==c)h=c[1];else if(0===l.indexOf("url("))throw"Holder: unable to parse background URL: "+l}if(h){var f=i(h,o);f&&a({mode:"background",el:e,flags:f,engineSettings:n})}}}),u.forEach(function(e){var t={};try{t.data=e.getAttribute("data"),t.dataSrc=e.getAttribute(O.vars.dataAttr)}catch(i){}var a=null!=t.data&&0===t.data.indexOf(o.domain),s=null!=t.dataSrc&&0===t.dataSrc.indexOf(o.domain);a?r(o,n,t.data,e):s&&r(o,n,t.dataSrc,e)}),s.forEach(function(e){var t={};try{t.src=e.getAttribute("src"),t.dataSrc=e.getAttribute(O.vars.dataAttr),t.rendered=e.getAttribute("data-holder-rendered")}catch(i){}var a=null!=t.src,s=null!=t.dataSrc&&0===t.dataSrc.indexOf(o.domain),l=null!=t.rendered&&"true"==t.rendered;a?0===t.src.indexOf(o.domain)?r(o,n,t.src,e):s&&(l?r(o,n,t.dataSrc,e):!function(e,t,n,i,a){w.imageExists(e,function(e){e||r(t,n,i,a)})}(t.src,o,n,t.dataSrc,e)):s&&r(o,n,t.dataSrc,e)}),this}},O={settings:{domain:"holder.js",images:"img",objects:"object",bgnodes:"body .holderjs",stylenodes:"head link.holderjs",themes:{gray:{bg:"#EEEEEE",fg:"#AAAAAA"},social:{bg:"#3a5a97",fg:"#FFFFFF"},industrial:{bg:"#434A52",fg:"#C2F200"},sky:{bg:"#0D8FDB",fg:"#FFFFFF"},vine:{bg:"#39DBAC",fg:"#1E292C"},lava:{bg:"#F8591A",fg:"#1C2846"}}},defaults:{size:10,units:"pt",scale:1/16}},z=function(){var e=null,t=null,n=null;return function(r){var i=r.root;if(O.setup.supportsSVG){var a=!1,o=function(e){return document.createTextNode(e)};(null==e||e.parentNode!==document.body)&&(a=!0),e=b.initSVG(e,i.properties.width,i.properties.height),e.style.display="block",a&&(t=x.newEl("text",F),n=o(null),x.setAttr(t,{x:0}),t.appendChild(n),e.appendChild(t),document.body.appendChild(e),e.style.visibility="hidden",e.style.position="absolute",e.style.top="-100%",e.style.left="-100%");var s=i.children.holderTextGroup,l=s.properties;x.setAttr(t,{y:l.font.size,style:w.cssProps({"font-weight":l.font.weight,"font-size":l.font.size+l.font.units,"font-family":l.font.family})});var h=x.newEl("textarea");h.innerHTML=l.text,n.nodeValue=h.value;var u=t.getBBox(),d=Math.ceil(u.width/i.properties.width),c=l.text.split(" "),f=l.text.match(/\\n/g);d+=null==f?0:f.length,n.nodeValue=l.text.replace(/[ ]+/g,"");var p=t.getComputedTextLength(),g=u.width-p,m=Math.round(g/Math.max(1,c.length-1)),v=[];if(d>1){n.nodeValue="";for(var y=0;y<c.length;y++)if(0!==c[y].length){n.nodeValue=w.decodeHtmlEntity(c[y]);var S=t.getBBox();v.push({text:c[y],width:S.width})}}return e.style.display="none",{spaceWidth:m,lineCount:d,boundingBox:u,words:v}}return!1}}();for(var M in O.flags)O.flags.hasOwnProperty(M)&&(O.flags[M].match=function(e){return e.match(this.regex)});O.setup={renderer:"html",debounce:100,ratio:1,supportsCanvas:!1,supportsSVG:!1,lineWrapRatio:.9,dataAttr:"data-src",renderers:["html","canvas","svg"]},O.vars={preempted:!1,resizableImages:[],invisibleImages:{},invisibleId:0,visibilityCheckStarted:!1,debounceTimer:null,cache:{}},function(){var e=x.newEl("canvas");e.getContext&&-1!=e.toDataURL("image/png").indexOf("data:image/png")&&(O.setup.renderer="canvas",O.setup.supportsCanvas=!0),document.createElementNS&&document.createElementNS(F,"svg").createSVGRect&&(O.setup.renderer="svg",O.setup.supportsSVG=!0)}(),c(),m&&m(function(){O.vars.preempted||j.run(),t.addEventListener?(t.addEventListener("resize",g,!1),t.addEventListener("orientationchange",g,!1)):t.attachEvent("onresize",g),"object"==typeof t.Turbolinks&&t.document.addEventListener("page:change",function(){j.run()})}),e.exports=j}).call(t,function(){return this}())},function(e,t){function n(e){function t(e){if(!x){if(!o.body)return i(t);for(x=!0;e=S.shift();)i(e)}}function n(e){(w||e.type===l||o[c]===d)&&(r(),t())}function r(){w?(o[y](m,n,h),e[y](l,n,h)):(o[p](v,n),e[p](u,n))}function i(e,t){setTimeout(e,+t>=0?t:1)}function a(e){x?i(e):S.push(e)}null==document.readyState&&document.addEventListener&&(document.addEventListener("DOMContentLoaded",function C(){document.removeEventListener("DOMContentLoaded",C,!1),document.readyState="complete"},!1),document.readyState="loading");var o=e.document,s=o.documentElement,l="load",h=!1,u="on"+l,d="complete",c="readyState",f="attachEvent",p="detachEvent",g="addEventListener",m="DOMContentLoaded",v="onreadystatechange",y="removeEventListener",w=g in o,b=h,x=h,S=[];if(o[c]===d)i(t);else if(w)o[g](m,n,h),e[g](l,n,h);else{o[f](v,n),e[f](u,n);try{b=null==e.frameElement&&s}catch(A){}b&&b.doScroll&&!function E(){if(!x){try{b.doScroll("left")}catch(e){return i(E,50)}r(),t()}}()}return a.version="1.4.0",a.isReady=function(){return x},a}e.exports="undefined"!=typeof window&&n(window)},function(e,t,n){var r=encodeURIComponent,i=decodeURIComponent,a=n(4),o=n(5),s=/(\w+)\[(\d+)\]/,l=/\w+\.\w+/;t.parse=function(e){if("string"!=typeof e)return{};if(e=a(e),""===e)return{};"?"===e.charAt(0)&&(e=e.slice(1));for(var t={},n=e.split("&"),r=0;r<n.length;r++){var o,h,u,d=n[r].split("="),c=i(d[0]);if(o=s.exec(c))t[o[1]]=t[o[1]]||[],t[o[1]][o[2]]=i(d[1]);else if(o=l.test(c)){for(o=c.split("."),h=t;o.length;)if(u=o.shift(),u.length){if(h[u]){if(h[u]&&"object"!=typeof h[u])break}else h[u]={};o.length||(h[u]=i(d[1])),h=h[u]}}else t[d[0]]=null==d[1]?"":i(d[1])}return t},t.stringify=function(e){if(!e)return"";var t=[];for(var n in e){var i=e[n];if("array"!=o(i))t.push(r(n)+"="+r(e[n]));else for(var a=0;a<i.length;++a)t.push(r(n+"["+a+"]")+"="+r(i[a]))}return t.join("&")}},function(e,t){function n(e){return e.replace(/^\s*|\s*$/g,"")}t=e.exports=n,t.left=function(e){return e.replace(/^\s*/,"")},t.right=function(e){return e.replace(/\s*$/,"")}},function(e,t){var n=Object.prototype.toString;e.exports=function(e){switch(n.call(e)){case"[object Date]":return"date";case"[object RegExp]":return"regexp";case"[object Arguments]":return"arguments";case"[object Array]":return"array";case"[object Error]":return"error"}return null===e?"null":void 0===e?"undefined":e!==e?"nan":e&&1===e.nodeType?"element":(e=e.valueOf?e.valueOf():Object.prototype.valueOf.apply(e),typeof e)}},function(e,t){var n=function(e){function t(e,t){for(var n in t)e[n]=t[n];return e}var n=1,r=function(e){n++,this.parent=null,this.children={},this.id=n,this.name="n"+n,"undefined"!=typeof e&&(this.name=e),this.x=this.y=this.z=0,this.width=this.height=0};r.prototype.resize=function(e,t){null!=e&&(this.width=e),null!=t&&(this.height=t)},r.prototype.moveTo=function(e,t,n){this.x=null!=e?e:this.x,this.y=null!=t?t:this.y,this.z=null!=n?n:this.z},r.prototype.add=function(e){var t=e.name;if("undefined"!=typeof this.children[t])throw"SceneGraph: child already exists: "+t;this.children[t]=e,e.parent=this};var i=function(){r.call(this,"root"),this.properties=e};i.prototype=new r;var a=function(e,n){if(r.call(this,e),this.properties={fill:"#000000"},"undefined"!=typeof n)t(this.properties,n);else if("undefined"!=typeof e&&"string"!=typeof e)throw"SceneGraph: invalid node name"};a.prototype=new r;var o=function(){a.apply(this,arguments),this.type="group"};o.prototype=new a;var s=function(){a.apply(this,arguments),this.type="rect"};s.prototype=new a;var l=function(e){a.call(this),this.type="text",this.properties.text=e};l.prototype=new a;var h=new i;return this.Shape={Rect:s,Text:l,Group:o},this.root=h,this};e.exports=n},function(e,t){(function(e){t.extend=function(e,t){var n={};for(var r in e)e.hasOwnProperty(r)&&(n[r]=e[r]);if(null!=t)for(var i in t)t.hasOwnProperty(i)&&(n[i]=t[i]);return n},t.cssProps=function(e){var t=[];for(var n in e)e.hasOwnProperty(n)&&t.push(n+":"+e[n]);return t.join(";")},t.encodeHtmlEntity=function(e){for(var t=[],n=0,r=e.length-1;r>=0;r--)n=e.charCodeAt(r),t.unshift(n>128?["&#",n,";"].join(""):e[r]);return t.join("")},t.imageExists=function(e,t){var n=new Image;n.onerror=function(){t.call(this,!1)},n.onload=function(){t.call(this,!0)},n.src=e},t.decodeHtmlEntity=function(e){return e.replace(/&#(\d+);/g,function(e,t){return String.fromCharCode(t)})},t.dimensionCheck=function(e){var t={height:e.clientHeight,width:e.clientWidth};return t.height&&t.width?t:!1},t.truthy=function(e){return"string"==typeof e?"true"===e||"yes"===e||"1"===e||"on"===e||"✓"===e:!!e},t.parseColor=function(e){var t,n=/(^(?:#?)[0-9a-f]{6}$)|(^(?:#?)[0-9a-f]{3}$)/i,r=/^rgb\((\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/,i=/^rgba\((\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(0*\.\d{1,}|1)\)$/,a=e.match(n);if(null!==a)return t=a[1]||a[2],"#"!==t[0]?"#"+t:t;if(a=e.match(r),null!==a)return t="rgb("+a.slice(1).join(",")+")";if(a=e.match(i),null!==a){const o=function(e){return"0."+e.split(".")[1]},s=a.slice(1).map(function(e,t){return 3===t?o(e):e});return t="rgba("+s.join(",")+")"}return null},t.canvasRatio=function(){var t=1,n=1;if(e.document){var r=e.document.createElement("canvas");if(r.getContext){var i=r.getContext("2d");t=e.devicePixelRatio||1,n=i.webkitBackingStorePixelRatio||i.mozBackingStorePixelRatio||i.msBackingStorePixelRatio||i.oBackingStorePixelRatio||i.backingStorePixelRatio||1}}return t/n}}).call(t,function(){return this}())},function(e,t,n){(function(e){var r=n(9),i="http://www.w3.org/2000/svg",a=8;t.initSVG=function(e,t,n){var o,s,l=!1;e&&e.querySelector?(s=e.querySelector("style"),null===s&&(l=!0)):(e=r.newEl("svg",i),l=!0),l&&(o=r.newEl("defs",i),s=r.newEl("style",i),r.setAttr(s,{type:"text/css"}),o.appendChild(s),e.appendChild(o)),e.webkitMatchesSelector&&e.setAttribute("xmlns",i);for(var h=0;h<e.childNodes.length;h++)e.childNodes[h].nodeType===a&&e.removeChild(e.childNodes[h]);for(;s.childNodes.length;)s.removeChild(s.childNodes[0]);return r.setAttr(e,{width:t,height:n,viewBox:"0 0 "+t+" "+n,preserveAspectRatio:"none"}),e},t.svgStringToDataURI=function(){var t="data:image/svg+xml;charset=UTF-8,",n="data:image/svg+xml;charset=UTF-8;base64,";return function(r,i){return i?n+btoa(e.unescape(encodeURIComponent(r))):t+encodeURIComponent(r)}}(),t.serializeSVG=function(t,n){if(e.XMLSerializer){var i=new XMLSerializer,a="",o=n.stylesheets;if(n.svgXMLStylesheet){for(var s=r.createXML(),l=o.length-1;l>=0;l--){var h=s.createProcessingInstruction("xml-stylesheet",'href="'+o[l]+'" rel="stylesheet"');s.insertBefore(h,s.firstChild)}s.removeChild(s.documentElement),a=i.serializeToString(s)}var u=i.serializeToString(t);return u=u.replace(/\&amp;(\#[0-9]{2,}\;)/g,"&$1"),a+u}}}).call(t,function(){return this}())},function(e,t){(function(e){t.newEl=function(t,n){return e.document?null==n?e.document.createElement(t):e.document.createElementNS(n,t):void 0},t.setAttr=function(e,t){for(var n in t)e.setAttribute(n,t[n])},t.createXML=function(){return e.DOMParser?(new DOMParser).parseFromString("<xml />","application/xml"):void 0},t.getNodeArray=function(t){var n=null;return"string"==typeof t?n=document.querySelectorAll(t):e.NodeList&&t instanceof e.NodeList?n=t:e.Node&&t instanceof e.Node?n=[t]:e.HTMLCollection&&t instanceof e.HTMLCollection?n=t:t instanceof Array?n=t:null===t&&(n=[]),n=Array.prototype.slice.call(n)}}).call(t,function(){return this}())},function(e,t){var n=function(e,t){"string"==typeof e&&(this.original=e,"#"===e.charAt(0)&&(e=e.slice(1)),/[^a-f0-9]+/i.test(e)||(3===e.length&&(e=e.replace(/./g,"$&$&")),6===e.length&&(this.alpha=1,t&&t.alpha&&(this.alpha=t.alpha),this.set(parseInt(e,16)))))};n.rgb2hex=function(e,t,n){function r(e){var t=(0|e).toString(16);return 16>e&&(t="0"+t),t}return[e,t,n].map(r).join("")},n.hsl2rgb=function(e,t,n){var r=e/60,i=(1-Math.abs(2*n-1))*t,a=i*(1-Math.abs(parseInt(r)%2-1)),o=n-i/2,s=0,l=0,h=0;return r>=0&&1>r?(s=i,l=a):r>=1&&2>r?(s=a,l=i):r>=2&&3>r?(l=i,h=a):r>=3&&4>r?(l=a,h=i):r>=4&&5>r?(s=a,h=i):r>=5&&6>r&&(s=i,h=a),s+=o,l+=o,h+=o,s=parseInt(255*s),l=parseInt(255*l),h=parseInt(255*h),[s,l,h]},n.prototype.set=function(e){this.raw=e;var t=(16711680&this.raw)>>16,n=(65280&this.raw)>>8,r=255&this.raw,i=.2126*t+.7152*n+.0722*r,a=-.09991*t-.33609*n+.436*r,o=.615*t-.55861*n-.05639*r;return this.rgb={r:t,g:n,b:r},this.yuv={y:i,u:a,v:o},this},n.prototype.lighten=function(e){var t=Math.min(1,Math.max(0,Math.abs(e)))*(0>e?-1:1),r=255*t|0,i=Math.min(255,Math.max(0,this.rgb.r+r)),a=Math.min(255,Math.max(0,this.rgb.g+r)),o=Math.min(255,Math.max(0,this.rgb.b+r)),s=n.rgb2hex(i,a,o);return new n(s)},n.prototype.toHex=function(e){return(e?"#":"")+this.raw.toString(16)},n.prototype.lighterThan=function(e){return e instanceof n||(e=new n(e)),this.yuv.y>e.yuv.y},n.prototype.blendAlpha=function(e){e instanceof n||(e=new n(e));var t=e,r=this,i=t.alpha*t.rgb.r+(1-t.alpha)*r.rgb.r,a=t.alpha*t.rgb.g+(1-t.alpha)*r.rgb.g,o=t.alpha*t.rgb.b+(1-t.alpha)*r.rgb.b;return new n(n.rgb2hex(i,a,o))},e.exports=n},function(e,t){e.exports={version:"2.9.7",svg_ns:"http://www.w3.org/2000/svg"}},function(e,t,n){function r(e,t){return d.element({tag:t,width:e.width,height:e.height,fill:e.properties.fill})}function i(e){return h.cssProps({fill:e.fill,"font-weight":e.font.weight,"font-family":e.font.family+", monospace","font-size":e.font.size+e.font.units})}function a(e,t,n){var r=n/2;return["M",r,r,"H",e-r,"V",t-r,"H",r,"V",0,"M",0,r,"L",e,t-r,"M",0,t-r,"L",e,r].join(" ")}var o=n(13),s=n(8),l=n(11),h=n(7),u=l.svg_ns,d={element:function(e){var t=e.tag,n=e.content||"";return delete e.tag,delete e.content,[t,n,e]}};e.exports=function(e,t){var n=t.engineSettings,l=n.stylesheets,h=l.map(function(e){return'<?xml-stylesheet rel="stylesheet" href="'+e+'"?>'}).join("\n"),c="holder_"+Number(new Date).toString(16),f=e.root,p=f.children.holderTextGroup,g="#"+c+" text { "+i(p.properties)+" } ";p.y+=.8*p.textPositionData.boundingBox.height;var m=[];Object.keys(p.children).forEach(function(e){var t=p.children[e];Object.keys(t.children).forEach(function(e){var n=t.children[e],r=p.x+t.x+n.x,i=p.y+t.y+n.y,a=d.element({tag:"text",content:n.properties.text,x:r,y:i});m.push(a)})});var v=d.element({tag:"g",content:m}),y=null;if(f.children.holderBg.properties.outline){var w=f.children.holderBg.properties.outline;y=d.element({tag:"path",d:a(f.children.holderBg.width,f.children.holderBg.height,w.width),"stroke-width":w.width,stroke:w.fill,fill:"none"})}var b=r(f.children.holderBg,"rect"),x=[];x.push(b),w&&x.push(y),x.push(v);var S=d.element({tag:"g",id:c,content:x}),A=d.element({tag:"style",content:g,type:"text/css"}),C=d.element({tag:"defs",content:A}),E=d.element({tag:"svg",content:[C,S],width:f.properties.width,height:f.properties.height,xmlns:u,viewBox:[0,0,f.properties.width,f.properties.height].join(" "),preserveAspectRatio:"none"}),T=o(E);/\&amp;(x)?#[0-9A-Fa-f]/.test(T[0])&&(T[0]=T[0].replace(/&amp;#/gm,"&#")),T=h+T[0];var k=s.svgStringToDataURI(T,"background"===t.mode);return k}},function(e,t,n){n(14);e.exports=function r(e,t,n){"use strict";function i(e){var t=e.match(/^[\w-]+/),r={tag:t?t[0]:"div",attr:{},children:[]},i=e.match(/#([\w-]+)/),a=e.match(/\$([\w-]+)/),o=e.match(/\.[\w-]+/g);return i&&(r.attr.id=i[1],n[i[1]]=r),a&&(n[a[1]]=r),o&&(r.attr["class"]=o.join(" ").replace(/\./g,"")),e.match(/&$/g)&&(f=!1),r}function a(e,t){return null!==t&&t!==!1&&void 0!==t?"string"!=typeof t&&"object"!=typeof t?String(t):t:void 0}function o(e){return e||0===e?String(e).replace(/&/g,"&amp;").replace(/"/g,"&quot;"):""}function s(e){return String(e).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&apos;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}var l,h,u,d,c=1,f=!0;if(n=n||{},"string"==typeof e[0])e[0]=i(e[0]);else{if(!Array.isArray(e[0]))throw new Error("First element of array must be a string, or an array and not "+JSON.stringify(e[0]));c=0}for(;c<e.length;c++){if(e[c]===!1||null===e[c]){e[0]=!1;break}if(void 0!==e[c]&&e[c]!==!0)if("string"==typeof e[c])f&&(e[c]=s(e[c])),e[0].children.push(e[c]);else if("number"==typeof e[c])e[0].children.push(e[c]);else if(Array.isArray(e[c])){if(Array.isArray(e[c][0])){if(e[c].reverse().forEach(function(t){e.splice(c+1,0,t)}),0!==c)continue;c++}r(e[c],t,n),e[c][0]&&e[0].children.push(e[c][0])}else if("function"==typeof e[c])u=e[c];else{if("object"!=typeof e[c])throw new TypeError('"'+e[c]+'" is not allowed as a value.');for(h in e[c])e[c].hasOwnProperty(h)&&null!==e[c][h]&&e[c][h]!==!1&&(e[0].attr[h]="style"===h&&"object"==typeof e[c][h]?JSON.stringify(e[c][h],a).slice(2,-2).replace(/","/g,";").replace(/":"/g,":").replace(/\\"/g,"'"):e[c][h])}}if(e[0]!==!1){l="<"+e[0].tag;for(d in e[0].attr)e[0].attr.hasOwnProperty(d)&&(l+=" "+d+'="'+o(e[0].attr[d])+'"');l+=">",e[0].children.forEach(function(e){l+=e}),l+="</"+e[0].tag+">",e[0]=l}return n[0]=e[0],u&&u(e[0]),n}},function(e,t){"use strict";function n(e){var t=""+e,n=r.exec(t);if(!n)return t;var i,a="",o=0,s=0;for(o=n.index;o<t.length;o++){switch(t.charCodeAt(o)){case 34:i="&quot;";break;case 38:i="&amp;";break;case 39:i="&#39;";break;case 60:i="&lt;";break;case 62:i="&gt;";break;default:continue}s!==o&&(a+=t.substring(s,o)),s=o+1,a+=i}return s!==o?a+t.substring(s,o):a}var r=/["'&<>]/;e.exports=n},function(e,t,n){var r=n(9),i=n(7);e.exports=function(){var e=r.newEl("canvas"),t=null;return function(n){null==t&&(t=e.getContext("2d"));var r=i.canvasRatio(),a=n.root;e.width=r*a.properties.width,e.height=r*a.properties.height,t.textBaseline="middle";var o=a.children.holderBg,s=r*o.width,l=r*o.height,h=2,u=h/2;t.fillStyle=o.properties.fill,t.fillRect(0,0,s,l),o.properties.outline&&(t.strokeStyle=o.properties.outline.fill,t.lineWidth=o.properties.outline.width,t.moveTo(u,u),t.lineTo(s-u,u),t.lineTo(s-u,l-u),t.lineTo(u,l-u),t.lineTo(u,u),t.moveTo(0,u),t.lineTo(s,l-u),t.moveTo(0,l-u),t.lineTo(s,u),t.stroke());var d=a.children.holderTextGroup;t.font=d.properties.font.weight+" "+r*d.properties.font.size+d.properties.font.units+" "+d.properties.font.family+", monospace",t.fillStyle=d.properties.fill;for(var c in d.children){var f=d.children[c];for(var p in f.children){var g=f.children[p],m=r*(d.x+f.x+g.x),v=r*(d.y+f.y+g.y+d.properties.leading/2);
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 13) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 14) t.fillText(g.properties.text,m,v)}}return e.toDataURL("image/png")}}()}])}),function(e,t){t&&(Holder=e.Holder)}(this,"undefined"!=typeof Meteor&&"undefined"!=typeof Package);
+
+./frontend/src/pages/Home.js
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  1) import React from 'react';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  2) import Navigation from '../components/Navigation';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  3) import Browsing from '../components/Browsing';
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  4) 
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  5) const Home = () => {
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  6)     return (
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  7)         <>
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  8)             <Navigation style={{
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  9)                 height: '8%',
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 10)                 width: '100%',
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 11)             }} />
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 12)             <Browsing style={{
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 13)                 height: '92%',
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 14)                 width: '100%',
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 15)                 padding: '12px'
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 16)             }}/>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 17)         </>
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 18)     );
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 19) };
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 20) 
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400 21) export default Home;
+
+./frontend/src/pages/Signup.js
+a074d914 (LakelonBailey     2023-10-24 11:32:57 -0400 11)     firstName: '',
+a074d914 (LakelonBailey     2023-10-24 11:32:57 -0400 12)     lastName: '',
+a074d914 (LakelonBailey     2023-10-24 11:32:57 -0400 28)     console.log(formState);
+a074d914 (LakelonBailey     2023-10-24 11:32:57 -0400 55)             <input name="firstName" value={formState.firstName} placeholder="First Name" required onChange={handleFormChange}></input>
+a074d914 (LakelonBailey     2023-10-24 11:32:57 -0400 56)             <input name="lastName" value={formState.lastName} placeholder="Last Name" required onChange={handleFormChange}></input>
+
+./backend/server.js
+000f9d02 (LakelonBailey     2023-10-24 11:19:56 -0400  3) const dbUpdate = require('./utils/dbUpdater');
+000f9d02 (LakelonBailey     2023-10-24 11:19:56 -0400  9) const sequelize = require('./config/db');
+000f9d02 (LakelonBailey     2023-10-24 11:19:56 -0400 22) sequelize.sync({ force: false, alter: true }).then(() => {
+000f9d02 (LakelonBailey     2023-10-24 11:19:56 -0400 24) 	dbUpdate();
+
+./backend/config/db.js
+4de2b28b backend/config/db.js         (LakelonBailey     2023-10-24 10:42:07 -0400  9)     port: process.env.DB_PORT,
+6884ac76 backend/config/db.js         (LakelonBailey     2023-10-24 18:25:33 -0400 10)     logging: false
+
+./backend/utils/dbUpdater.js
+000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400   9) function dbUpdate() {
+000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 124) }
+000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 125) 
+000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 126) module.exports = dbUpdate;
+
+./backend/utils/auth.js
+4de2b28b (LakelonBailey     2023-10-24 10:42:07 -0400 29)   signToken: function({ username, email, id, firstName, lastName}) {
+4de2b28b (LakelonBailey     2023-10-24 10:42:07 -0400 30)     const payload = { username, email, id, firstName, lastName };
+
+./backend/models/User.js
+3edc5e50 (LakelonBailey     2023-10-16 17:35:54 -0400 25)     firstName: {
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 26)       type: DataTypes.STRING,
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 27)       allowNull: false
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 28)     },
+3edc5e50 (LakelonBailey     2023-10-16 17:35:54 -0400 29)     lastName: {
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 30)       type: DataTypes.STRING,
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 31)       allowNull: false
+57e73947 (LakelonBailey     2023-10-16 17:29:41 -0400 32)     },
+
+./backend/models/index.js
+000f9d02 (LakelonBailey     2023-10-24 11:19:56 -0400 11)     foreignKey: 'userId',
+000f9d02 (LakelonBailey     2023-10-24 11:19:56 -0400 18)     foreignKey: 'fragranceId',
+
+./backend/models/FragranceListing.js
+e0dcf24a backend/models/FragranceListing.js (LakelonBailey     2023-10-24 12:52:27 -0400 44)     },
+e0dcf24a backend/models/FragranceListing.js (LakelonBailey     2023-10-24 12:52:27 -0400 45)     link: {
+e0dcf24a backend/models/FragranceListing.js (LakelonBailey     2023-10-24 12:52:27 -0400 46)       type: DataTypes.STRING
+
+./backend/scripts/seedData.js
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  1) const jomashopData = require('../data/jomashop.json');
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  2) const {FragranceListing, Fragrance} = require('../models');
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  3) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  4) // Extract floating point from price string
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  5) // e.g. '$24.99' -> 24.99
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  6) function parsePrice(str) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  7)     return parseFloat(str.replace(/[^0-9.]/g, ''));
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  8) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  9) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 10) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 11) // Use JavaScript's URL builder to parse hostname
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 12) function extractDomain(url) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 13)     try {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 14)         let parsedURL = new URL(url);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 15)         return parsedURL.hostname;
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 16)     } catch (e) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 17)         console.error("Invalid URL");
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 18)         return null;
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 19)     }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 20) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 21) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 22) const cleanData = (data) => {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 23)     return data.filter(item => item.title != 'N/A').map(item => {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 24)         const {size, ...data} = item;
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 25) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 26)         // Designate size
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 27)         if (size.includes('oz')) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 28)             data.sizeoz = size.replace('oz', '').trim();
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 29)         }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 30)         else if (size.includes('ml')) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 31)             data.sizeml = size.replace('ml', '').trim();
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 32)         }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 33) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 34)         // Parse price string
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 35)         data.price = parsePrice(data.price);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 36) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 37)         // Get site
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 38)         data.site = extractDomain(data.link);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 39) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 40)         return data;
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 41)     });
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 42) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 43) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 44) const destroyExistingData = async () => {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 45)     await FragranceListing.destroy({
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 46)         where: {}
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 47)     });
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 48)     await Fragrance.destroy({
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 49)         where: {}
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 50)     });
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 51) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 52) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 53) const getFragranceMapKey = (item) => {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 54)     return `${item.gender}__${item.brand}__${item.title}__${item.concentration}`.toLowerCase();
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 55) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 56) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 57) const loadFragrances = async () => {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 58)     await destroyExistingData();
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 59)     const data = cleanData(jomashopData);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 60)     const fragranceMap = new Map();
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 61)     const fragranceListings = []
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 62)     for (let item of data) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 63) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 64)         // Create map key used to determine unique fragrances
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 65)         const mapKey = getFragranceMapKey(item);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 66)         let fragrance = fragranceMap.get(mapKey);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 67) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 68)         // If fragrance doesn't exist, create it.
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 69)         if (!fragrance) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 70)             fragrance = await Fragrance.create({
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 71)                 brand: item.brand,
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 72)                 title: item.title,
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 73)                 concentration: item.concentration,
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 74)                 gender: item.gender,
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 75)                 photoLink: item.photoLink
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 76)             });
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 77)             fragranceMap.set(mapKey, fragrance);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 78)         }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 79) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 80)         fragranceListings.push({
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 81)             fragranceId: fragrance.id,
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 82)             ...item
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 83)         });
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 84)     }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 85) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 86)     await FragranceListing.bulkCreate(fragranceListings);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 87) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 88) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 89) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 90) loadFragrances();
+
+./backend/scrapers/MasterScript.py
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  4) import os
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  6) # Create data directory if it doesn't exist
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  7) if not os.path.exists(os.path.join(os.getcwd(), 'data')):
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  8)     os.mkdir('data', 0x774)
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400 11) temp = asyncio.run(scrape_jomashop())
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400 12) df = pd.read_json(temp, orient="columns")
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 13) df.to_json('data/jomashop.json', orient='records')
+
+./backend/scrapers/giftExpress.py
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  13) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  24) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  28) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  33) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  36) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  37)         # Men's scraping
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  41) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  47) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  48)             # Finding the ordered list of links
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  51) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  59)             for j in range(0, len(fragPages)):
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  66) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  69) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  75) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  82) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400  93) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 108) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 155) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 188)         pageNumbers = []
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 189) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 193) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 198) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 201) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 203)         for i in range(1, totalPages + 1):
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 206) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 212) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 213)             # Finding the ordered list of links
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 216) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 224)             for j in range(0, len(fragPages)):
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 231) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 234) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 239) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 246) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 257) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 272) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 319) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 342) 
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 344)
+
+./backend/scrapers/maxaroma.py
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  60)                 name = next(name_div.find('div').stripped_strings)
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  61) 
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  71)                 gender = gender_row.find_next('td').find('span').text.strip()
+57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  72)
+
+./backend/scrapers/jomashop.py
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  10)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  11) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  39)             photoLink = product_item.find('img', class_='productImg')
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  40)             photoLink = photoLink.get('src') if photoLink else None
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  45) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  68) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 106)                     # by can be used to indicate a fragrance by a brand,
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 129)                 price = price.text.strip()
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 131)                 price = "N/A"
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 138) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 148) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 150) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 151)             df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link, photoLink]
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 152)
+
+./backend/routes/fragranceListingRoutes.js
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  1) const router = require('express').Router();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  2) const { FragranceListing, Fragrance } = require('../models');
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  3) const {Op} = require('sequelize');
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  4) const sequelize = require('../config/db');
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  5) const {Sequelize} = require('sequelize');
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  6) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  7) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  8) router.get('/', async (req, res) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  9)     const {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 10)         price_start,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 11)         price_end,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 12)         size_start,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 13)         size_end,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 14)         brands,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 15)         gender
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 16)     } = req.query;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 17) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 18)     // Initialize model filters
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 19)     const fragranceWhere = {}
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 20)     const fragranceListingWhere = {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 21)         price: {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 22)             [Op.between]: [parseFloat(price_start), parseFloat(price_end)],
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 23)         },
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 24)         sizeoz: {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 25)             [Op.between]: [parseFloat(size_start), parseFloat(size_end)],
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 26)         }
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 27)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 28) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 29)     // Only filter on brands if some are provided
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 30)     const getAllBrands = brands == '';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 31)     if (!getAllBrands) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 32)         fragranceWhere.brand = {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 33)             [Op.in]: brands.split(',')
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 34)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 35)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 36) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 37)     // Only filter on gender if a specific one
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 38)     // is selected
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 39)     if (gender != 'All') {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 40)         fragranceWhere.gender = gender;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 41)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 42) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 43)     // Get data and return
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 44)     const fragranceListings = await FragranceListing.findAll({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 45)         where: fragranceListingWhere,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 46)         include: {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 47)             model: Fragrance,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 48)             where: fragranceWhere
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 49)         },
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 50)     });
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 51) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 52)     res.json({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 53)         success: true,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 54)         data: fragranceListings.map(f => f.get({
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 55)             plain: true
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 56)         }))
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 57)     });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 58) });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 59) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 60) router.get('/search-defaults', async (req, res) => {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 61) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 62)     // Aggregate max price and max size
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 63)     const aggregates = await sequelize.query(`
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 64)         SELECT
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 65)             MAX(price) as maxPrice,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 66)             MAX(sizeoz) as maxSize
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 67)         FROM
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 68)             fragrance_listing
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 69)     `, { type: Sequelize.QueryTypes.SELECT });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 70) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 71)     // Group listings by brand and count the occurrences for
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 72)     // each brand
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 73)     const brandGrouping = await FragranceListing.findAll({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 74)         attributes: [
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 75)             [Sequelize.fn('COUNT', Sequelize.col('fragrance_listing.id')), 'listingCount'],
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 76)             [Sequelize.col('fragrance.brand'), 'brand']
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 77)         ],
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 78)         include: [{
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 79)             model: Fragrance,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 80)             attributes: []
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 81)         }],
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 82)         group: ['fragrance.brand'],
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 83)     })
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 84) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 85)     // Return search defaults
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 86)     res.json({
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 87)         success: true,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 88)         data: {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 89)             ...aggregates[0],
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 90)             brands: brandGrouping.map(b => b.get())
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 91)         }
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 92)     });
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 93) });
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 94) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 95) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 96) module.exports = router;
+
+./backend/routes/index.js
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  1) const userRoutes = require('./userRoutes.js');
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  2) const mailRoutes = require('./mailRoutes.js');
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  3) const fragranceListingRoutes = require('./fragranceListingRoutes.js');
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  8) router.use('/fragrance-listings', fragranceListingRoutes);
+
+./backend/routes/userRoutes.js
+a074d914 backend/routes/user-routes.js (LakelonBailey     2023-10-24 11:32:57 -0400 10)         const newUser = await User.create(req.body);

@@ -13,19 +13,22 @@ Fragrance.init(
       primaryKey: true,
       autoIncrement: true
     },
-    make: {
+    brand: {
       type: DataTypes.STRING,
     },
-    model: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    series: {
+    concentration: {
       type: DataTypes.STRING
     },
     photoLink: {
       type: DataTypes.STRING
     },
+    gender: {
+      type: DataTypes.STRING
+    }, 
   },
   {
     hooks: {},

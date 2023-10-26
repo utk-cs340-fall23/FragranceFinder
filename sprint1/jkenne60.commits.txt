@@ -1,0 +1,398 @@
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400  1) import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  2) import Hero from './pages/hero/hero';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  3) import Home from './pages/fullFront';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  4) import Best from './pages/bestsellers';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  5) import Navbar from './pages/fullFront';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  6) import React from 'react'
+73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  7) import "./App.css";
+17ccb666 (OutliersAdvantage 2023-09-20 13:49:11 -0400  8) 
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400  9) function App() {
+9b64e8c8 (OutliersAdvantage 2023-09-21 11:23:01 -0400 10) 
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 11)       return (
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 12)               <Router>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 13)                       <Routes>
+9b64e8c8 (OutliersAdvantage 2023-09-21 11:23:01 -0400 14)                               <Route exact path='/' element={<Home />} />
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 15)                               <Route path='/best' element={<Best />} />
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 16)                       </Routes>
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 17)                       <Navbar/>
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 18)                       <Hero/>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 19)               </Router>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 20)       );
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 21) }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 22) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 23) export default App;
+
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400  1) import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  2) import Hero from './pages/hero/hero';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  3) import Home from './pages/fullFront';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  4) import Best from './pages/bestsellers';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  5) import Navbar from './pages/fullFront';
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  6) import React from 'react'
+73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  7) import "./App.css";
+17ccb666 (OutliersAdvantage 2023-09-20 13:49:11 -0400  8) 
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400  9) function App() {
+9b64e8c8 (OutliersAdvantage 2023-09-21 11:23:01 -0400 10) 
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 11)       return (
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 12)               <Router>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 13)                       <Routes>
+9b64e8c8 (OutliersAdvantage 2023-09-21 11:23:01 -0400 14)                               <Route exact path='/' element={<Home />} />
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 15)                               <Route path='/best' element={<Best />} />
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 16)                       </Routes>
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 17)                       <Navbar/>
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 18)                       <Hero/>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 19)               </Router>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 20)       );
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 21) }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 22) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 23) export default App;
+jacobkennedy@Jacobs-MacBook-Pro-78 src % git blame index.css
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  1) :root{
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  2)       --primary-color: orange;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  3)       --secondary-color: purple;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  4)       --tertiary-color: white;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  5) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  6) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  7) * {
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  8)       box-sizing: border-box;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400  9)       margin: 0;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 10)       padding: 0;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 11) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 12) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 13) ul{
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 14)       list-style-type: none;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 15) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 16) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 17) a {
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 18)       text-decoration: none;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 19) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 20) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 21) h1 {
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 22)       font-size: 3.5rem;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 23) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 24) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 25) h2 {
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 26)       font-size: 2rem;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 27) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 28) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 29) .container {
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 30)       max-width: 1248px;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 31)       margin: auto;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 32)       padding: 0 1rem;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 33) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 34) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 35) button{
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 36)       background-image: linear-gradient(45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 37)       border: 1px solid var(--primary-color);
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 38)       color: var(--tertiary-color);
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 39)       padding: .7rem 1.5rem;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 40)       border-radius: 8px;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 41)       cursor: pointer;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 42)       font-family: 'Courier New', Courier, monospace;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 43) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 44) 
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 45) @media screen and (max-width: 940px) {
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 46)       h1{
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 47)               font-size: 2.5rem;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 48)       }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 49)       h2{
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 50)               font-size: 1.5rem;
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 51)       }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 52) }
+dd2a3c82 (BlueNinja420      2023-10-11 08:09:34 -0400 53) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 54) body {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 55)   margin: 0;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 56)   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI
+', 'Roboto', 'Oxygen',
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 57)     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helv
+etica Neue',
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 58)     sans-serif;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 59)   -webkit-font-smoothing: antialiased;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 60)   -moz-osx-font-smoothing: grayscale;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 61) }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 62) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 63) code {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 64)   font-family: source-code-pro, Menlo, Monaco, Consolas, 'C
+ourier New',
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 65)     monospace;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 66) }
+(END)
+
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  1) import React, {useState} from 'react'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  2) import {AiOutlineSearch} from 'react-icons/ai'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  3) import {AiOutlineClose} from 'react-icons/ai'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  4) import {AiFillRobot} from 'react-icons/ai'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  5) import {HiOutlineMenuAlt4} from 'react-icons/hi'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  6) import {FaFacebook, FaInstagram, FaPinterest, FaTwitter, FaYoutube} from 'react-icons/fa'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  7) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  8) import './CSS/naviStyles.css'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  9) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 10) const Navbar = () => {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 11)    const [nav, setNav] = useState(false)
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 12)    const handleNav = () => setNav(!nav)
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 13) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 14)    return(
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 15)            <div className={nav ? 'navbar navbar-bg' : 'navbar'}>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 16)                    <div classname="logo">
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 17)                            <h2>FragranceFinder</h2>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 18)                    </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 19)                    <ul className="nav-menu">
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 20)                            <li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 21)                                    <a href='/'>Home</a>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 22)                            </li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 23)                            <li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 24)                                    <a href="/">Men's</a>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 25)                            </li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 26)                            <li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 27)                                    <a href="/">Women's</a>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 28)                            </li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 29)                            <li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 30)                                    <a href="/">Unisex</a>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 31)                            </li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 32)                            <li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 33)                                    <a href="/">Bestsellers</a>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 34)                            </li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 35)                    </ul>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 36)                    <div className="nav-icons">
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 37)                            <AiOutlineSearch className='icon' sty
+le={{marginRight: '1rem'}}/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 38)                            <AiFillRobot className='icon'/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 39)                    </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 40)                    <div className="hamburger" onClick={handleNav
+}>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 41)                            {!nav ? (<HiOutlineMenuAlt4 className
+='icon' />) : (<AiOutlineClose className='icon'/>)}
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 42)                    </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 43) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 44)                    <div className={nav ? 'mobile-menu active' : 
+'mobile-menu'}>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 45)                            <ul className="mobile-nav">
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 46)                                    <li>Home</li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 47)                                    <li>Mens</li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 48)                                    <li>Womens</li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 49)                                    <li>UniSex</li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 50)                                    <li>Bestsellers</li>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 51)                            </ul>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 52)                            <div className="mobile-menu-bottom">
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 53)                                    <div className="menu-icons">
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 54)                                            <button>Search</butto
+n>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 55)                                            <button>Account</butt
+on>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 56)                                    </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 57)                                    <div className="social-icons"
+>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 58)                                            <FaFacebook className
+='icon'/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 59)                                            <FaInstagram classNam
+e='icon'/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 60)                                            <FaTwitter className=
+'icon'/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 61)                                            <FaPinterest classNam
+e='icon'/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 62)                                            <FaYoutube className=
+'icon'/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 63)                                    </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 64)                            </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 65)                    </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 66) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 67)            </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 68)    )
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 69) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 70) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 71) export default Navbar
+
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  1) import React from 'react'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  2) import {AiOutlineSearch} from 'react-icons/ai'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  3) import './heroStyles.css'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  4) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  5) import Video from '../assets/perfumeCreation.mp4'
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  6) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  7) function Hero(){
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  8)    return(
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  9)            <div className='hero'>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 10)                    <video autoPlay loop muted id='video'>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 11)                            <source src={Video} type='video/mp4' />
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 12)                    </video>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 13)                    <div className='overlay'>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 14)                            <div className='content'>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 15)                                    <h1>Best in Class Smell</h1>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 16)                                    <h2>Top 1% for the 99%</h2>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 17)                                    <form className="form">
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 18)                                            <div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 19)                                                    <input type="text" placeholder='Search Smells'/>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 20)                                            </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 21)                                            <div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 22)                                                    <button><AiOutlineSearch className='icon'/></button>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 23)                                            </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 24)                                    </form>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 25)                            </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 26)                    </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 27)            </div>
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 28)    )
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 29) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 30) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 31) export default Hero
+
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  1) .hero {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  2)    width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  3)    height: 100vh;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  4)    color: #fff;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  5)    position: relative;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  6)    display: flex;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  7)    justify-content: space-between;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  8) }  
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  9) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 10) .overlay {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 11)    background-color: rgba(0, 0, 0, 0, 0.1);
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 12)    position: absolute;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 13)    width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 14)    height: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 15)    top: 0;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 16)    left: 0;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 17)    color: black;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 18) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 19) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 20) #video {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 21)    width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 22)    height: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 23)    object-fit: cover;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 24)    z-index: -1;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 25) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 26) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 27) .hero .content {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 28)    position: absolute;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 29)    top: 0;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 30)    height: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 31)    display: flex;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 32)    justify-content: center;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 33)    flex-direction: column;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 34)    text-align: center;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 35)    width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 36)    margin: auto;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 37)    padding: 1rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 38) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 39) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 40) .form {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 41)    display: flex;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 42)    background-color: #ffffffcc;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 43)    color: #000;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 44)    justify-content: space-between;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 45)    align-items: center;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 46)    border: 1px solid #ccc;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 47)    padding: 4px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 48)    border-radius: 8px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 49)    max-width: 500px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 50)    width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 51)    margin: 0 auto;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 52) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 53) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 54) .form input[type=text] {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 55)    background-color: transparent;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 56)    border: transparent;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 57)    width: 400px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 58)    font-size: 1.2rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 59)    font-family: 'Courier New', Courier, monospace;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 60) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 61) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 62) .form input[type=text]:focus{
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 63)    outline: none;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 64) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 65) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 66) @media screen and (max-width: 940px) {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 67)    .form input[type=text]{
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 68)            max-width: 275px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 69)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 70) }
+
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  1) .navbar {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  2)    width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  3)    height: 80px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  4)    display: flex;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  5)    justify-content: space-between;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  6)    align-items: center;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  7)    padding: 0 1rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  8)    z-index: 2;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400  9)    position: absolute;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 10) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 11) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 12) .navbar-bg {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 13)    background-color: whitesmoke
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 14) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 15) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 16) .nav-menu {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 17)    display: flex;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 18)    color: black;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 19) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 20) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 21) li {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 22)    padding: 0 1rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 23) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 24) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 25) .hamburger {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 26)    display: block;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 27)    padding: 1rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 28) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 29) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 30) .mobile-menu {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 31)    display: none;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 32) }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 33) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 34) @media screen and (max-width: 940px){
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 35) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 36)    .mobile-menu {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 37)            display: flex;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 38)            flex-direction: column;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 39)            width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 40)            top: -575px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 41)            left: 0;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 42)            position: absolute;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 43)            justify-content: space-between;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 44)            background-color: whitesmoke;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 45)            transition: 0.4s;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 46)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 47) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 48)    .active {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 49)            top: 85px;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 50)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 51) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 52)    .mobile-menu li {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 53)            padding: 1.2rem 1.2rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 54)            margin: 0 1rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 55)            border-bottom: 1px solid black;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 56)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 57) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 58)    .mobile-nav {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 59)            margin: 1rem 0 ;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 60)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 61)    .mobile-menu-bottom {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 62)            width: 100%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 63)            text-align: center;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 64)            padding: 1rem 0;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 65)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 66) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 67)    .social-icons {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 68)            display: flex;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 69)            justify-content: space-around;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 70)            margin: 1rem 0;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 71)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 72) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 73)    .social-icon .icon:hover {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 74)            transform: scale(1.5);
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 75)            transition: 0.4s;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 76)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 77) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 78)    .mobile-menu button {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 79)            margin: 1rem;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 80)            width: 85%;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 81)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 82) 
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 83)    .nav-menu {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 84)            display: none
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 85)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 86)    .nav-icons{
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 87)            display: none;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 88)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 89)    .hamburger {
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 90)            display: block;
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 91)    }
+dd2a3c82 (BlueNinja420 2023-10-11 08:09:34 -0400 92) }

@@ -21,22 +21,28 @@ FragranceListing.init(
       }
     },
     price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false
     },
     discount: {
       type: DataTypes.INTEGER
     },
-    quantity: {
+    stock: {
       type: DataTypes.INTEGER
     },
-    volume: {
-      type: DataTypes.FLOAT
+    sizeoz: {
+      type: DataTypes.STRING
+    },
+    sizeml: {
+      type: DataTypes.STRING
     },
     reviews: {
-      type: DataTypes.FLOAT
+      type: DataTypes.STRING
     },
     site: {
+      type: DataTypes.STRING
+    },
+    link: {
       type: DataTypes.STRING
     }
   },

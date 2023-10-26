@@ -1,0 +1,628 @@
+./frontend/package.json
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 13)     "react-router-dom": "^6.16.0",
+
+./frontend/src/App.js
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400  1) import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400  3) import Home from './pages';
+d16c383c (ssouther          2023-09-28 15:46:22 -0400  6) import DemoHome from './pages/demos';
+d16c383c (ssouther          2023-09-28 15:46:22 -0400  7) import DemoEmail from './pages/demos/email';
+d16c383c (ssouther          2023-09-28 15:46:22 -0400  8) import DemoCrudExample from './pages/demos/CrudExample';
+d16c383c (ssouther          2023-09-28 15:46:22 -0400  9) import DemoNavbar from './pages/demos/navigation';
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 12) function App() {
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 14) 	return (
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 15) 		<Router>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 16) 			<Routes>
+d16c383c (ssouther          2023-09-28 15:46:22 -0400 20) 				<Route exact path='/demos/' element={<DemoHome />} />
+d16c383c (ssouther          2023-09-28 15:46:22 -0400 21) 				<Route path='/demos/email' element={<DemoEmail />} />
+d16c383c (ssouther          2023-09-28 15:46:22 -0400 22) 				<Route path='/demos/crud' element={<DemoCrudExample />} />
+d16c383c (ssouther          2023-09-28 15:46:22 -0400 23) 				<Route path='/demos/nav' element={<DemoNavbar />} />
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 24) 			</Routes>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 25) 		</Router>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 26) 	);
+
+./frontend/src/pages/index.js
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400  5) const Home = () => {
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 17)     return (
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 18)         <div>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 19)             <h1>FragranceFinder home page</h1>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 34)         </div>
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 35)     );
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 36) };
+dbfeddce (ssouther          2023-09-21 11:07:07 -0400 38) export default Home;
+
+./frontend/src/pages/CSS/email.css
+85226006 (ssouther 2023-09-21 15:27:42 -0400 1) div.body{
+85226006 (ssouther 2023-09-21 15:27:42 -0400 2) 	text-align: center;
+85226006 (ssouther 2023-09-21 15:27:42 -0400 3) }
+
+./frontend/src/pages/demos/index.js
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  1) import React from 'react';
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  2) 
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  3) const Home = () => {
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  4)     return (
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  5)         <div>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  6)             <h1>FragranceFinder home page</h1>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  7) 			<p>Hello world!</p>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  8) 			<a href="/demos/crud">Lakelon Bailey's CRUD demo</a>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400  9) 			<br/>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 10) 			<a href="/demos/email">Stephen Souther's email demo</a>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 11)             <br/>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 12)             <a href="/demos/nav">Kien Nguyen's Navigation Bar demo</a>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 13)         </div>
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 14)     );
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 15) };
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 16) 
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 17) export default Home;
+
+./frontend/src/pages/demos/navigation.js
+d16c383c frontend/src/pages/demos/navigation.js (ssouther 2023-09-28 15:46:22 -0400  2) import "../CSS/navbar.css"
+
+./frontend/src/pages/demos/CrudExample.js
+d16c383c frontend/src/pages/demos/CrudExample.js (ssouther          2023-09-28 15:46:22 -0400   1) import '../CSS/crudexample.css';
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400   2) import {useEffect, useState} from "react";
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400   3) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400   5)   const [data, setData] = useState(null);
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400   6) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400   7)   // Initialize empty form
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400   8)   const [formState, setFormState] = useState({
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  10)     title: '',
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  11)     description: ''
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  12)   })
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  13) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  14)   // Request data from backend
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  15)   const getPosts = async () => {
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  16)     const response = await fetch('/api/posts/');
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  17)     const responseData = await response.json();
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  18)     setData(responseData);
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  19)   }
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  20) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  21) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  22)   // Load posts onto the page
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  23)   useEffect(function() {
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  24)     getPosts();
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  25)   }, []);
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  26) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  27) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  28)   // Handle changing values in form
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  29)   const handleFormChange = (event) => {
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  30)     setFormState({
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  31)       ...formState,
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  32)       [event.target.name]: event.target.value
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  33)     });
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  34)   }
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  35) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  36)   // Handle submission of form
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  39) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  58)       }
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  84)     });
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  85) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  86)     if (response.ok) {
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  87)       getPosts();
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  88)     }
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  89)   }
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  90) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400  99)   return (
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 100)     <div className="App">
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 101)       <header className="App-header">
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 102)       </header>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 103)       <main style={{
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 104)         display: 'flex',
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 105)         flexDirection: 'column',
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 106)         alignItems: 'center',
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 107)       }}>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 114)         <h2>Create Post</h2>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 116)           display: 'flex',
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 117)           flexDirection: 'column',
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 118)           width: '500px',
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 119)         }}>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 120)           <input onChange={handleFormChange} name='title' placeholder='Title' value={formState.title}></input>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 121)           <textarea onChange={handleFormChange} name='description' placeholder='Description' rows='10' value={formState.description}></textarea>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 123)         </form>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 124) 
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 125)         <h2>Posts</h2>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 126)         <div>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 127)           {data ? data.map((item, i) => (
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 128)             <div key={i}>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 129)               <p><strong>{item.title}:</strong></p>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 130)               <p style={{marginLeft: '8px'}}>{item.description}</p>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 135)             </div>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 136)           )) : (<li>None</li>)}
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 137)         </div>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 138)       </main>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 139)     </div>
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 140)   );
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 141) }
+dbfeddce frontend/src/pages/database.js          (ssouther          2023-09-21 11:07:07 -0400 142)
+
+./frontend/src/pages/demos/email.js
+d16c383c frontend/src/pages/demos/email.js (ssouther          2023-09-28 15:46:22 -0400  1) import "../CSS/email.css"
+85226006 frontend/src/pages/email.js       (ssouther          2023-09-21 15:27:42 -0400  2) 
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400  3) import React from "react";
+3ca26ca0 frontend/src/pages/email.js       (ssouther          2023-09-21 18:28:56 -0400  4) import {useState} from "react";
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400  6) 
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400  7) const Email = () => {
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400  8) 	const [form, setForm] = useState({
+692c03d7 frontend/src/pages/email.js       (ssouther          2023-09-28 15:28:12 -0400  9) 		email: "",
+692c03d7 frontend/src/pages/email.js       (ssouther          2023-09-28 15:28:12 -0400 10) 		title: "",
+692c03d7 frontend/src/pages/email.js       (ssouther          2023-09-28 15:28:12 -0400 11) 		body: ""
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 12) 	})
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 14) 	const handleForm = (event) => {
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 15) 		setForm({
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 16) 			...form,
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 17) 			[event.target.name]: event.target.value
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 18) 		});
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 19) 	}
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 21) 	const handleFormSubmit = async(event) => {
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 22) 		event.preventDefault();
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 24) 	}
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 26)     return (
+85226006 frontend/src/pages/email.js       (ssouther          2023-09-21 15:27:42 -0400 27)         <div className="body">
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 28)             <h1>Enter an email address and get an email!</h1>
+85226006 frontend/src/pages/email.js       (ssouther          2023-09-21 15:27:42 -0400 29) 			<form onSubmit={handleFormSubmit}>
+47ee279d frontend/src/pages/email.js       (ssouther          2023-09-21 16:31:14 -0400 30) 				<input type="text" name="email" onChange={handleForm} value={form.email} placeholder="email@example.com" />
+692c03d7 frontend/src/pages/email.js       (ssouther          2023-09-28 15:28:12 -0400 31) 				<input type="text" name="title" onChange={handleForm} value={form.title} placeholder="Title" />
+692c03d7 frontend/src/pages/email.js       (ssouther          2023-09-28 15:28:12 -0400 32) 				<textarea name="body" onChange={handleForm} value={form.body} placeholder="Body" />
+85226006 frontend/src/pages/email.js       (ssouther          2023-09-21 15:27:42 -0400 33) 				<input type="submit" />
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 34) 			</form>
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 35)         </div>
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 36)     );
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 37) };
+dbfeddce frontend/src/pages/email.js       (ssouther          2023-09-21 11:07:07 -0400 39) export default Email;
+
+./sprint1/ssouthe3.md
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  2) Stephen Souther (ssouther) FragranceFinder
+
+./sprint1/ssouthe3.commits.txt
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   1) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400   9) const { Fragrance, FragranceListing } = require("./models");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   2) 039c3927 (ssouther          2023-10-10 15:38:20 -0400  10) const mailer = require('./config/mail');
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   3) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  11) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   4) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400  27) 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   5) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400  28) 	const spawn = require("child_process").spawn;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   6) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400  30) 	function scrapeWeb(){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   7) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400  32) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   8) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400  33) 		pyproc.stdout.on("data", (data) => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400   9) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400  34) 			ret = JSON.parse(data.toString());
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  10) 36c1887e (ssouther          2023-10-10 16:09:34 -0400  35) 			// IMPORTANT: The record in scrapers/scraperfaker.py must already exist in the database for the demo to work.
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  11) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  37) 			Fragrance.findOne({
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  12) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  38) 				where:{
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  13) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  39) 					make: ret.Make,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  14) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  40) 					model: ret.Model,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  15) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  41) 					series: ret.Series
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  16) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  42) 				}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  17) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  43) 			}).then(res => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  18) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  45) 				if(res == null){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  19) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  46) 					console.log("No data entry found");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  20) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  47) 					//insert data where not found
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  21) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  48) 				}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  22) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  49) 				else{
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  23) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  50) 					FragranceListing.findOne({
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  24) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  51) 						where:{
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  25) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  52) 							id: res.id,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  26) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  53) 							site: ret.Site
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  27) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  54) 						}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  28) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  55) 					}).then(res1 => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  29) da02a956 (ssouther          2023-10-10 12:43:11 -0400  56) 						changes = 0;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  30) da02a956 (ssouther          2023-10-10 12:43:11 -0400  57) 						subject = "";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  31) da02a956 (ssouther          2023-10-10 12:43:11 -0400  58) 						body = "";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  32) da02a956 (ssouther          2023-10-10 12:43:11 -0400  60) 						if(res1.price != ret.Price) changes |= 1;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  33) da02a956 (ssouther          2023-10-10 12:43:11 -0400  61) 						if(res1.discount == 0 && ret.Discount > 0) changes |= 2;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  34) da02a956 (ssouther          2023-10-10 12:43:11 -0400  62) 						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)) changes |= 4;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  35) da02a956 (ssouther          2023-10-10 12:43:11 -0400  64) 						if(changes == 7){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  36) da02a956 (ssouther          2023-10-10 12:43:11 -0400  65) 							//all conditions present
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  37) da02a956 (ssouther          2023-10-10 12:43:11 -0400  66) 							console.log("\nAll change\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  38) da02a956 (ssouther          2023-10-10 12:43:11 -0400  67) 							subject = "Stock, discount, and price notification for an item on your watch list";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  39) 3168857e (ssouther          2023-10-10 13:18:09 -0400  68) 							body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  40) fa95aa1c (ssouther          2023-10-10 11:17:32 -0400  69) 						}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  41) da02a956 (ssouther          2023-10-10 12:43:11 -0400  70) 						else if(changes == 3 || changes == 5 || changes == 6){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  42) da02a956 (ssouther          2023-10-10 12:43:11 -0400  71) 							//two conditions present
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  43) da02a956 (ssouther          2023-10-10 12:43:11 -0400  72) 							if(changes == 3){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  44) da02a956 (ssouther          2023-10-10 12:43:11 -0400  73) 								console.log("\nDiscount and price change\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  45) da02a956 (ssouther          2023-10-10 12:43:11 -0400  74) 								subject = "Discount and price notification for an item on your watch list";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  46) 3168857e (ssouther          2023-10-10 13:18:09 -0400  75) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and discount change";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  47) da02a956 (ssouther          2023-10-10 12:43:11 -0400  76) 							}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  48) da02a956 (ssouther          2023-10-10 12:43:11 -0400  77) 							else if(changes == 5){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  49) da02a956 (ssouther          2023-10-10 12:43:11 -0400  78) 								console.log("\nStock and price change\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  50) da02a956 (ssouther          2023-10-10 12:43:11 -0400  79) 								subject = "Stock and price notification for an item on your watch list";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  51) 3168857e (ssouther          2023-10-10 13:18:09 -0400  80) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and stock change";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  52) da02a956 (ssouther          2023-10-10 12:43:11 -0400  81) 							}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  53) da02a956 (ssouther          2023-10-10 12:43:11 -0400  82) 							else if(changes == 6){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  54) da02a956 (ssouther          2023-10-10 12:43:11 -0400  83) 								console.log("\nStock and discount change\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  55) da02a956 (ssouther          2023-10-10 12:43:11 -0400  84) 								subject = "Stock and discount notification for an item on your watch list";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  56) 3168857e (ssouther          2023-10-10 13:18:09 -0400  85) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount and stock change";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  57) da02a956 (ssouther          2023-10-10 12:43:11 -0400  86) 							}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  58) da02a956 (ssouther          2023-10-10 12:43:11 -0400  87) 						}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  59) da02a956 (ssouther          2023-10-10 12:43:11 -0400  88) 						else if(changes == 1 || changes == 2 || changes == 4){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  60) da02a956 (ssouther          2023-10-10 12:43:11 -0400  89) 							//one condition present
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  61) da02a956 (ssouther          2023-10-10 12:43:11 -0400  90) 							if(changes == 1){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  62) da02a956 (ssouther          2023-10-10 12:43:11 -0400  91) 								console.log("\nPrice change\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  63) da02a956 (ssouther          2023-10-10 12:43:11 -0400  92) 								subject = "Price notification for an item on your watch list";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  64) 3168857e (ssouther          2023-10-10 13:18:09 -0400  93) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price change";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  65) da02a956 (ssouther          2023-10-10 12:43:11 -0400  94) 							}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  66) da02a956 (ssouther          2023-10-10 12:43:11 -0400  95) 							else if(changes == 2){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  67) da02a956 (ssouther          2023-10-10 12:43:11 -0400  96) 								console.log("\nDiscount change\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  68) da02a956 (ssouther          2023-10-10 12:43:11 -0400  97) 								subject = "Discount notification for an item on your watch list";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  69) 3168857e (ssouther          2023-10-10 13:18:09 -0400  98) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount change";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  70) da02a956 (ssouther          2023-10-10 12:43:11 -0400  99) 							}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  71) da02a956 (ssouther          2023-10-10 12:43:11 -0400 100) 							else if(changes == 4){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  72) da02a956 (ssouther          2023-10-10 12:43:11 -0400 101) 								console.log("\nStock change\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  73) da02a956 (ssouther          2023-10-10 12:43:11 -0400 102) 								subject = "Stock notification for an item on your watch list";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  74) 3168857e (ssouther          2023-10-10 13:18:09 -0400 103) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a stock change";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  75) da02a956 (ssouther          2023-10-10 12:43:11 -0400 104) 							}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  76) fa95aa1c (ssouther          2023-10-10 11:17:32 -0400 105) 						}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  77) 3168857e (ssouther          2023-10-10 13:18:09 -0400 107) 						if(changes != 0){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  78) 3168857e (ssouther          2023-10-10 13:18:09 -0400 108) 							console.log("\n\n"+subject+"\n"+body+"\n\n");
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  79) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 110) 							const mail = {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  80) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 111) 								from: process.env.EMAIL_USER,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  81) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 112) 								to: process.env.EMAIL_USER,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  82) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 113) 								subject: subject,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  83) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 114) 								text: body
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  84) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 115) 							}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  85) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 117) 							mailer.sendMail(mail, function(error, info){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  86) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 118) 								if(error){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  87) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 119) 									console.log("An error has occurred while sending the email.\n" + error);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  88) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 120) 								}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  89) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 121) 								else{
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  90) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 122) 									console.log("Email sent: " + info.response);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  91) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 123) 								}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  92) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 124) 							});
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  93) 3168857e (ssouther          2023-10-10 13:18:09 -0400 125) 						}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  94) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400 127) 					}).catch((error) => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  95) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400 128) 						console.error("Cannot get data: ", error);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  96) 6a256bd6 (ssouther          2023-10-10 11:06:46 -0400 129) 					});
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  97) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 130) 				}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  98) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 132) 			}).catch((error) => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400  99) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 133) 				console.error("Cannot get data: ", error);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 100) ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 134) 			});
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 101) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400 136) 		});
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 102) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400 137) 	}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 103) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 139) 	scrapeWeb();
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 104) 039c3927 (ssouther          2023-10-10 15:38:20 -0400 140) 	setInterval(scrapeWeb, 3600000);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 105) 30fbf996 (ssouther          2023-10-09 13:07:34 -0400 142) });
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 106) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	1) import json
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 107) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	2) test = {
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 108) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	3)     "Make": "TestMake",
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 109) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	4)     "Model": "TestModel",
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 110) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	5)     "Series": "TestSeries",
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 111) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	6)     "Price": 150.99,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 112) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	7)     "Discount": 50,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 113) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	8)     "Quantity": 5,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 114) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  	9)     "Volume": 90,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 115) 6a256bd6 (ssouther 			    2023-10-10 11:06:46 -0400  10)     "Reviews": 5,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 116) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  11)     "Site": "example.com"
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 117) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  12) }
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 118) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  13) 
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 119) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  14) jsonTest = json.dumps(test)
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 120) 679c88cc (ssouther 			    2023-10-08 15:53:00 -0400  15) print(jsonTest)
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 121) f123a627 (ssouther 			    2023-10-09 15:15:11 -0400   1) import pandas as pd
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 122) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   2) from playwright.sync_api import sync_playwright
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 123) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   3) from bs4 import BeautifulSoup
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 124) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   4) 
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 125) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   5) with sync_playwright() as p:
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 126) 176ef5e9 (ssouther 			    2023-10-09 15:31:48 -0400   6)     browser = p.chromium.launch(headless=True)
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 127) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   7)     page = browser.new_page()
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 128) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   8)     page.goto('https://www.scentrique.com/fragrances')
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 129) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400   9)     html = page.inner_html('#TPASection_jqwvt965')
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 130) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  10)     soup = BeautifulSoup(html, 'html.parser')
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 131) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  11)     ul_list = soup.find('ul', class_='S4WbK_ uQ5Uah c2Zj9x H1ux6p')
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 132) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  12) 
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 133) c1564233 (ssouther 			    2023-10-08 13:56:20 -0400  13)     for i in ul_list:
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 134) f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  14)         page.goto(i.find("a", class_="oQUvqL x5qIv3")["href"])
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 135) f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  15)         html = page.inner_html('#TPAMultiSection_jqwvt9ch')
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 136) f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  16)         soup = BeautifulSoup(html, 'html.parser')
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 137) f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  17)         name = soup.find('h1', class_='_2qrJF')
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 138) f123a627 (ssouther 			    2023-10-09 15:15:11 -0400  18)         print(name.decode_contents())
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 139) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   1) const nodemail = require("nodemailer");
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 140) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   2) 
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 141) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   3) const mailer = nodemail.createTransport({
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 142) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   4) 	host: process.env.EMAIL_HOST,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 143) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   5) 	port: process.env.EMAIL_PORT,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 144) 46025cd6 (ssouther 		    	2023-09-28 15:03:36 -0400   6) 	secure: process.env.EMAIL_SECURE,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 145) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   7) 	auth: {
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 146) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   8) 		user: process.env.EMAIL_USER,
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 147) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400   9) 		pass: process.env.EMAIL_PASS
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 148) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  10) 	}
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 149) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  11) });
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 150) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  12) 
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 151) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  13) mailer.verify(function(error, success) {
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 152) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  14) 	if(error){
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 153) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  15) 		console.log("Failed to connect to mail host");
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 154) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  16) 	}
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 155) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  17) 	else{
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 156) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  18) 		console.log("Mail host connected");
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 157) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  19) 	}
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 158) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  20) });
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 159) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  21) 
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 160) 46025cd6 (ssouther 			    2023-09-28 15:03:36 -0400  22) module.exports = mailer;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 161) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   1) const router = require('express').Router();
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 162) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   2) const mailer = require('../config/mail');
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 163) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   4) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 164) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400   6) 	const {email, title, body} = req.body;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 165) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   7) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 166) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400   9) 		return res.status(400).json({ error: "Email is required." });
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 167) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  10) 	}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 168) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  12) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 169) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  13) 		const mail = {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 170) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  14) 			from: process.env.EMAIL_USER,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 171) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400  15) 			to: email,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 172) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400  16) 			subject: title,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 173) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400  17) 			text: body
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 174) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  18) 		};
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 175) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  19) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 176) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  20) 		mailer.sendMail(mail, function(error, info) {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 177) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  21) 			if(error){
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 178) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  22) 				console.log("An error has occurred while sending the email.\n" + error);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 179) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  23) 			}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 180) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  24) 			else{
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 181) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  25) 				console.log("Email sent: " + info.response);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 182) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  26) 			}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 183) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  27) 		});
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 184) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  28) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 185) bf4e60f4 (ssouther          2023-09-28 15:31:09 -0400  29) 		return res.status(200);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 186) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  30) 	}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 187) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  31) })
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 188) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  32) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 189) 46025cd6 (ssouther          2023-09-28 15:03:36 -0400  33) module.exports = router;
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 190) dbfeddce (ssouther          2023-09-21 11:07:07 -0400   1) import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 191) dbfeddce (ssouther          2023-09-21 11:07:07 -0400   3) import Home from './pages';
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 192) d16c383c (ssouther          2023-09-28 15:46:22 -0400   6) import DemoHome from './pages/demos';
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 193) d16c383c (ssouther          2023-09-28 15:46:22 -0400   7) import DemoEmail from './pages/demos/email';
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 194) d16c383c (ssouther          2023-09-28 15:46:22 -0400   8) import DemoCrudExample from './pages/demos/CrudExample';
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 195) d16c383c (ssouther          2023-09-28 15:46:22 -0400   9) import DemoNavbar from './pages/demos/navigation';
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 196) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  12) function App() {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 197) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  14) 	return (
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 198) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  15) 		<Router>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 199) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  16) 			<Routes>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 200) d16c383c (ssouther          2023-09-28 15:46:22 -0400  20) 				<Route exact path='/demos/' element={<DemoHome />} />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 201) d16c383c (ssouther          2023-09-28 15:46:22 -0400  21) 				<Route path='/demos/email' element={<DemoEmail />} />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 202) d16c383c (ssouther          2023-09-28 15:46:22 -0400  22) 				<Route path='/demos/crud' element={<DemoCrudExample />} />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 203) d16c383c (ssouther          2023-09-28 15:46:22 -0400  23) 				<Route path='/demos/nav' element={<DemoNavbar />} />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 204) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  24) 			</Routes>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 205) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  25) 		</Router>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 206) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  26) 	);
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 207) d16c383c (ssouther          2023-09-28 15:46:22 -0400   1) import "../CSS/email.css"
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 208) 85226006 (ssouther          2023-09-21 15:27:42 -0400   2) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 209) dbfeddce (ssouther          2023-09-21 11:07:07 -0400   3) import React from "react";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 210) 3ca26ca0 (ssouther          2023-09-21 18:28:56 -0400   4) import {useState} from "react";
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 211) dbfeddce (ssouther          2023-09-21 11:07:07 -0400   6) 
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 212) dbfeddce (ssouther          2023-09-21 11:07:07 -0400   7) const Email = () => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 213) 47ee279d (ssouther          2023-09-21 16:31:14 -0400   8) 	const [form, setForm] = useState({
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 214) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400   9) 		email: "",
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 215) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400  10) 		title: "",
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 216) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400  11) 		body: ""
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 217) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  12) 	})
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 218) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  14) 	const handleForm = (event) => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 219) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  15) 		setForm({
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 220) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  16) 			...form,
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 221) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  17) 			[event.target.name]: event.target.value
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 222) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  18) 		});
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 223) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  19) 	}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 224) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  21) 	const handleFormSubmit = async(event) => {
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 225) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  22) 		event.preventDefault();
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 226) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  24) 	}
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 227) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  26)     return (
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 228) 85226006 (ssouther          2023-09-21 15:27:42 -0400  27)         <div className="body">
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 229) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  28)             <h1>Enter an email address and get an email!</h1>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 230) 85226006 (ssouther          2023-09-21 15:27:42 -0400  29) 			<form onSubmit={handleFormSubmit}>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 231) 47ee279d (ssouther          2023-09-21 16:31:14 -0400  30) 				<input type="text" name="email" onChange={handleForm} value={form.email} placeholder="email@example.com" />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 232) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400  31) 				<input type="text" name="title" onChange={handleForm} value={form.title} placeholder="Title" />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 233) 692c03d7 (ssouther          2023-09-28 15:28:12 -0400  32) 				<textarea name="body" onChange={handleForm} value={form.body} placeholder="Body" />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 234) 85226006 (ssouther          2023-09-21 15:27:42 -0400  33) 				<input type="submit" />
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 235) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  34) 			</form>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 236) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  35)         </div>
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 237) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  36)     );
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 238) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  37) };
+309f4442 (ssouther 2023-10-11 10:47:33 -0400 239) dbfeddce (ssouther          2023-09-21 11:07:07 -0400  39) export default Email;
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 240) 85226006 (ssouther 			    2023-09-21 15:27:42 -0400   1) div.body{
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 241) 85226006 (ssouther 			    2023-09-21 15:27:42 -0400   2) 	text-align: center;
+6a3ec10d (ssouther 2023-10-11 10:50:01 -0400 242) 85226006 (ssouther 			    2023-09-21 15:27:42 -0400   3) }
+
+./backend/server.js
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400   9) const { Fragrance, FragranceListing } = require("./models");
+039c3927 (ssouther          2023-10-10 15:38:20 -0400  10) const mailer = require('./config/mail');
+47ee279d (ssouther          2023-09-21 16:31:14 -0400  11) 
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400  27) 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400  28) 	const spawn = require("child_process").spawn;
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400  30) 	function scrapeWeb(){
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400  32) 
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400  33) 		pyproc.stdout.on("data", (data) => {
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400  34) 			ret = JSON.parse(data.toString());
+36c1887e (ssouther          2023-10-10 16:09:34 -0400  35) 			// IMPORTANT: The record in scrapers/scraperfaker.py must already exist in the database for the demo to work.
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  37) 			Fragrance.findOne({
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  38) 				where:{
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  39) 					make: ret.Make,
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  40) 					model: ret.Model,
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  41) 					series: ret.Series
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  42) 				}
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  43) 			}).then(res => {
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  45) 				if(res == null){
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  46) 					console.log("No data entry found");
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  47) 					//insert data where not found
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  48) 				}
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400  49) 				else{
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  50) 					FragranceListing.findOne({
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  51) 						where:{
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  52) 							id: res.id,
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  53) 							site: ret.Site
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  54) 						}
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400  55) 					}).then(res1 => {
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  56) 						changes = 0;
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  57) 						subject = "";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  58) 						body = "";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  60) 						if(res1.price != ret.Price) changes |= 1;
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  61) 						if(res1.discount == 0 && ret.Discount > 0) changes |= 2;
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  62) 						if(res1.quantity == 0 && (ret.Quantity > 0 || ret.Quantity == -1)) changes |= 4;
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  64) 						if(changes == 7){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  65) 							//all conditions present
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  66) 							console.log("\nAll change\n");
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  67) 							subject = "Stock, discount, and price notification for an item on your watch list";
+3168857e (ssouther          2023-10-10 13:18:09 -0400  68) 							body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price, discount, and stock change";
+fa95aa1c (ssouther          2023-10-10 11:17:32 -0400  69) 						}
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  70) 						else if(changes == 3 || changes == 5 || changes == 6){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  71) 							//two conditions present
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  72) 							if(changes == 3){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  73) 								console.log("\nDiscount and price change\n");
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  74) 								subject = "Discount and price notification for an item on your watch list";
+3168857e (ssouther          2023-10-10 13:18:09 -0400  75) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and discount change";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  76) 							}
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  77) 							else if(changes == 5){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  78) 								console.log("\nStock and price change\n");
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  79) 								subject = "Stock and price notification for an item on your watch list";
+3168857e (ssouther          2023-10-10 13:18:09 -0400  80) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price and stock change";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  81) 							}
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  82) 							else if(changes == 6){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  83) 								console.log("\nStock and discount change\n");
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  84) 								subject = "Stock and discount notification for an item on your watch list";
+3168857e (ssouther          2023-10-10 13:18:09 -0400  85) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount and stock change";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  86) 							}
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  87) 						}
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  88) 						else if(changes == 1 || changes == 2 || changes == 4){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  89) 							//one condition present
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  90) 							if(changes == 1){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  91) 								console.log("\nPrice change\n");
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  92) 								subject = "Price notification for an item on your watch list";
+3168857e (ssouther          2023-10-10 13:18:09 -0400  93) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a price change";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  94) 							}
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  95) 							else if(changes == 2){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  96) 								console.log("\nDiscount change\n");
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  97) 								subject = "Discount notification for an item on your watch list";
+3168857e (ssouther          2023-10-10 13:18:09 -0400  98) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a discount change";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400  99) 							}
+da02a956 (ssouther          2023-10-10 12:43:11 -0400 100) 							else if(changes == 4){
+da02a956 (ssouther          2023-10-10 12:43:11 -0400 101) 								console.log("\nStock change\n");
+da02a956 (ssouther          2023-10-10 12:43:11 -0400 102) 								subject = "Stock notification for an item on your watch list";
+3168857e (ssouther          2023-10-10 13:18:09 -0400 103) 								body = "Hello, the item '"+res.series+" "+res.model+"' from the website '"+res1.site+"' has had a stock change";
+da02a956 (ssouther          2023-10-10 12:43:11 -0400 104) 							}
+fa95aa1c (ssouther          2023-10-10 11:17:32 -0400 105) 						}
+3168857e (ssouther          2023-10-10 13:18:09 -0400 107) 						if(changes != 0){
+3168857e (ssouther          2023-10-10 13:18:09 -0400 108) 							console.log("\n\n"+subject+"\n"+body+"\n\n");
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 110) 							const mail = {
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 111) 								from: process.env.EMAIL_USER,
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 112) 								to: process.env.EMAIL_USER,
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 113) 								subject: subject,
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 114) 								text: body
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 115) 							}
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 117) 							mailer.sendMail(mail, function(error, info){
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 118) 								if(error){
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 119) 									console.log("An error has occurred while sending the email.\n" + error);
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 120) 								}
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 121) 								else{
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 122) 									console.log("Email sent: " + info.response);
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 123) 								}
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 124) 							});
+3168857e (ssouther          2023-10-10 13:18:09 -0400 125) 						}
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400 127) 					}).catch((error) => {
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400 128) 						console.error("Cannot get data: ", error);
+6a256bd6 (ssouther          2023-10-10 11:06:46 -0400 129) 					});
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 130) 				}
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 132) 			}).catch((error) => {
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 133) 				console.error("Cannot get data: ", error);
+ab1d1994 (ssouther          2023-10-10 10:50:56 -0400 134) 			});
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400 136) 		});
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400 137) 	}
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 139) 	scrapeWeb();
+039c3927 (ssouther          2023-10-10 15:38:20 -0400 140) 	setInterval(scrapeWeb, 3600000);
+30fbf996 (ssouther          2023-10-09 13:07:34 -0400 142) });
+
+./backend/package.json
+a2975742 (ssouther          2023-09-21 17:10:09 -0400 18)     "mysql2": "^3.6.1",
+
+./backend/config/mail.js
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  1) const nodemail = require("nodemailer");
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  2) 
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  3) const mailer = nodemail.createTransport({
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  4) 	host: process.env.EMAIL_HOST,
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  5) 	port: process.env.EMAIL_PORT,
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  6) 	secure: process.env.EMAIL_SECURE,
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  7) 	auth: {
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  8) 		user: process.env.EMAIL_USER,
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400  9) 		pass: process.env.EMAIL_PASS
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 10) 	}
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 11) });
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 12) 
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 13) mailer.verify(function(error, success) {
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 14) 	if(error){
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 15) 		console.log("Failed to connect to mail host");
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 16) 	}
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 17) 	else{
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 18) 		console.log("Mail host connected");
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 19) 	}
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 20) });
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 21) 
+46025cd6 (ssouther 2023-09-28 15:03:36 -0400 22) module.exports = mailer;
+
+./backend/scrapers/scraperfaker.py
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  1) import json
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  2) test = {
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  3)     "Make": "TestMake",
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  4)     "Model": "TestModel",
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  5)     "Series": "TestSeries",
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  6)     "Price": 150.99,
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  7)     "Discount": 50,
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  8)     "Quantity": 5,
+679c88cc (ssouther 2023-10-08 15:53:00 -0400  9)     "Volume": 90,
+6a256bd6 (ssouther 2023-10-10 11:06:46 -0400 10)     "Reviews": 5,
+679c88cc (ssouther 2023-10-08 15:53:00 -0400 11)     "Site": "example.com"
+679c88cc (ssouther 2023-10-08 15:53:00 -0400 12) }
+679c88cc (ssouther 2023-10-08 15:53:00 -0400 13) 
+679c88cc (ssouther 2023-10-08 15:53:00 -0400 14) jsonTest = json.dumps(test)
+679c88cc (ssouther 2023-10-08 15:53:00 -0400 15) print(jsonTest)
+
+./backend/scrapers/scentrique.py
+f123a627 (ssouther 2023-10-09 15:15:11 -0400  1) import pandas as pd
+c1564233 (ssouther 2023-10-08 13:56:20 -0400  2) from playwright.sync_api import sync_playwright
+c1564233 (ssouther 2023-10-08 13:56:20 -0400  3) from bs4 import BeautifulSoup
+c1564233 (ssouther 2023-10-08 13:56:20 -0400  4) 
+c1564233 (ssouther 2023-10-08 13:56:20 -0400  5) with sync_playwright() as p:
+176ef5e9 (ssouther 2023-10-09 15:31:48 -0400  6)     browser = p.chromium.launch(headless=True)
+c1564233 (ssouther 2023-10-08 13:56:20 -0400  7)     page = browser.new_page()
+c1564233 (ssouther 2023-10-08 13:56:20 -0400  8)     page.goto('https://www.scentrique.com/fragrances')
+c1564233 (ssouther 2023-10-08 13:56:20 -0400  9)     html = page.inner_html('#TPASection_jqwvt965')
+c1564233 (ssouther 2023-10-08 13:56:20 -0400 10)     soup = BeautifulSoup(html, 'html.parser')
+c1564233 (ssouther 2023-10-08 13:56:20 -0400 11)     ul_list = soup.find('ul', class_='S4WbK_ uQ5Uah c2Zj9x H1ux6p')
+c1564233 (ssouther 2023-10-08 13:56:20 -0400 12) 
+c1564233 (ssouther 2023-10-08 13:56:20 -0400 13)     for i in ul_list:
+f123a627 (ssouther 2023-10-09 15:15:11 -0400 14)         page.goto(i.find("a", class_="oQUvqL x5qIv3")["href"])
+f123a627 (ssouther 2023-10-09 15:15:11 -0400 15)         html = page.inner_html('#TPAMultiSection_jqwvt9ch')
+f123a627 (ssouther 2023-10-09 15:15:11 -0400 16)         soup = BeautifulSoup(html, 'html.parser')
+f123a627 (ssouther 2023-10-09 15:15:11 -0400 17)         name = soup.find('h1', class_='_2qrJF')
+f123a627 (ssouther 2023-10-09 15:15:11 -0400 18)         print(name.decode_contents())
+
+./backend/routes/user-routes.js
+6954764f (ssouther          2023-10-02 20:51:05 -0400 21)         if (err.original?.code == 'ER_DUP_ENTRY') {
+
+./backend/routes/mailRoutes.js
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400  1) const router = require('express').Router();
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400  2) const mailer = require('../config/mail');
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400  4) 
+692c03d7 (ssouther          2023-09-28 15:28:12 -0400  6) 	const {email, title, body} = req.body;
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400  7) 
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400  9) 		return res.status(400).json({ error: "Email is required." });
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 10) 	}
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 12) 
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 13) 		const mail = {
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 14) 			from: process.env.EMAIL_USER,
+692c03d7 (ssouther          2023-09-28 15:28:12 -0400 15) 			to: email,
+692c03d7 (ssouther          2023-09-28 15:28:12 -0400 16) 			subject: title,
+692c03d7 (ssouther          2023-09-28 15:28:12 -0400 17) 			text: body
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 18) 		};
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 19) 
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 20) 		mailer.sendMail(mail, function(error, info) {
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 21) 			if(error){
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 22) 				console.log("An error has occurred while sending the email.\n" + error);
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 23) 			}
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 24) 			else{
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 25) 				console.log("Email sent: " + info.response);
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 26) 			}
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 27) 		});
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 28) 
+bf4e60f4 (ssouther          2023-09-28 15:31:09 -0400 29) 		return res.status(200);
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 30) 	}
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 31) })
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 32) 
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400 33) module.exports = router;
+
+./backend/routes/index.js
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400  2) const mailRoutes = require('./mailRoutes');
+
+./backend/routes/basicCrudRoutes.js
+46025cd6 (ssouther          2023-09-28 15:03:36 -0400  2) const db = require('../config/db');

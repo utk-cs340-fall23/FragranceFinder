@@ -1,0 +1,281 @@
+.\backend\scrapers\fragrancenet.py
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  1) from playwright.sync_api import sync_playwright
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  2) from bs4 import BeautifulSoup
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  3) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  4) # The base URL of the website
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  5) baseurl = "https://www.fragrancenet.com/"
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  6) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  7) # The number of pages to scrape
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  8) num_pages = 3
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400  9) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 10) # Launch the Playwright browser
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 11) with sync_playwright() as p:
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 12)     browser = p.chromium.launch(headless=False)
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 13) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 14)     # Iterate through the specified number of pages
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 15)     for page_number in range(1, num_pages + 1):
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 16)         # Generate the search URL for each page
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 17)         search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 18) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 19)         # Open a new page in the browser
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 20)         page = browser.new_page()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 21) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 22)         # Navigate to the search URL
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 23)         page.goto(search_url)
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 24) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 25)         # Wait for the page to load
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 26)         page.wait_for_load_state()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 27) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 28)         # Extract the HTML content of the result set
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 29)         product_data = page.inner_html('#resultSet')
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 30) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 31)         # Close the page to free up resources
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 32)         page.close()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 33) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 34)         # Parse the HTML content using BeautifulSoup
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 35)         soup = BeautifulSoup(product_data, 'html.parser')
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 36) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 37)         # Find all product items on the page
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 38)         product_items = soup.find_all('div', class_='resultItem heightSync')
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 39) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 40)         # Iterate through each product on the page
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 41)         for product in product_items:
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 42)             # Extract the name of the product
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 43)             name = product.find('span', class_='brand-name').text.strip()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 44) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 45)             # Extract the brand with a try-except block
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 46)             try:
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 47)                 brand_element = product.find('p', class_='des').find('a')
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 48)                 brand = brand_element.text.strip()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 49)             except AttributeError:
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 50)                 brand = "Brand not available"
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 51) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 52)             # Extract the price of the product
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 53)             price_element = product.find('span', class_='price types')
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 54)             price = price_element.find_next('span').text.strip() if price_element else "Price not available"
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 55) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 56)             # Extract the gender information
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 57)             gender = product.find('span', class_='gender-badge').text.strip()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 58) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 59)             # Extract the link to the product
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 60)             link = product.find('a', href=True)['href']
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 61) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 62)             # Extract the savings information
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 63)             savings = product.find('span', class_='savings').text.strip()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 64) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 65)             # Extract the ratings information
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 66)             ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 67) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 68)             # Print the extracted data
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 69)             print(f"Name: {name}")
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 70)             print(f"Brand: {brand}")
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 71)             print(f"Price: {price}")
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 72)             print(f"Gender: {gender}")
+c66fdf36 (KienKong 2023-10-11 18:55:22 -0400 73)             print(f"Link: {link}")
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 74)             print(f"Savings: {savings}")
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 75)             print(f"Ratings: {ratings}")
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 76)             print("\n")
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 77) 
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 78)     # Close the browser when done
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 79)     browser.close()
+09dc8cb5 (Kien     2023-10-10 23:39:56 -0400 80)
+
+.\frontend\src\pages\CSS\navbar.css
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  1) /* Add a black background color to the top navigation */
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  2) .topnav {
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  3)     background-color: #333;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  4)     overflow: hidden;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  5)   }
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  6)   
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  7)   /* Style the links inside the navigation bar */
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  8)   .topnav a {
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400  9)     float: left;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 10)     color: #f2f2f2;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 11)     text-align: center;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 12)     padding: 14px 16px;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 13)     text-decoration: none;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 14)     font-size: 17px;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 15)   }
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 16)   
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 17)   /* Change the color of links on hover */
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 18)   .topnav a:hover {
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 19)     background-color: #ddd;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 20)     color: black;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 21)   }
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 22)   
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 23)   /* Add a color to the active/current link */
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 24)   .topnav a.active {
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 25)     background-color: #04AA6D;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 26)     color: white;
+9b6d4d20 (Kien 2023-09-22 13:54:52 -0400 27)   }
+
+.\frontend\src\pages\demos\index.js
+d16c383c (ssouther 2023-09-28 15:46:22 -0400 12)             <a href="/demos/nav">Kien Nguyen's Navigation Bar demo</a>
+
+.\frontend\src\pages\demos\navigation.js
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  1) import React from "react";
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  3) 
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  4) export const Navbar = () => {
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  5)     return (
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  6)         <div>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  7)             <div class="topnav">
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  8)                 <a class="active" href="#home">Home</a>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400  9)                 <a href="#news">News</a>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 10)                 <a href="#contact">Contact</a>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 11)                 <a href="#about">About</a>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 12)             </div>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 13)             <center>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 14)             <h1>Kien's Amazing Page</h1>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 15)             <h2><a href="https://www.fragrancenet.com/ni/fragrances?f=0!4U">Check out this fragrance website!</a></h2>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 16)             </center>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 17)         </div>
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 18)     );
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 19)     
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 20) };
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 21)  
+9b6d4d20 frontend/src/pages/navigation.js       (Kien     2023-09-22 13:54:52 -0400 22) export default Navbar;
+
+.\sprint1\knguye34.commits.txt
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400   2) c66fdf36 (KienKong 2023-10-11 18:55:22 -0400 73)             print(f"Link: {link}")
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400   5) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  2) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  2) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  1) # Sprint 1
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400   6) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  3) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  3) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  2) Kien Nguyen, KienKong, FragranceFinder
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400   7) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  4) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  4) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  3) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400   8) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  5) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  5) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  4) ### What you planned to do
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400   9) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  6) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  6) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  5) - Worked with React and NodeJS to create a local webpage and display a demo navigation bar
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  10) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  7) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  7) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  6) - Scrape fragrance data (name, brand, price, gender, link, savings, ratings, etc.) on fragrancenet.com
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  11) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  8) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  8) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  7) - Displaying the data from the jumbly html format to a nice print format that is easy to see
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  12) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400  9) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400  9) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  8) - Begin databasing the data after collecting it from the website
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  13) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 10) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 10) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  9) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  14) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 11) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 11) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 10) ### What you did not do
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  15) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 12) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 12) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 11) - I have not listed the price correctly yet
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  16) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 13) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 13) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 12) - I did not database since I am still looking into it (and our group is deciding how we want to do it)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  17) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 14) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 14) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 13) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  18) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 15) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 15) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 14) ### What problems you encountered
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  19) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 16) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 16) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 15) - Because the price is not listed in the default first page (and shows the available sizes instead), 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  20) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 17) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 17) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 16) I have to find a way to go into the product link and extract data from there. The only caveat is that
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  21) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 18) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 18) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 17) the website blocks that from happening, so I have to figure my way around to get the pricing.
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  22) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 19) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 19) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 18) - I want to make it to apply to multiple websites, but because most websites are formatted differently,
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  23) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 20) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 20) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 19) it makes it tough to have 1 program work for many websites.
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  24) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 21) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 21) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 20) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  25) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 22) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 22) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 21) ### Issues you worked on
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  26) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 23) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 23) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 22) - I have not worked on the issue with the pricing yet, so I will post that into the github issue section.
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  27) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 24) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 24) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 23) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  28) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 25) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 25) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 24) ### Files you worked on
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  29) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 26) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 26) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 25) - fragrancenet.py (backend/scrapers/fragrancenet.py)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  30) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 27) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 27) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 26) - navbar.css (frontend/src/pages/CSS/navbar.css)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  31) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 28) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 28) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 27) - navigation.js (frontend/src/pages/demos/navigation.js)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  32) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 29) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 29) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 28) - index.js (frontend/src/pages/demos/index.js)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  33) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 30) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 30) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 29) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  34) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 31) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 31) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 30) ### What you accomplished
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  35) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 32) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 32) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 31) - I was able to get a local webpage working with the help of Lakelon because he set most of it up. I also created demo a simple navigation bar. 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  36) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 33) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 33) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 32) I can now webscrape a decent amount of data from fragrancenet and display it in a more user-friendly format. I ran to a lot of random bugs because
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  37) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 34) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 34) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 33) I had to download some extensions, such as playwright, beautifulsoup, and selenium. I did a bunch of trial and error to get things to work, and most
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  38) 00000000 (Not Committed Yet 2023-10-11 18:56:33 -0400 35) 6b4905a3 (Kien 2023-10-11 18:41:56 -0400 35) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 34) of us decided to use playwright to webscrape our chosen websites. I will figure out how to get the prices and then start databasing after that.
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  39) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 38) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  1) # Sprint 1
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  40) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 39) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  2) Kien Nguyen, KienKong, FragranceFinder
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  41) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 40) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  3) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  42) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 41) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  4) ### What you planned to do
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  43) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 42) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  5) - Worked with React and NodeJS to create a local webpage and display a demo navigation bar
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  44) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 43) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  6) - Scrape fragrance data (name, brand, price, gender, link, savings, ratings, etc.) on fragrancenet.com
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  45) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 44) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  7) - Displaying the data from the jumbly html format to a nice print format that is easy to see
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  46) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 45) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  8) - Begin databasing the data after collecting it from the website
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  47) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 46) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  9) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  48) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 47) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 10) ### What you did not do
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  49) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 48) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 11) - I have not listed the price correctly yet
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  50) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 49) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 12) - I did not database since I am still looking into it (and our group is deciding how we want to do it)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  51) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 50) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 13) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  52) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 51) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 14) ### What problems you encountered
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  53) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 52) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 15) - Because the price is not listed in the default first page (and shows the available sizes instead), 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  54) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 53) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 16) I have to find a way to go into the product link and extract data from there. The only caveat is that
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  55) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 54) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 17) the website blocks that from happening, so I have to figure my way around to get the pricing.
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  56) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 55) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 18) - I want to make it to apply to multiple websites, but because most websites are formatted differently,
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  57) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 56) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 19) it makes it tough to have 1 program work for many websites.
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  58) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 57) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 20) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  59) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 58) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 21) ### Issues you worked on
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  60) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 59) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 22) - I have not worked on the issue with the pricing yet, so I will post that into the github issue section.
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  61) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 60) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 23) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  62) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 61) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 24) ### Files you worked on
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  63) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 62) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 25) - fragrancenet.py (backend/scrapers/fragrancenet.py)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  64) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 63) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 26) - navbar.css (frontend/src/pages/CSS/navbar.css)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  65) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 64) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 27) - navigation.js (frontend/src/pages/demos/navigation.js)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  66) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 65) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 28) - index.js (frontend/src/pages/demos/index.js)
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  67) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 66) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 29) 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  68) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 67) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 30) ### What you accomplished
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  69) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 68) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 31) - I was able to get a local webpage working with the help of Lakelon because he set most of it up. I also created demo a simple navigation bar. 
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  70) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 69) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 32) I can now webscrape a decent amount of data from fragrancenet and display it in a more user-friendly format. I ran to a lot of random bugs because
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  71) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 70) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 33) I had to download some extensions, such as playwright, beautifulsoup, and selenium. I did a bunch of trial and error to get things to work, and most
+00000000 (Not Committed Yet 2023-10-11 18:58:00 -0400  72) 6b4905a3 (Kien              2023-10-11 18:41:56 -0400 71) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 34) of us decided to use playwright to webscrape our chosen websites. I will figure out how to get the prices and then start databasing after that.
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  74) .\sprint1\knguye34.md
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  75) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  1) # Sprint 1
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  76) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  2) Kien Nguyen, KienKong, FragranceFinder
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  77) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  3) 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  78) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  4) ### What you planned to do
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  79) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  5) - Worked with React and NodeJS to create a local webpage and display a demo navigation bar
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  80) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  6) - Scrape fragrance data (name, brand, price, gender, link, savings, ratings, etc.) on fragrancenet.com
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  81) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  7) - Displaying the data from the jumbly html format to a nice print format that is easy to see
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  82) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  8) - Begin databasing the data after collecting it from the website
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  83) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  9) 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  84) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 10) ### What you did not do
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  85) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 11) - I have not listed the price correctly yet
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  86) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 12) - I did not database since I am still looking into it (and our group is deciding how we want to do it)
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  87) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 13) 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  88) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 14) ### What problems you encountered
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  89) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 15) - Because the price is not listed in the default first page (and shows the available sizes instead), 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  90) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 16) I have to find a way to go into the product link and extract data from there. The only caveat is that
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  91) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 17) the website blocks that from happening, so I have to figure my way around to get the pricing.
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  92) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 18) - I want to make it to apply to multiple websites, but because most websites are formatted differently,
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  93) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 19) it makes it tough to have 1 program work for many websites.
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  94) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 20) 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  95) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 21) ### Issues you worked on
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  96) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 22) - I have not worked on the issue with the pricing yet, so I will post that into the github issue section.
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  97) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 23) 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  98) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 24) ### Files you worked on
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400  99) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 25) - fragrancenet.py (backend/scrapers/fragrancenet.py)
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 100) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 26) - navbar.css (frontend/src/pages/CSS/navbar.css)
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 101) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 27) - navigation.js (frontend/src/pages/demos/navigation.js)
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 102) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 28) - index.js (frontend/src/pages/demos/index.js)
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 103) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 29) 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 104) 99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 30) ### What you accomplished
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 105) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 31) - I was able to get a local webpage working with the help of Lakelon because he set most of it up. I also created demo a simple navigation bar. 
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 106) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 32) I can now webscrape a decent amount of data from fragrancenet and display it in a more user-friendly format. I ran to a lot of random bugs because
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 107) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 33) I had to download some extensions, such as playwright, beautifulsoup, and selenium. I did a bunch of trial and error to get things to work, and most
+6b4905a3 (Kien              2023-10-11 18:41:56 -0400 108) adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 34) of us decided to use playwright to webscrape our chosen websites. I will figure out how to get the prices and then start databasing after that.
+
+.\sprint1\knguye34.md
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  1) # Sprint 1
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  2) Kien Nguyen, KienKong, FragranceFinder
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  3) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  4) ### What you planned to do
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  5) - Worked with React and NodeJS to create a local webpage and display a demo navigation bar
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  6) - Scrape fragrance data (name, brand, price, gender, link, savings, ratings, etc.) on fragrancenet.com
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  7) - Displaying the data from the jumbly html format to a nice print format that is easy to see
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  8) - Begin databasing the data after collecting it from the website
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400  9) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 10) ### What you did not do
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 11) - I have not listed the price correctly yet
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 12) - I did not database since I am still looking into it (and our group is deciding how we want to do it)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 13) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 14) ### What problems you encountered
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 15) - Because the price is not listed in the default first page (and shows the available sizes instead), 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 16) I have to find a way to go into the product link and extract data from there. The only caveat is that
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 17) the website blocks that from happening, so I have to figure my way around to get the pricing.
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 18) - I want to make it to apply to multiple websites, but because most websites are formatted differently,
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 19) it makes it tough to have 1 program work for many websites.
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 20) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 21) ### Issues you worked on
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 22) - I have not worked on the issue with the pricing yet, so I will post that into the github issue section.
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 23) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 24) ### Files you worked on
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 25) - fragrancenet.py (backend/scrapers/fragrancenet.py)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 26) - navbar.css (frontend/src/pages/CSS/navbar.css)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 27) - navigation.js (frontend/src/pages/demos/navigation.js)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 28) - index.js (frontend/src/pages/demos/index.js)
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 29) 
+99c9c7ee (KienKong 2023-10-10 23:59:06 -0400 30) ### What you accomplished
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 31) - I was able to get a local webpage working with the help of Lakelon because he set most of it up. I also created demo a simple navigation bar. 
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 32) I can now webscrape a decent amount of data from fragrancenet and display it in a more user-friendly format. I ran to a lot of random bugs because
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 33) I had to download some extensions, such as playwright, beautifulsoup, and selenium. I did a bunch of trial and error to get things to work, and most
+adb6ef3e (KienKong 2023-10-11 00:02:46 -0400 34) of us decided to use playwright to webscrape our chosen websites. I will figure out how to get the prices and then start databasing after that.
+
+.\sprint1\ssouthe3.commits.txt
+24209848 (ssouther 2023-10-11 17:55:44 -0400  50) d16c383c (ssouther 2023-09-28 15:46:22 -0400 12)             <a href="/demos/nav">Kien Nguyen's Navigation Bar demo</a>

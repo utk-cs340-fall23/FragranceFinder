@@ -1,0 +1,6 @@
+beautifulsoup4==4.12.2
+greenlet==2.0.2
+playwright==1.38.0
+pyee==9.0.4
+soupsieve==2.5
+typing-extensions==4.8.0
