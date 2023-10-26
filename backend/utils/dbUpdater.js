@@ -24,36 +24,38 @@ function dbUpdate() {
 			const ret = JSON.parse(output);
 
 			for(let i = 0; i < ret.length; i++){
-				Fragrance.findOne({
-					where:{
-						brand: ret[i].brand,
-						title: ret[i].title,
-						concentration: ret[i].concentration,
-						gender: ret[i].gender
-					}
-				}).then(res => {
-					if(res == null){
-						Fragrance.create({
+				if(ret[i].brand != "N/A" && ret[i].title != "N/A" && ret[i].concentration != "N/A" && ret[i].gender != "N/A"){
+					Fragrance.findOne({
+						where:{
 							brand: ret[i].brand,
 							title: ret[i].title,
 							concentration: ret[i].concentration,
-							photoLink: ret[i].photoLink,
 							gender: ret[i].gender
-						}).then(ins => {
-							FragranceListing.create({
-								fragranceId: ins.id,
-								price: ret[i].price,
-								link: ret[i].link,
-								sizeoz: ret[i].size
+						}
+					}).then(res => {
+						if(res == null){
+							Fragrance.create({
+								brand: ret[i].brand,
+								title: ret[i].title,
+								concentration: ret[i].concentration,
+								photoLink: ret[i].photoLink,
+								gender: ret[i].gender
+							}).then(ins => {
+								FragranceListing.create({
+									fragranceId: ins.id,
+									price: ret[i].price,
+									link: ret[i].link,
+									sizeoz: ret[i].size
+								});
 							});
-						});
-					}
-					else{
-						console.log("data found");
-					}
-				}).catch((error) => {
-					console.log("Error: Cannot fetch data: ", error);
-				});
+						}
+						else{
+							console.log("data found");
+						}
+					}).catch((error) => {
+						console.log("Error: Cannot fetch data: ", error);
+					});
+				}
 			}
 		});
 	}
