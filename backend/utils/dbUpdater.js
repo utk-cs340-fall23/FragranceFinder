@@ -51,9 +51,30 @@ function dbUpdate() {
 							});
 						}
 						else{
-							console.log("data found");
 							// Append existing element
-							
+							FragranceListing.findOne({
+								where:{
+									fragranceId: res.id,
+									price: ret[i].price,
+									link: ret[i].link,
+									sizeoz: ret[i].size
+								}
+							}).then(lst => {
+								if(lst == null){
+									// Create new list
+									FragranceListing.create({
+										fragranceId: res.id,
+										price: ret[i].price,
+										link: ret[i].link,
+										sizeoz: ret[i].size
+									}).then(ins => {
+										// check smallest price and send email if is new smallest
+									});
+								}
+								else{
+									// Update list
+								}
+							});
 						}
 					}).catch((error) => {
 						console.log("Error: Cannot fetch data: ", error);
