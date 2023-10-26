@@ -66,20 +66,14 @@ async def get_product_info(browser, product):
     pricing_elements = product_soup.find_all('div', class_='variantText solo')
 
     for pricing_element in pricing_elements:
-        dimname_span = pricing_element.find('div', class_='dimname').find('span', class_='text')
-        size_text = dimname_span.text.strip()
-
-        # Use regular expression to extract the numeric part for the size
-        size_match = re.search(r'(\d+\.\d+)', size_text)
-        
-        if size_match:
-            size = size_match.group(1)
-        else:
-            size = "Not found"
+        # Extract the product size in ounces from the data-dim-value attribute
+        size_oz = pricing_element['data-dim-value']
+        # Convert the size to milliliters using the conversion factor
+        size_ml = float(size_oz) * 29.5735
             
         # Extract the original price
         price = pricing_element.find('div', class_='pricing').text.strip()
-        print(f"Price: {price:}, Size: {size}")
+        print(f"Price: {price:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
     
     """
     # Get pricing and size details from the product page
