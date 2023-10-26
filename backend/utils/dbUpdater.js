@@ -68,7 +68,19 @@ function dbUpdate() {
 										link: ret[i].link,
 										sizeoz: ret[i].size
 									}).then(ins => {
-										// check smallest price and send email if is new smallest
+										FragranceListing.findAll({
+											where:{
+												fragranceId: res.id,
+												sizeoz: ret[i].size
+											}
+										}).then(lst1 => {
+											if(lst1 == null){
+												// Insert new
+											}
+											else{
+												// find smallest price then insert
+											}
+										});
 									});
 								}
 								else{
