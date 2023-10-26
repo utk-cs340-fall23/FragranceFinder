@@ -1,4 +1,5 @@
 const jomashopData = require('../data/jomashop.json');
+const maxaromaData = require('../data/maxaroma.json')
 const {FragranceListing, Fragrance} = require('../models');
 
 // Extract floating point from price string
@@ -56,10 +57,11 @@ const getFragranceMapKey = (item) => {
 
 const loadFragrances = async () => {
     await destroyExistingData();
-    const data = cleanData(jomashopData);
+    const jomadata = cleanData(jomashopData);
+    const maxaromData = cleanData(maxaromaData)
     const fragranceMap = new Map();
     const fragranceListings = []
-    for (let item of data) {
+    for (let item of jomadata) {
 
         // Create map key used to determine unique fragrances
         const mapKey = getFragranceMapKey(item);
@@ -82,9 +84,32 @@ const loadFragrances = async () => {
             ...item
         });
     }
+    // Max Aroma Fragrances
+    for (let item of maxaromData) {
+        // Create map key used to determine unique fragrances
+        const mapKey = getFragranceMapKey(item);
+        let fragrance = fragranceMap.get(mapKey);
+
+        // If fragrance doesn't exist, create it.
+        if (!fragrance) {
+            fragrance = await Fragrance.create({
+                brand: item.brand,
+                title: item.title,
+                concentration: item.concentration,
+                gender: item.gender,
+                photoLink: item.photoLink
+            });
+            fragranceMap.set(mapKey, fragrance);
+        }
+
+        fragranceListings.push({
+            fragranceId: fragrance.id,
+            ...item
+        });
+
+    }
 
     await FragranceListing.bulkCreate(fragranceListings);
 }
-
 
 loadFragrances();
