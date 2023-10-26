@@ -4,24 +4,14 @@ from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 import re
 import json
-#import atexit
-
-all_fragrances = []
-
-"""def print_fragrances():
-    for fragrance in all_fragrances:
-            print(f"Photo Link: {fragrance['photoLink']}")
-            print(f"Brand: {fragrance['brand']}")
-            print(f"Title: {fragrance['title']}")
-            print(f"Concentration: {fragrance['concentration']}")
-            print(f"Sizeoz {fragrance['sizeoz']}")
-            print(f"Sizeml: {fragrance['sizeml']}")
-            print(f"Price: {fragrance['price']}")
-            print(f"Gender: {fragrance['gender']}")
-            print(f"Link: {fragrance['link']}")
-            print("-----")"""
+import pandas as pd
 
 async def scrape_maxaroma():
+
+    all_fragrances = []
+
+    df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+
     try: 
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless = False)
@@ -41,18 +31,15 @@ async def scrape_maxaroma():
             while True:
                 catalog_content = await page.content()
                 catalog = BeautifulSoup(catalog_content, 'html.parser')
-                #await page.wait_for_timeout(7000)
-                #await page.mouse.click(0,0)
-                #await page.click('div#list-more.pb-2')
             
                 products = catalog.find_all('div', class_='product') 
                 data_page = catalog.find('div', class_='pb-2', id='list-more')
                 data_page = data_page.find('a', class_='list-more d-block')
                 data_page = int(data_page['data-page'])
                 if (data_page >= 365):
-                    print(f"Data Page Num: {data_page}")
+                    #print(f"Data Page Num: {data_page}")
                     break
-                print(f"Data Page: {data_page}")
+                #print(f"Data Page: {data_page}")
                 # Wait 7 seconds then click top left corner to close popup ad
                 if data_page == 1:
                     await page.wait_for_timeout(7000)
@@ -174,11 +161,13 @@ async def scrape_maxaroma():
                         fragrance["link"] = link
 
                         all_fragrances.append(fragrance)
+                        df.loc[len(df)] = [brand, name, concentration, gender, size, price, link, photoLink]
                         # Prints the current list of fragrances, even if exiting early
 
             await browser.close()
     finally:
-            for fragrance in all_fragrances:
+
+            """for fragrance in all_fragrances:
                 print(f"Photo Link: {fragrance['photoLink']}")
                 print(f"Brand: {fragrance['brand']}")
                 print(f"Title: {fragrance['title']}")
@@ -188,9 +177,11 @@ async def scrape_maxaroma():
                 print(f"Price: {fragrance['price']}")
                 print(f"Gender: {fragrance['gender']}")
                 print(f"Link: {fragrance['link']}")
-                print("-----")
+                print("-----")"""
+
+            return df.to_json(orient="records")
 
             
 
-if __name__ == "__main__":
-    asyncio.run(scrape_maxaroma())
+#if __name__ == "__main__":
+#    asyncio.run(scrape_maxaroma())

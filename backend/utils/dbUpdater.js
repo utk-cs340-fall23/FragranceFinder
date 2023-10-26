@@ -34,6 +34,7 @@ function dbUpdate() {
 						}
 					}).then(res => {
 						if(res == null){
+							// Creates new record of item
 							Fragrance.create({
 								brand: ret[i].brand,
 								title: ret[i].title,
@@ -50,7 +51,43 @@ function dbUpdate() {
 							});
 						}
 						else{
-							console.log("data found");
+							// Append existing element
+							FragranceListing.findOne({
+								where:{
+									fragranceId: res.id,
+									price: ret[i].price,
+									link: ret[i].link,
+									sizeoz: ret[i].size
+								}
+							}).then(lst => {
+								if(lst == null){
+									// Create new list
+									FragranceListing.create({
+										fragranceId: res.id,
+										price: ret[i].price,
+										link: ret[i].link,
+										sizeoz: ret[i].size
+									}).then(ins => {
+										FragranceListing.findAll({
+											where:{
+												fragranceId: res.id,
+												sizeoz: ret[i].size
+											}
+										}).then(lst1 => {
+											if(lst1 == null){
+												console.log("Item exists but size doesn't exist");
+											}
+											else{
+												console.log("Record(s) exist and smallest price needs to be found");
+												// find smallest price then insert
+											}
+										});
+									});
+								}
+								else{
+									// Update list
+								}
+							});
 						}
 					}).catch((error) => {
 						console.log("Error: Cannot fetch data: ", error);
