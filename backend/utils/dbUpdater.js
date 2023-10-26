@@ -75,9 +75,10 @@ function dbUpdate() {
 											}
 										}).then(lst1 => {
 											if(lst1 == null){
-												// Insert new
+												console.log("Item exists but size doesn't exist");
 											}
 											else{
+												console.log("Record(s) exist and smallest price needs to be found");
 												// find smallest price then insert
 											}
 										});
