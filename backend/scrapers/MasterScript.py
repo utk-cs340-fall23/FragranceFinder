@@ -13,9 +13,8 @@ frames = [
     pd.read_json(asyncio.run(scrape_maxaroma()), orient="records")
 ]
 
-#frames[0].to_json('data/jomashop.json', orient='records')
-#frames[1].to_json('data/maxaroma.json', orient='records')
-
 gdf = pd.concat(frames)
+
+#gdf.to_json('data/AllRecords.json', orient='records')
 
 print(gdf.to_json(orient='records'))
