@@ -55,7 +55,6 @@ function dbUpdate() {
 							FragranceListing.findOne({
 								where:{
 									fragranceId: res.id,
-									price: ret[i].price,
 									link: ret[i].link,
 									sizeoz: ret[i].size
 								}
