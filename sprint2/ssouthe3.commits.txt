@@ -1,0 +1,104 @@
+.\backend\models\FragranceListing.js
+0d7b0092 backend/models/FragranceListing.js (ssouther          2023-10-25 19:57:56 -0400 40)       type: DataTypes.STRING
+
+
+.\backend\scrapers\jomashop.py
+6b3841a3 (ssouther      2023-10-24 09:05:35 -0400   6) import pandas as pd
+
+
+.\backend\scrapers\MasterScript.py
+43474afa (ssouther      2023-10-24 11:00:02 -0400  1) import asyncio
+43474afa (ssouther      2023-10-24 11:00:02 -0400  2) import pandas as pd
+43474afa (ssouther      2023-10-24 11:00:02 -0400  3) from jomashop import scrape_jomashop
+43474afa (ssouther      2023-10-24 11:00:02 -0400  7) 
+94c64c4f (ssouther      2023-10-25 17:27:12 -0400  9) #if not os.path.exists(os.path.join(os.getcwd(), 'data')):
+94c64c4f (ssouther      2023-10-25 17:27:12 -0400 10) #    os.mkdir('data', 0x774)
+43474afa (ssouther      2023-10-24 11:00:02 -0400 22) 
+43474afa (ssouther      2023-10-24 11:00:02 -0400 34) 
+e417f35b (ssouther      2023-10-26 22:09:56 -0400 40) #gdf.to_json('data/AllRecords.json', orient='records')
+9e065ea2 (ssouther      2023-10-26 08:44:22 -0400 41) 
+e417f35b (ssouther      2023-10-26 22:09:56 -0400 42) print(gdf.to_json(orient='records'))
+
+
+.\backend\utils\dbUpdater.js
+d56c935e (ssouther      2023-10-19 19:00:37 -0400   1) const { Fragrance, FragranceListing } = require("../models");
+665cae69 (ssouther      2023-10-20 10:52:28 -0400   3) 
+d56c935e (ssouther      2023-10-19 19:00:37 -0400   5) 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
+d56c935e (ssouther      2023-10-19 19:00:37 -0400   6) 	const spawn = require("child_process").spawn;
+d56c935e (ssouther      2023-10-19 19:00:37 -0400   8) 
+d56c935e (ssouther      2023-10-19 19:00:37 -0400   9) 	function scrapeWeb(){
+d56c935e (ssouther      2023-10-19 19:00:37 -0400  18) 
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  22) 			for(let i = 0; i < ret.length; i++){
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  23) 				if(ret[i].brand != "N/A" && ret[i].title != "N/A" && ret[i].concentration != "N/A" && ret[i].gender != "N/A"){
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  24) 					Fragrance.findOne({
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  25) 						where:{
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  26) 							brand: ret[i].brand,
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  27) 							title: ret[i].title,
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  28) 							concentration: ret[i].concentration,
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  29) 							gender: ret[i].gender
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  30) 						}
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  31) 					}).then(res => {
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  32) 						if(res == null){
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  33) 							// Creates new record of item
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  34) 							Fragrance.create({
+528e0297 (ssouther      2023-10-25 20:35:17 -0400  35) 								brand: ret[i].brand,
+528e0297 (ssouther      2023-10-25 20:35:17 -0400  36) 								title: ret[i].title,
+528e0297 (ssouther      2023-10-25 20:35:17 -0400  37) 								concentration: ret[i].concentration,
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  38) 								photoLink: ret[i].photoLink,
+528e0297 (ssouther      2023-10-25 20:35:17 -0400  39) 								gender: ret[i].gender
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  40) 							}).then(ins => {
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  41) 								FragranceListing.create({
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  42) 									fragranceId: ins.id,
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  43) 									price: ret[i].price,
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  44) 									link: ret[i].link,
+528e0297 (ssouther      2023-10-25 20:35:17 -0400  46) 								});
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  47) 							});
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  48) 						}
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  49) 						else{
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  50) 							// Append existing element
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  51) 							FragranceListing.findOne({
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  52) 								where:{
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  53) 									fragranceId: res.id,
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  54) 									link: ret[i].link,
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  56) 								}
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  57) 							}).then(lst => {
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  58) 								if(lst == null){
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  59) 									// Create new list
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  60) 									FragranceListing.create({
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  61) 										fragranceId: res.id,
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  62) 										price: ret[i].price,
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  63) 										link: ret[i].link,
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  65) 									}).then(ins => {
+cd1f60ef (ssouther      2023-10-26 09:09:30 -0400  66) 										FragranceListing.findAll({
+cd1f60ef (ssouther      2023-10-26 09:09:30 -0400  67) 											where:{
+cd1f60ef (ssouther      2023-10-26 09:09:30 -0400  68) 												fragranceId: res.id,
+cd1f60ef (ssouther      2023-10-26 09:09:30 -0400  70) 											}
+cd1f60ef (ssouther      2023-10-26 09:09:30 -0400  71) 										}).then(lst1 => {
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  72) 											if(lst1 != null){
+51d0fb8f (ssouther      2023-10-26 20:14:14 -0400  73) 												// find a way to deal with converting price to float
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  74) 												console.log("Record(s) exist and smallest price needs to be found to email out");
+cd1f60ef (ssouther      2023-10-26 09:09:30 -0400  75) 											}
+cd1f60ef (ssouther      2023-10-26 09:09:30 -0400  76) 										});
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  77) 									});
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  78) 								}
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  79) 								else{
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  81) 									// check price change
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  83) 									FragranceListing.update({
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  84) 										price: ret[i].price,
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  85) 									},{
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  86) 										where:{
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  87) 											id: lst.id
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  88) 										}
+b9b35500 (ssouther      2023-10-26 21:06:30 -0400  89) 									});
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  90) 								}
+99b19a80 (ssouther      2023-10-26 08:10:24 -0400  91) 							});
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  92) 						}
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  93) 					}).catch((error) => {
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  94) 						console.log("Error: Cannot fetch data: ", error);
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  95) 					});
+528e0297 (ssouther      2023-10-25 20:35:17 -0400  96) 				}
+bb3510f6 (ssouther      2023-10-26 07:45:09 -0400  97) 			}
+d56c935e (ssouther      2023-10-19 19:00:37 -0400  98) 		});
+d56c935e (ssouther      2023-10-19 19:00:37 -0400  99) 	}
+d56c935e (ssouther      2023-10-19 19:00:37 -0400 100) 
+d56c935e (ssouther      2023-10-19 19:00:37 -0400 101) 	scrapeWeb();
