@@ -83,7 +83,7 @@ const Browsing = ({style}) => {
     // Get search defaults
     useEffect(() => {
       getSearchDefaults();
-    }, []);
+    });
 
     // Search fragrances again when defaultSearchObject is completed
     useEffect(

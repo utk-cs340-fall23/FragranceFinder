@@ -156,412 +156,410 @@ d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400 10)     "holderjs": "^2.9.
 
 ./frontend/src/components/FilterBar.js
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   1) import React, {useEffect, useState} from 'react';
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   2) import Container from 'react-bootstrap/Container';
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   3) import Row from 'react-bootstrap/Row';
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   4) import Col from 'react-bootstrap/Col';
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   5) import Form from 'react-bootstrap/Form';
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   6) import InputGroup from 'react-bootstrap/InputGroup';
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   7) import Button from 'react-bootstrap/Button';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   2) import Row from 'react-bootstrap/Row';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   3) import Col from 'react-bootstrap/Col';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   4) import Form from 'react-bootstrap/Form';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   5) import InputGroup from 'react-bootstrap/InputGroup';
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   6) import Button from 'react-bootstrap/Button';
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   7) 
 d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   8) 
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   9) 
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  10) const genderMapper = {
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  11)     'All': "All",
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  12)     'Male': "Men's",
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  13)     'Female': "Women's",
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  14)     'Unisex': "Unisex",
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  15) }
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  16) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  17) function FilterBar({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  18)     searchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  19)     setSearchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  20)     searchFragrances,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  21)     defaultSearchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  22)     searchDefaults,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  23)     xs,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  24)     useSidebarFilter,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  25)     hideFilters
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  26) }) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  27)     const updateSearchObject = (name, value) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  28)         setSearchObject({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  29)             ...searchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  30)             [name]: value
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  31)         });
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  32)     }
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  33) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  34)     const handleFormChange = (event) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  35)         updateSearchObject(event.target.name, event.target.value);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  36)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  37) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  38)     // Range values are only 1-100. Normalize the value with its
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  39)     // associated max value. There is similiar logic in each of the
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  40)     // next two functions
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  41)     const handleRangeChange = (event, normalizer) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  42)         const newVal = Math.round(
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  43)             (parseInt(event.target.value) / 100) * normalizer
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  44)         );
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  45)         updateSearchObject(event.target.name, newVal);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  46)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  47) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  48)     const getRangeValue = (val, normalizer) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  49)         const newVal = Math.round((val / normalizer) * 100);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  50)         return newVal;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  51)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  52) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  53)     // Set search object to defaults and search fragrances again
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  54)     const resetSearchObject = () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  55)         setSearchObject(defaultSearchObject);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  56)         searchFragrances(defaultSearchObject);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  57)         if (hideFilters) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  58)             hideFilters();
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  59)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  60)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  61) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  62)     // Apply new filters to search.
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  63)     const handleApplyClick = () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  64)         searchFragrances(searchObject);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  65)         if (hideFilters) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  66)             hideFilters();
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  67)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  68)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  69) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  70)     // When brands are checked/unchecked, we need
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  71)     // to toggle their presence in the 'brands'
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  72)     // field of searchObject
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  73)     const handleBrandChange = (event) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  74)         if (allBrandsChecked) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  75)             return;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  76)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  77) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  78)         const brandName = event.target.name;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  79)         const brands = [...searchObject.brands];
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  80) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  81)         if (brands.includes(brandName) && !allBrandsChecked) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  82)             brands.splice(brands.indexOf(brandName), 1);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  83)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  84)         else if (!brands.includes(brandName)) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  85)             brands.push(brandName);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  86)         }
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  87)         updateSearchObject('brands', brands);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  88)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  89) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  90)     const [allBrandsChecked, setAllBrandsChecked] = useState(!searchObject.brands.length);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  91) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  92)     // If all brands are checked, empty brands in searchObject
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  93)     useEffect(() => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  94)         if (allBrandsChecked) {
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  95)             updateSearchObject('brands', []);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  96)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  97)     }, [allBrandsChecked]);
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400   9) const genderMapper = {
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  10)     'All': "All",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  11)     'Male': "Men's",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  12)     'Female': "Women's",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  13)     'Unisex': "Unisex",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  14) }
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  15) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  16) function FilterBar({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  17)     searchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  18)     setSearchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  19)     searchFragrances,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  20)     defaultSearchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  21)     searchDefaults,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  22)     xs,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  23)     useSidebarFilter,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  24)     hideFilters
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  25) }) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  26)     const updateSearchObject = (name, value) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  27)         setSearchObject({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  28)             ...searchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  29)             [name]: value
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  30)         });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  31)     }
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  32) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  33)     const handleFormChange = (event) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  34)         updateSearchObject(event.target.name, event.target.value);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  35)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  36) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  37)     // Range values are only 1-100. Normalize the value with its
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  38)     // associated max value. There is similiar logic in each of the
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  39)     // next two functions
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  40)     const handleRangeChange = (event, normalizer) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  41)         const newVal = Math.round(
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  42)             (parseInt(event.target.value) / 100) * normalizer
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  43)         );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  44)         updateSearchObject(event.target.name, newVal);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  45)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  46) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  47)     const getRangeValue = (val, normalizer) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  48)         const newVal = Math.round((val / normalizer) * 100);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  49)         return newVal;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  50)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  51) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  52)     // Set search object to defaults and search fragrances again
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  53)     const resetSearchObject = () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  54)         setSearchObject(defaultSearchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  55)         searchFragrances(defaultSearchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  56)         if (hideFilters) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  57)             hideFilters();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  58)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  59)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  60) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  61)     // Apply new filters to search.
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  62)     const handleApplyClick = () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  63)         searchFragrances(searchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  64)         if (hideFilters) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  65)             hideFilters();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  66)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  67)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  68) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  69)     // When brands are checked/unchecked, we need
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  70)     // to toggle their presence in the 'brands'
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  71)     // field of searchObject
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  72)     const handleBrandChange = (event) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  73)         if (allBrandsChecked) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  74)             return;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  75)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  76) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  77)         const brandName = event.target.name;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  78)         const brands = [...searchObject.brands];
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  79) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  80)         if (brands.includes(brandName) && !allBrandsChecked) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  81)             brands.splice(brands.indexOf(brandName), 1);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  82)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  83)         else if (!brands.includes(brandName)) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  84)             brands.push(brandName);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  85)         }
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  86)         updateSearchObject('brands', brands);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  87)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  88) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  89)     const [allBrandsChecked, setAllBrandsChecked] = useState(!searchObject.brands.length);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  90) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  91)     // If all brands are checked, empty brands in searchObject
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  92)     useEffect(() => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  93)         if (allBrandsChecked) {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  94)             updateSearchObject('brands', []);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  95)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  96)     }, [allBrandsChecked]);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  97) 
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  98) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  99) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 100)     const {maxSize, maxPrice} = searchDefaults;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 101)     const genderOptions = ['All', 'Unisex', 'Male', 'Female'];
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 102) 
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 103)     return (
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 104)         <Col xs={xs} style={{
-a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 105)             borderRight: '1px solid lightgray',
-a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 106)             height: '100%',
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 107)         }}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 108)             {!useSidebarFilter && (<h4>Filters</h4>)}
-a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 109)             <Form style={{
-a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 110)                 maxHeight: '95%',
-a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 111)                 overflowY: 'auto'
-a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 112)             }}>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 113)                 <Form.Group style={{margin: '12px 0px'}}>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 114)                     <span>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 115)                         <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 116)                     </span>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 117)                     <span>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 118)                         <Button size='sm' onClick={handleApplyClick}>Apply</Button>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 119)                     </span>
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 120)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 121)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 122)                     <Form.Label><strong>Price</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 123)                     <Form.Group style={{marginLeft: '8px'}}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 124)                         <Form.Label>Min:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 125)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 126)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 127)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 128)                                 name='price_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 129)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 130)                                 value={getRangeValue(searchObject.price_start, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 131)                                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 132)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 133)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 134)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 135)                                     <InputGroup.Text>$</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 136)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 137)                                     name='price_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 138)                                     value={searchObject.price_start}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 139)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 140)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 141)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 142)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 143)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 144)                         <Form.Label>Max:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 145)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 146)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 147)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 148)                                 name='price_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 149)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 150)                                 value={getRangeValue(searchObject.price_end, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 151)                                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 152)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 153)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 154)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 155)                                     <InputGroup.Text>$</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 156)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 157)                                     name='price_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 158)                                     value={searchObject.price_end}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 159)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 160)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 161)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 162)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 163)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 164)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 165)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 166)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 167)                     <Form.Label><strong>Size</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 168)                     <Form.Group style={{marginLeft: '8px'}}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 169)                     <Form.Label>Min:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 170)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 171)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 172)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 173)                                 name='size_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 174)                                 onChange={(event) => handleRangeChange(event, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 175)                                 value={getRangeValue(searchObject.size_start, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 176)                                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 177)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 178)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 179)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 180)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 181)                                     name='size_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 182)                                     value={searchObject.size_start}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 183)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 184)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 185)                                     <InputGroup.Text>oz</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 186)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 187)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 188)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 189)                         <Form.Label>Max:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 190)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 191)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 192)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 193)                                 name='size_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 194)                                 onChange={(event) => handleRangeChange(event, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 195)                                 value={getRangeValue(searchObject.size_end, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 196)                                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 197)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 198)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 199)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 200)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 201)                                     name='size_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 202)                                     value={searchObject.size_end}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 203)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 204)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 205)                                     <InputGroup.Text>oz</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 206)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 207)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 208)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 209)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 210)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 211)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 212)                     <Form.Label><strong>Gender</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 213)                     <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 214)                         <Form.Select name='gender' onChange={handleFormChange} value={searchObject.gender}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 215)                             {genderOptions.map((option, i) => (
-1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 216)                                 <option key={i} value={option}>{genderMapper[option]}</option>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 217)                             ))}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 218)                         </Form.Select>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 219)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 220)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 221)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 222)                     <Form.Label><strong>Brand</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 223)                     <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 224)                         <Form.Check
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 225)                             type='checkbox'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 226)                             name='all'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 227)                             label={'All'}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 228)                             checked={allBrandsChecked}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 229)                             onChange={() => setAllBrandsChecked(!allBrandsChecked)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 230)                         />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 231)                         {searchDefaults.brands.map((brand, i) => (
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 232)                             <Form.Check
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 233)                                 key={i}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 234)                                 type='checkbox'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 235)                                 name={brand.brand}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 236)                                 label={`${brand.brand} (${brand.listingCount})`}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 237)                                 checked={searchObject.brands.includes(brand.brand) || allBrandsChecked}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 238)                                 onChange={handleBrandChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 239)                             />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 240)                         ))}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 241)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 242)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 243)             </Form>
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 244)         </Col>
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 245)     )
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 246) }
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 247) 
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 248) export default FilterBar;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  99)     const {maxSize, maxPrice} = searchDefaults;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 100)     const genderOptions = ['All', 'Unisex', 'Male', 'Female'];
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 101) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 102)     return (
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 103)         <Col xs={xs} style={{
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 104)             borderRight: '1px solid lightgray',
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 105)             height: '100%',
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 106)         }}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 107)             {!useSidebarFilter && (<h4>Filters</h4>)}
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 108)             <Form style={{
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 109)                 maxHeight: '95%',
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 110)                 overflowY: 'auto'
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400 111)             }}>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 112)                 <Form.Group style={{margin: '12px 0px'}}>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 113)                     <span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 114)                         <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 115)                     </span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 116)                     <span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 117)                         <Button size='sm' onClick={handleApplyClick}>Apply</Button>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 118)                     </span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 119)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 120)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 121)                     <Form.Label><strong>Price</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 122)                     <Form.Group style={{marginLeft: '8px'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 123)                         <Form.Label>Min:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 124)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 125)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 126)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 127)                                 name='price_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 128)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 129)                                 value={getRangeValue(searchObject.price_start, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 130)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 131)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 132)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 133)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 134)                                     <InputGroup.Text>$</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 135)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 136)                                     name='price_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 137)                                     value={searchObject.price_start}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 138)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 139)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 140)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 141)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 142)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 143)                         <Form.Label>Max:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 144)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 145)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 146)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 147)                                 name='price_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 148)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 149)                                 value={getRangeValue(searchObject.price_end, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 150)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 151)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 152)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 153)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 154)                                     <InputGroup.Text>$</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 155)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 156)                                     name='price_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 157)                                     value={searchObject.price_end}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 158)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 159)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 160)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 161)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 162)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 163)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 164)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 165)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 166)                     <Form.Label><strong>Size</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 167)                     <Form.Group style={{marginLeft: '8px'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 168)                     <Form.Label>Min:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 169)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 170)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 171)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 172)                                 name='size_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 173)                                 onChange={(event) => handleRangeChange(event, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 174)                                 value={getRangeValue(searchObject.size_start, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 175)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 176)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 177)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 178)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 179)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 180)                                     name='size_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 181)                                     value={searchObject.size_start}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 182)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 183)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 184)                                     <InputGroup.Text>oz</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 185)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 186)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 187)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 188)                         <Form.Label>Max:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 189)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 190)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 191)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 192)                                 name='size_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 193)                                 onChange={(event) => handleRangeChange(event, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 194)                                 value={getRangeValue(searchObject.size_end, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 195)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 196)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 197)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 198)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 199)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 200)                                     name='size_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 201)                                     value={searchObject.size_end}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 202)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 203)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 204)                                     <InputGroup.Text>oz</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 205)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 206)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 207)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 208)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 209)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 210)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 211)                     <Form.Label><strong>Gender</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 212)                     <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 213)                         <Form.Select name='gender' onChange={handleFormChange} value={searchObject.gender}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 214)                             {genderOptions.map((option, i) => (
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 215)                                 <option key={i} value={option}>{genderMapper[option]}</option>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 216)                             ))}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 217)                         </Form.Select>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 218)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 219)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 220)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 221)                     <Form.Label><strong>Brand</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 222)                     <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 223)                         <Form.Check
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 224)                             type='checkbox'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 225)                             name='all'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 226)                             label={'All'}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 227)                             checked={allBrandsChecked}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 228)                             onChange={() => setAllBrandsChecked(!allBrandsChecked)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 229)                         />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 230)                         {searchDefaults.brands.map((brand, i) => (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 231)                             <Form.Check
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 232)                                 key={i}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 233)                                 type='checkbox'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 234)                                 name={brand.brand}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 235)                                 label={`${brand.brand} (${brand.listingCount})`}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 236)                                 checked={searchObject.brands.includes(brand.brand) || allBrandsChecked}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 237)                                 onChange={handleBrandChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 238)                             />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 239)                         ))}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 240)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 241)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 242)             </Form>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 243)         </Col>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 244)     )
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 245) }
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 246) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 247) export default FilterBar;
 
 
 ./frontend/src/components/Browsing.js
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400   1) import React, {useEffect, useState} from 'react';
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   2) import Container from 'react-bootstrap/Container';
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   3) import Row from 'react-bootstrap/Row';
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   4) import FilterBar from './FilterBar';
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   5) import FragranceListings from './FragranceListings';
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400   6) import { sendGet } from '../utils/requests';
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   7) import Offcanvas from 'react-bootstrap/Offcanvas';
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   8) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   9) const SMALL_SCREEN_CUTOFF = 800;
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  10) 
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  11) const Browsing = ({style}) => {
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  12) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  13)     // Handle screen size changes with the next few variables/functions
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  14)     const [useOffcanvasFilters, setUseOffcanvasFilters] = useState(
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  15)       window.innerWidth < SMALL_SCREEN_CUTOFF
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  16)     );
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  17) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  18)     const updateScreenState = () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  19)         setUseOffcanvasFilters(
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  20)             window.innerWidth < SMALL_SCREEN_CUTOFF
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  21)         );
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  22)     };
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  23) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  24)     useEffect(() => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  25)         window.addEventListener('resize', updateScreenState);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  26) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  27)         return () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  28)             window.removeEventListener('resize', updateScreenState);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  29)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  30)     }, []);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  31) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  32)     // Initialize variables related to searching
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  33)     const [searchDefaults, setSearchDefaults] = useState({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  34)       maxPrice: 1000,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  35)       maxSize: 100,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  36)       brands: []
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  37)     });
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  38) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  39)     const [defaultSearchObject, setDefaultSearchObject] = useState({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  40)       price_start: 0,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  41)       price_end: searchDefaults.maxPrice,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  42)       size_start: 0,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  43)       size_end: searchDefaults.maxSize,
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  44)       brands: searchDefaults.brands,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  45)       gender: 'All'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  46)     });
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  47) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  48)     const [searchObject, setSearchObject] = useState(defaultSearchObject);
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  49)     const [fragranceListings, setFragranceListings] = useState(null);
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  50) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  51)     // Use searchObject to search for fragrances
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  52)     const searchFragrances = async (params) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  53)       const url = '/api/fragrance-listings';
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  54)       const response = await sendGet(
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  55)         `${url}?${new URLSearchParams(params).toString()}`
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  56)       );
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  57)       if (response.ok && response.data.success) {
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  58)         setFragranceListings(response.data.data);
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  59)       }
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  60)     }
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  61) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  62)     const getSearchDefaults = async () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  63)       const response = await sendGet('/api/fragrance-listings/search-defaults');
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  64)       const searchDefaultsData = response.data.data;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  65)       const newMaxPrice = Math.round(searchDefaultsData.maxPrice);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  66)       const newMaxSize = Math.round(searchDefaultsData.maxSize);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  67) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  68)       setSearchDefaults(searchDefaultsData);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  69) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  70)       setSearchObject({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  71)         ...searchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  72)         price_end: newMaxPrice,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  73)         size_end: newMaxSize
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  74)       });
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  75) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  76)       setDefaultSearchObject({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  77)         ...defaultSearchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  78)         price_end: newMaxPrice,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  79)         size_end: newMaxSize
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  80)       });
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  81)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  82) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  83)     // Get search defaults
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  84)     useEffect(() => {
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  85)       getSearchDefaults();
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  86)     }, []);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  87) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  88)     // Search fragrances again when defaultSearchObject is completed
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  89)     useEffect(
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  90)       () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  91)         searchFragrances(defaultSearchObject);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  92)       },
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  93)       [defaultSearchObject]
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  94)     );
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  95) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  96) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  97)     const [showSidebar, setShowSidebar] = useState(false);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  98) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  99)     if (useOffcanvasFilters) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 100)       const showFilters = () => setShowSidebar(true);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 101)       const hideFilters = () => setShowSidebar(false);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 102) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 103)       return (
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 104)           <Container style={style}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 105)             <Row style={{
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 106)               height: '100%'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 107)             }}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 108)             <Offcanvas show={showSidebar} onHide={hideFilters}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 109)               <Offcanvas.Header closeButton>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 110)                 <Offcanvas.Title>Filters</Offcanvas.Title>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 111)               </Offcanvas.Header>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 112)               <Offcanvas.Body>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 113)                 <FilterBar
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 114)                 xs={12}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 115)                 searchObject={searchObject}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 116)                 setSearchObject={setSearchObject}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 117)                 searchFragrances={searchFragrances}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 118)                 defaultSearchObject={defaultSearchObject}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 119)                 searchDefaults={searchDefaults}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 120)                 useSidebarFilter={useOffcanvasFilters}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 121)                 hideFilters={hideFilters}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 122)                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 123)               </Offcanvas.Body>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 124)             </Offcanvas>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 125)               <FragranceListings
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 126)               xs={12}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 127)               fragranceListings={fragranceListings}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 128)               showFilters={showFilters}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 129)               useOffcanvasFilters={true}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 130)               />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 131)             </Row>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 132)           </Container>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 133)       );
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 134)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 135)     else {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 136)       return (
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 137)           <Container style={style}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 138)             <Row style={{
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 139)               height: '100%'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 140)             }}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 141)               <FilterBar
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 142)               xs={4}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 143)               searchObject={searchObject}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 144)               setSearchObject={setSearchObject}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 145)               searchFragrances={searchFragrances}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 146)               defaultSearchObject={defaultSearchObject}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 147)               searchDefaults={searchDefaults}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 148)               />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 149)               <FragranceListings xs={8} fragranceListings={fragranceListings}/>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 150)             </Row>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 151)           </Container>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 152)       );
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 153)     }
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 154) };
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 155) 
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 156) export default Browsing;
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400   1) import React, {useEffect, useState} from 'react';
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400   2) import Container from 'react-bootstrap/Container';
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400   3) import Row from 'react-bootstrap/Row';
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400   4) import FilterBar from './FilterBar';
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400   5) import FragranceListings from './FragranceListings';
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400   6) import { sendGet } from '../utils/requests';
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400   7) import Offcanvas from 'react-bootstrap/Offcanvas';
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400   8) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400   9) const SMALL_SCREEN_CUTOFF = 800;
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400  10) 
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  11) const Browsing = ({style}) => {
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  12) 
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  13)     // Handle screen size changes with the next few variables/functions
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  14)     const [useOffcanvasFilters, setUseOffcanvasFilters] = useState(
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  15)       window.innerWidth < SMALL_SCREEN_CUTOFF
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  16)     );
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  17) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  18)     const updateScreenState = () => {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  19)         setUseOffcanvasFilters(
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  20)             window.innerWidth < SMALL_SCREEN_CUTOFF
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  21)         );
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  22)     };
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  23) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  24)     useEffect(() => {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  25)         window.addEventListener('resize', updateScreenState);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  26) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  27)         return () => {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  28)             window.removeEventListener('resize', updateScreenState);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  29)         }
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  30)     }, []);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  31) 
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  32)     // Initialize variables related to searching
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  33)     const [searchDefaults, setSearchDefaults] = useState({
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  34)       maxPrice: 1000,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  35)       maxSize: 100,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  36)       brands: []
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  37)     });
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  38) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  39)     const [defaultSearchObject, setDefaultSearchObject] = useState({
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  40)       price_start: 0,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  41)       price_end: searchDefaults.maxPrice,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  42)       size_start: 0,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  43)       size_end: searchDefaults.maxSize,
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  44)       brands: searchDefaults.brands,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  45)       gender: 'All'
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  46)     });
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  47) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  48)     const [searchObject, setSearchObject] = useState(defaultSearchObject);
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  49)     const [fragranceListings, setFragranceListings] = useState(null);
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  50) 
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  51)     // Use searchObject to search for fragrances
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  52)     const searchFragrances = async (params) => {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  53)       const url = '/api/fragrance-listings';
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  54)       const response = await sendGet(
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  55)         `${url}?${new URLSearchParams(params).toString()}`
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  56)       );
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  57)       if (response.ok && response.data.success) {
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  58)         setFragranceListings(response.data.data);
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  59)       }
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  60)     }
+916dd95a (LakelonBailey     2023-10-24 13:50:57 -0400  61) 
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  62)     const getSearchDefaults = async () => {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  63)       const response = await sendGet('/api/fragrance-listings/search-defaults');
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  64)       const searchDefaultsData = response.data.data;
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  65)       const newMaxPrice = Math.round(searchDefaultsData.maxPrice);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  66)       const newMaxSize = Math.round(searchDefaultsData.maxSize);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  67) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  68)       setSearchDefaults(searchDefaultsData);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  69) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  70)       setSearchObject({
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  71)         ...searchObject,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  72)         price_end: newMaxPrice,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  73)         size_end: newMaxSize
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  74)       });
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  75) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  76)       setDefaultSearchObject({
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  77)         ...defaultSearchObject,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  78)         price_end: newMaxPrice,
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  79)         size_end: newMaxSize
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  80)       });
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  81)     }
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  82) 
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  83)     // Get search defaults
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  84)     useEffect(() => {
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  85)       getSearchDefaults();
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  87) 
+969eb2da (LakelonBailey     2023-10-24 18:44:10 -0400  88)     // Search fragrances again when defaultSearchObject is completed
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  89)     useEffect(
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  90)       () => {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  91)         searchFragrances(defaultSearchObject);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  92)       },
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  93)       [defaultSearchObject]
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400  94)     );
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  95) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  96) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  97)     const [showSidebar, setShowSidebar] = useState(false);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  98) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400  99)     if (useOffcanvasFilters) {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 100)       const showFilters = () => setShowSidebar(true);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 101)       const hideFilters = () => setShowSidebar(false);
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 102) 
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 103)       return (
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 104)           <Container style={style}>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 105)             <Row style={{
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 106)               height: '100%'
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 107)             }}>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 108)             <Offcanvas show={showSidebar} onHide={hideFilters}>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 109)               <Offcanvas.Header closeButton>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 110)                 <Offcanvas.Title>Filters</Offcanvas.Title>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 111)               </Offcanvas.Header>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 112)               <Offcanvas.Body>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 113)                 <FilterBar
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 114)                 xs={12}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 115)                 searchObject={searchObject}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 116)                 setSearchObject={setSearchObject}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 117)                 searchFragrances={searchFragrances}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 118)                 defaultSearchObject={defaultSearchObject}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 119)                 searchDefaults={searchDefaults}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 120)                 useSidebarFilter={useOffcanvasFilters}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 121)                 hideFilters={hideFilters}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 122)                 />
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 123)               </Offcanvas.Body>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 124)             </Offcanvas>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 125)               <FragranceListings
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 126)               xs={12}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 127)               fragranceListings={fragranceListings}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 128)               showFilters={showFilters}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 129)               useOffcanvasFilters={true}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 130)               />
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 131)             </Row>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 132)           </Container>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 133)       );
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 134)     }
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 135)     else {
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 136)       return (
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 137)           <Container style={style}>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 138)             <Row style={{
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 139)               height: '100%'
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 140)             }}>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 141)               <FilterBar
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 142)               xs={4}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 143)               searchObject={searchObject}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 144)               setSearchObject={setSearchObject}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 145)               searchFragrances={searchFragrances}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 146)               defaultSearchObject={defaultSearchObject}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 147)               searchDefaults={searchDefaults}
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 148)               />
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 149)               <FragranceListings xs={8} fragranceListings={fragranceListings}/>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 150)             </Row>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 151)           </Container>
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 152)       );
+6884ac76 (LakelonBailey     2023-10-24 18:25:33 -0400 153)     }
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400 154) };
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400 155) 
+d2fd97a4 (LakelonBailey     2023-10-16 18:06:50 -0400 156) export default Browsing;
 
 
 ./frontend/src/components/Navigation.js
@@ -928,16 +926,28 @@ e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 51)
 436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  5) import os
 4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  6) import sys
 436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  8) # Create data directory if it doesn't exist
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 18) 
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 19) max_items_per_scraper = 10000
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 20) if len(sys.argv) > 1:
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 21)     try:
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 22)         max_items_per_scraper = int(sys.argv[1])
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 23)     except ValueError:
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 24)         print(
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 25)             f"Invalid integer provided: '{sys.argv[1]}'. Defaulting to {max_items_per_scraper} as max items per scraper"
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 26)         )
-4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 27)
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 11) 
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 12) scrapers = [
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 13)     scrape_jomashop,
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 14)     scrape_maxaroma
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 15) ]
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 16) 
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 19)         *[scraper(max_items) for scraper in scrapers]
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 23) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 24) max_items_per_scraper = 10000
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 25) if len(sys.argv) > 1:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 26)     try:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 27)         max_items_per_scraper = int(sys.argv[1])
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 28)     except ValueError:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 29)         print(
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 30)             f"Invalid integer provided: '{sys.argv[1]}'. Defaulting to {max_items_per_scraper} as max items per scraper"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 31)         )
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 32) 
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 33) result = asyncio.run(get_data(max_items_per_scraper))
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 35) gdf = pd.concat(list(map(
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 36)     lambda data: pd.read_json(data, orient='records'),
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 37)     result
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 38) )))
 
 
 ./backend/scrapers/giftExpress.py

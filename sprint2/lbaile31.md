@@ -15,55 +15,45 @@ Project: Fragrance Finder
 * It was challenging to make all web scrapers produce similar results.
 
 # Issues Worked on:
-* [#5](https://github.com/utk-cs340-fall23/FragranceFinder/issues/6) Create user authentication/authorization mechanism
+* [#34](https://github.com/utk-cs340-fall23/FragranceFinder/issues/34) Creating skeleton for searching/filtering fragrances using React Bootstrap
 
-* [#6](https://github.com/utk-cs340-fall23/FragranceFinder/issues/6) Create database schemas with Sequelize
-
-* [#26](https://github.com/utk-cs340-fall23/FragranceFinder/issues/26) Create login page skeleton
-
-* [#27](https://github.com/utk-cs340-fall23/FragranceFinder/issues/2) Create signup page skeleton
+* [#42](https://github.com/utk-cs340-fall23/FragranceFinder/issues/42) Create API endpoint for fragrance searching/filtering
 
 # Files you worked on
-* frontend/src/index.js
-* frontend/src/setupTests.js
-* frontend/src/App.js
-* sprint1/lbaile31.commits.txt
-* frontend/src/utils/auth.js
-* backend/models/UserFragrance.js
+* backend/scrapers/maxaroma.py
 * backend/utils/auth.js
-* backend/config/db.js
-* frontend/src/reportWebVitals.js
-* backend/routes/mailRoutes.js
-* package.json
-* backend/package.json
-* frontend/src/pages/Login.js
-* frontend/src/utils/requests.js
-* backend/routes/index.js
-* frontend/src/pages/Signup.js
-* frontend/src/pages/index.js
-* backend/models/User.js
-* README.md
-* frontend/src/pages/CSS/crudexample.css
-* backend/models/Fragrance.js
-* backend/routes/user-routes.js
-* frontend/src/pages/demos/CrudExample.js
-* frontend/src/App.test.js
-* frontend/src/pages/demos/email.js
 * backend/models/index.js
-* backend/server.js
-* frontend/src/setupProxy.js
-* frontend/package.json
-* backend/requirements.txt
+* backend/routes/fragranceListingRoutes.js
+* backend/utils/dbUpdater.js
+* frontend/src/utils/auth.js
 * frontend/src/App.css
-* backend/routes/basicCrudRoutes.js
+* backend/utils/parsing.js
+* backend/scripts/seedData.js
+* backend/scrapers/jomashop.py
+* backend/routes/index.js
+* blame_commits.py
+* backend/scripts/dbUpdate.js
+* backend/models/User.js
+* frontend/package.json
+* frontend/src/assets/js/holder.min.js
+* frontend/src/components/Navigation.js
+* frontend/src/components/FilterBar.js
+* backend/routes/userRoutes.js
+* backend/server.js
+* backend/config/db.js
+* frontend/src/components/FragranceListings.js
+* frontend/src/pages/Home.js
+* frontend/src/pages/Signup.js
+* backend/scrapers/MasterScript.py
+* backend/scrapers/giftExpress.py
+* .vscode/settings.json
+* frontend/src/App.js
+* frontend/src/components/Browsing.js
 * backend/models/FragranceListing.js
-* frontend/src/index.css
 
 # What you accomplished
-I successfully created the user authentication/authorization flow.
+I created the user interface and backend API endpoints necessary for users to filter and browse fragrances.
+- Users are able to filter on brand, gender, price range, and size range.
+- Users are able to scroll through fragrance listings and view the fragrances on the original site.
 
-- As part of authentication, I created the login page and the signup page skeletons. These allow users to log into an existing account or create a new account. Once one of those actions is complete, a JSON Web Token (JWT) is created to be passed in the Authorization header in all requests as a Bearer token.
-
-- As part of authorization, I developed an authorization middleware that can be applied to any endpoint. This middleware will verify the Bearer token that is sent with the request, and will return a 401 (Unauthorized) error if the token is invalid (expired, not signed with the correct secret, etc.). On the frontend, I developed a few utilities (sendGet and sendPost) to be used for requests. These automatically apply the existing token to the Authorization header if it is found in localStorage.
-
-I also created the initial versions of the database models that will be used in the project. These models and their relationships can be found in the `backend/models/` directory.
+I also helped in small ways with other aspects of the application, such as refining database models/structures and helping resolve issues with web scraping and data management.
