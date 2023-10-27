@@ -8,6 +8,8 @@ function Signup() {
     email: '',
     password: '',
     username: '',
+    firstName: '',
+    lastName: '',
   });
 
   const [error, setError] = useState(null);
@@ -23,7 +25,7 @@ function Signup() {
   // Handle submission of form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+    console.log(formState);
     const response = await sendPost('/api/users/', formState);
     if (response.ok) {
         const { token } = response.data;
@@ -50,6 +52,8 @@ function Signup() {
           flexDirection: 'column',
           width: '500px',
         }}>
+            <input name="firstName" value={formState.firstName} placeholder="First Name" required onChange={handleFormChange}></input>
+            <input name="lastName" value={formState.lastName} placeholder="Last Name" required onChange={handleFormChange}></input>
             <input name="username" value={formState.username} placeholder="Username" required onChange={handleFormChange}></input>
             <input name="email" value={formState.email} placeholder="Email" required onChange={handleFormChange}></input>
             <input name="password" value={formState.password} placeholder="Password" required onChange={handleFormChange}></input>
