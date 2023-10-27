@@ -6,6 +6,14 @@ import re
 import json
 import pandas as pd
 
+def valid_float(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
 async def scrape_maxaroma(max_items):
 
     all_fragrances = []
@@ -120,14 +128,14 @@ async def scrape_maxaroma(max_items):
 
                             if (len(split_size) >= 2):
 
-                                if (split_size[1] == "oz"):
+                                if (split_size[1] == "oz" and valid_float(split_size[0])):
                                     sizeoz = float(split_size[0])
                                     fragrance["sizeoz"] = sizeoz
                                     # ml = oz * 29.5735
                                     # Ml stored with no decimals places
                                     fragrance["sizeml"] = float(int(sizeoz * 29.5736))
 
-                                elif (split_size[1] == "ml"):
+                                elif (split_size[1] == "ml" and valid_float(split_size[0])):
                                     sizeml = float(split_size[0])
                                     fragrance["sizeml"] = sizeml
                                     # oz = ml * 0.033814
