@@ -5,6 +5,7 @@ import re
 import os
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
+import pandas as pd
 
 # The base URL of the website
 baseurl = "https://www.fragrancenet.com/"
@@ -43,10 +44,10 @@ async def get_prices_for_boxes(page):
     return prices
 """
 
-async def get_product_info(browser, product):
+async def get_product_info(browser, product, df):
     # Extract the link to the product
     link = product.find('a', href=True)['href']
-
+    
     # Create a new page in the browser
     page = await browser.new_page()
 
@@ -73,6 +74,9 @@ async def get_product_info(browser, product):
             
         # Extract the original price
         price = pricing_element.find('div', class_='pricing').text.strip()
+        
+        # Add the details to the DataFrame
+        #df.loc[len(df)] = [brand, name, concentration, gender, size_oz, price, link, photoLink]
         print(f"Price: {price:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
     
     """
@@ -92,6 +96,7 @@ async def main():
     # Launch the Playwright browser
         
     async with async_playwright() as p:
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
         # trying to get it run through without incognito (to grab proper pricing)
         # but it doesn't bypass through the bot security check
         """
@@ -142,14 +147,10 @@ async def main():
                     brand = brand_element.text.strip()
                 except AttributeError:
                     brand = "Brand not available"
-                
-                # Extract the price of the product
-                price_element = product.find('span', class_='price types')
-                price = price_element.find_next('span').text.strip() if price_element else "Price not available"
 
                 # Extract the gender information
                 gender = product.find('span', class_='gender-badge').text.strip()
-
+                
                 # Extract the link to the product
                 link = product.find('a', href=True)['href']
 
@@ -159,6 +160,14 @@ async def main():
                 # Extract the ratings information
                 ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
                 
+                photoLink = product.find('img',src=True)['src']
+                
+                concentration = product.find('p', class_='desc').text.strip()
+                if(concentration == "eau de toilette"):
+                    concentration = "EDT"
+                elif(concentration == "eau de parfum"):
+                    concentration = "EDP"
+                
                 # Print the extracted data
                 print(f"Name: {name}")
                 print(f"Brand: {brand}")
@@ -166,12 +175,15 @@ async def main():
                 print(f"Link: {link}")
                 print(f"Savings: {savings}")
                 print(f"Ratings: {ratings}")
+                print(f"Image: {photoLink}")
+                print(f"Concentration: {concentration}")
                 
-                await get_product_info(browser, product)
+                await get_product_info(browser, product, df)
                 print("\n")
                 
         # Close the browser when done
         await browser.close()
+    #return df.to_json(orient="records")
 
 # Run the main function
 if __name__ == "__main__":
