@@ -16,8 +16,8 @@ Project: Fragrance Finder
 
 # Issues Worked on:
 * [#34](https://github.com/utk-cs340-fall23/FragranceFinder/issues/34) Creating skeleton for searching/filtering fragrances using React Bootstrap
-
 * [#42](https://github.com/utk-cs340-fall23/FragranceFinder/issues/42) Create API endpoint for fragrance searching/filtering
+* [#43](https://github.com/utk-cs340-fall23/FragranceFinder/issues/43) Create API endpoint for determining search defaults
 
 # Files you worked on
 * backend/scrapers/maxaroma.py
