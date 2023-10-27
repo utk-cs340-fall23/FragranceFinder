@@ -9,7 +9,7 @@ import pandas as pd
 
 async def scrapeAura():
     async with async_playwright() as p:
-        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "sizeOZ", "sizeML", "price", "stock", "link", "photoLink"])
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "stock", "link", "photoLink"])
         browser = await p.chromium.launch()
         page = await browser.new_page()
     
@@ -342,7 +342,7 @@ async def scrapeAura():
                                         float(price), str(stock), str(link), str(imageLink)]
                     
         browser.close()
-
+        
         return df.to_json(orient="columns")
         
 if __name__ == "__main__":
