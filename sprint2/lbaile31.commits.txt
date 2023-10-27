@@ -1,65 +1,130 @@
-
 ./blame_commits.py
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  1) import subprocess
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  2) import os
-095d77bf (LakelonBailey     2023-10-26 20:47:54 -0400  3) from datetime import datetime
-095d77bf (LakelonBailey     2023-10-26 20:47:54 -0400  4) import sys
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400  6) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 10) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 18)     try:
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 19)         command = f"git blame {file_path} | grep -i {username}"
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 20)         blame_output = subprocess.check_output(
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 21)             command,
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 22)             stderr=subprocess.STDOUT,
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 23)             shell=True
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 24)         ).decode('utf-8').strip()
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 25) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 43) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 44)     except subprocess.CalledProcessError:
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 45)         return ""
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 46) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 47) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 49)     results = []
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 50)     unique_files = set()
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 51)     for root, dirs, files in os.walk(directory):
-8c005603 (LakelonBailey     2023-10-25 18:59:58 -0400 52)         dirs[:] = [
-8c005603 (LakelonBailey     2023-10-25 18:59:58 -0400 53)             d for d in dirs if
-8c005603 (LakelonBailey     2023-10-25 18:59:58 -0400 55)         ]
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 56)         for f in files:
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 57)             ext = f.split('.')[-1]
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 59)                 continue
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 61)                 continue
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 62) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 63)             file_path = os.path.join(root, f)
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 65)             if blame_output:
-04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 66)                 unique_files.add(
-04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 67)                     file_path
-04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 68)                     .replace('./', '')
-04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 69)                     .replace('.\\', '')
-04b51eae (LakelonBailey     2023-10-11 17:48:20 -0400 70)                 )
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 71)                 results.append(blame_output)
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 72) 
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 73)     return ("\n\n".join(results), unique_files)
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 74) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 75) 
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 76) if __name__ == "__main__":
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 79)     sprint_num = int(input("Enter the sprint number: "))
-095d77bf (LakelonBailey     2023-10-26 20:47:54 -0400 81) 
-095d77bf (LakelonBailey     2023-10-26 20:47:54 -0400 82)     if start_date:
-095d77bf (LakelonBailey     2023-10-26 20:47:54 -0400 83)         try:
-095d77bf (LakelonBailey     2023-10-26 20:47:54 -0400 85)         except ValueError:
-095d77bf (LakelonBailey     2023-10-26 20:47:54 -0400 87)             sys.exit()
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 88) 
-a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 89)     result, files = recursive_git_blame(
-a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 90)         '.',
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 91)         username,
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 93)     )
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 94) 
-a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 95)     files_string = "\n".join(files)
-afaeb824 (LakelonBailey     2023-10-11 17:00:36 -0400 96)     with open(f"sprint{sprint_num}/{netid}.commits.txt", 'w') as fl:
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 97)         fl.write(result)
-ae4ede9a (LakelonBailey     2023-10-11 17:13:00 -0400 98) 
-a4189090 (LakelonBailey     2023-10-11 17:30:03 -0400 99)     print(f"\nFiles worked on:\n{files_string}")
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400   1) import subprocess
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400   2) import os
+095d77bf (LakelonBailey 2023-10-26 20:47:54 -0400   3) from datetime import datetime
+095d77bf (LakelonBailey 2023-10-26 20:47:54 -0400   4) import sys
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400   5) import re
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400   6) 
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400   7) """
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400   8) Internal project tool for Fragrance Finder.
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400   9) 
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  10) Creates a proper commits.txt file for a sprint and prints
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  11) edited files to the console.
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  12) """
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  13) 
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  14) IGNORED_DIRECTORIES = [
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  15)     'venv',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  16)     'node_modules',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  17)     'public',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  18)     'build',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  19)     '__pycache__',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  20)     '.git'
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  21) ]
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  22) 
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  23) IGNORED_FILES = [
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  24)     'package-lock.json',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  25)     '.gitignore',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  26)     '.DS_Store'
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  27) ]
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  28) 
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  29) IGNORED_EXTENSIONS = [
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  30)     'svg',
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  31)     'env'
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  32) ]
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  33) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  34) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  35) def extract_date(s):
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  36)     pattern = r'\b(\d{4}-\d{2}-\d{2})\b'
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  37)     match = re.search(pattern, s)
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  38)     return match.group(1) if match else None
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  39) 
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  40) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  41) def git_blame_for_file(file_path, username, start_date):
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  42)     try:
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  43)         command = f"git blame {file_path} | grep -i {username}"
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  44)         blame_output = subprocess.check_output(
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  45)             command,
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  46)             stderr=subprocess.STDOUT,
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  47)             shell=True
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  48)         ).decode('utf-8').strip()
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  49) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  50)         if start_date:
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  51)             date_specific_output = []
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  52)             for line in blame_output.split('\n'):
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  53)                 date = extract_date(line)
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  54)                 if date is None:
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  55)                     continue
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  56) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  57)                 date = datetime.strptime(date, '%Y-%m-%d').date()
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  58)                 if date >= start_date:
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  59)                     date_specific_output.append(line)
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  60) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  61)             blame_output = "\n".join(date_specific_output).strip()
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  62) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  63)         if blame_output:
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  64)             return f"\n{file_path}\n{blame_output}"
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  65) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  66)         return None
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  67) 
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  68)     except subprocess.CalledProcessError:
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  69)         return ""
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  70) 
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  71) 
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  72) def recursive_git_blame(directory, username, start_date):
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  73)     results = []
+ae4ede9a (LakelonBailey 2023-10-11 17:13:00 -0400  74)     unique_files = set()
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  75)     for root, dirs, files in os.walk(directory):
+8c005603 (LakelonBailey 2023-10-25 18:59:58 -0400  76)         dirs[:] = [
+8c005603 (LakelonBailey 2023-10-25 18:59:58 -0400  77)             d for d in dirs if
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  78)             d not in IGNORED_DIRECTORIES and 'sprint' not in d
+8c005603 (LakelonBailey 2023-10-25 18:59:58 -0400  79)         ]
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  80)         for f in files:
+ae4ede9a (LakelonBailey 2023-10-11 17:13:00 -0400  81)             ext = f.split('.')[-1]
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  82)             if ext in IGNORED_EXTENSIONS:
+ae4ede9a (LakelonBailey 2023-10-11 17:13:00 -0400  83)                 continue
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  84)             if f in IGNORED_FILES:
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  85)                 continue
+ae4ede9a (LakelonBailey 2023-10-11 17:13:00 -0400  86) 
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  87)             file_path = os.path.join(root, f)
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400  88)             blame_output = git_blame_for_file(file_path, username, start_date)
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  89)             if blame_output:
+04b51eae (LakelonBailey 2023-10-11 17:48:20 -0400  90)                 unique_files.add(
+04b51eae (LakelonBailey 2023-10-11 17:48:20 -0400  91)                     file_path
+04b51eae (LakelonBailey 2023-10-11 17:48:20 -0400  92)                     .replace('./', '')
+04b51eae (LakelonBailey 2023-10-11 17:48:20 -0400  93)                     .replace('.\\', '')
+04b51eae (LakelonBailey 2023-10-11 17:48:20 -0400  94)                 )
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  95)                 results.append(blame_output)
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  96) 
+ae4ede9a (LakelonBailey 2023-10-11 17:13:00 -0400  97)     return ("\n\n".join(results), unique_files)
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  98) 
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400  99) 
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400 100) if __name__ == "__main__":
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400 101)     netid = input("Enter your NetID: ").lower().strip()
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400 102)     username = input("Enter your GitHub username: ").lower().strip()
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400 103)     sprint_num = int(input("Enter the sprint number: "))
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 104)     start_date = input(
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 105)         "Enter the sprint start date in YYYY-MM-DD format (ENTER to ignore): "
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 106)     ).strip()
+095d77bf (LakelonBailey 2023-10-26 20:47:54 -0400 107) 
+095d77bf (LakelonBailey 2023-10-26 20:47:54 -0400 108)     if start_date:
+095d77bf (LakelonBailey 2023-10-26 20:47:54 -0400 109)         try:
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400 110)             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+095d77bf (LakelonBailey 2023-10-26 20:47:54 -0400 111)         except ValueError:
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 112)             print(f"ERROR: Invalid date format '{start_date}'.\
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 113)                   Format must be YYYY-MM-DDD.")
+095d77bf (LakelonBailey 2023-10-26 20:47:54 -0400 114)             sys.exit()
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400 115) 
+a4189090 (LakelonBailey 2023-10-11 17:30:03 -0400 116)     result, files = recursive_git_blame(
+a4189090 (LakelonBailey 2023-10-11 17:30:03 -0400 117)         '.',
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400 118)         username,
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400 119)         start_date
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400 120)     )
+ae4ede9a (LakelonBailey 2023-10-11 17:13:00 -0400 121) 
+a4189090 (LakelonBailey 2023-10-11 17:30:03 -0400 122)     files_string = "\n".join(files)
+afaeb824 (LakelonBailey 2023-10-11 17:00:36 -0400 123)     with open(f"sprint{sprint_num}/{netid}.commits.txt", 'w') as fl:
+4c148654 (LakelonBailey 2023-10-26 21:06:52 -0400 124)         fl.write(result.strip())
+ae4ede9a (LakelonBailey 2023-10-11 17:13:00 -0400 125) 
+a4189090 (LakelonBailey 2023-10-11 17:30:03 -0400 126)     print(f"\nFiles worked on:\n{files_string}")
 
 
 ./frontend/package.json
@@ -99,234 +164,241 @@ d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   4) import Col from 'react-bo
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400   7) import Button from 'react-bootstrap/Button';
 d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   8) 
 d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400   9) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  10) function FilterBar({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  11)     searchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  12)     setSearchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  13)     searchFragrances,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  14)     defaultSearchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  15)     searchDefaults,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  16)     xs,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  17)     useSidebarFilter,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  18)     hideFilters
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  19) }) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  20)     const updateSearchObject = (name, value) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  21)         setSearchObject({
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  22)             ...searchObject,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  23)             [name]: value
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  24)         });
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  25)     }
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  26) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  27)     const handleFormChange = (event) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  28)         updateSearchObject(event.target.name, event.target.value);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  29)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  30) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  31)     // Range values are only 1-100. Normalize the value with its
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  32)     // associated max value. There is similiar logic in each of the
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  33)     // next two functions
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  34)     const handleRangeChange = (event, normalizer) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  35)         const newVal = Math.round(
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  36)             (parseInt(event.target.value) / 100) * normalizer
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  37)         );
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  38)         updateSearchObject(event.target.name, newVal);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  39)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  40) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  41)     const getRangeValue = (val, normalizer) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  42)         const newVal = Math.round((val / normalizer) * 100);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  43)         return newVal;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  44)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  45) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  46)     // Set search object to defaults and search fragrances again
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  47)     const resetSearchObject = () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  48)         setSearchObject(defaultSearchObject);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  49)         searchFragrances(defaultSearchObject);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  50)         if (hideFilters) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  51)             hideFilters();
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  52)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  53)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  54) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  55)     // Apply new filters to search.
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  56)     const handleApplyClick = () => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  57)         searchFragrances(searchObject);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  58)         if (hideFilters) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  59)             hideFilters();
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  60)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  61)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  62) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  63)     // When brands are checked/unchecked, we need
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  64)     // to toggle their presence in the 'brands'
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  65)     // field of searchObject
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  66)     const handleBrandChange = (event) => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  67)         if (allBrandsChecked) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  68)             return;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  69)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  70) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  71)         const brandName = event.target.name;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  72)         const brands = [...searchObject.brands];
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  73) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  74)         if (brands.includes(brandName) && !allBrandsChecked) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  75)             brands.splice(brands.indexOf(brandName), 1);
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  10) const genderMapper = {
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  11)     'All': "All",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  12)     'Male': "Men's",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  13)     'Female': "Women's",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  14)     'Unisex': "Unisex",
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  15) }
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400  16) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  17) function FilterBar({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  18)     searchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  19)     setSearchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  20)     searchFragrances,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  21)     defaultSearchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  22)     searchDefaults,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  23)     xs,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  24)     useSidebarFilter,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  25)     hideFilters
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  26) }) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  27)     const updateSearchObject = (name, value) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  28)         setSearchObject({
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  29)             ...searchObject,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  30)             [name]: value
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  31)         });
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  32)     }
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  33) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  34)     const handleFormChange = (event) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  35)         updateSearchObject(event.target.name, event.target.value);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  36)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  37) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  38)     // Range values are only 1-100. Normalize the value with its
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  39)     // associated max value. There is similiar logic in each of the
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  40)     // next two functions
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  41)     const handleRangeChange = (event, normalizer) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  42)         const newVal = Math.round(
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  43)             (parseInt(event.target.value) / 100) * normalizer
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  44)         );
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  45)         updateSearchObject(event.target.name, newVal);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  46)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  47) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  48)     const getRangeValue = (val, normalizer) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  49)         const newVal = Math.round((val / normalizer) * 100);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  50)         return newVal;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  51)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  52) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  53)     // Set search object to defaults and search fragrances again
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  54)     const resetSearchObject = () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  55)         setSearchObject(defaultSearchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  56)         searchFragrances(defaultSearchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  57)         if (hideFilters) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  58)             hideFilters();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  59)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  60)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  61) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  62)     // Apply new filters to search.
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  63)     const handleApplyClick = () => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  64)         searchFragrances(searchObject);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  65)         if (hideFilters) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  66)             hideFilters();
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  67)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  68)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  69) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  70)     // When brands are checked/unchecked, we need
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  71)     // to toggle their presence in the 'brands'
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  72)     // field of searchObject
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  73)     const handleBrandChange = (event) => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  74)         if (allBrandsChecked) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  75)             return;
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  76)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  77)         else if (!brands.includes(brandName)) {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  78)             brands.push(brandName);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  79)         }
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  80)         updateSearchObject('brands', brands);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  81)     }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  82) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  83)     const [allBrandsChecked, setAllBrandsChecked] = useState(!searchObject.brands.length);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  84) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  85)     // If all brands are checked, empty brands in searchObject
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  86)     useEffect(() => {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  87)         if (allBrandsChecked) {
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  88)             updateSearchObject('brands', []);
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  89)         }
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  90)     }, [allBrandsChecked]);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  77) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  78)         const brandName = event.target.name;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  79)         const brands = [...searchObject.brands];
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  80) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  81)         if (brands.includes(brandName) && !allBrandsChecked) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  82)             brands.splice(brands.indexOf(brandName), 1);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  83)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  84)         else if (!brands.includes(brandName)) {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  85)             brands.push(brandName);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  86)         }
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  87)         updateSearchObject('brands', brands);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  88)     }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  89) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  90)     const [allBrandsChecked, setAllBrandsChecked] = useState(!searchObject.brands.length);
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  91) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  92) 
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  93)     const {maxSize, maxPrice} = searchDefaults;
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  94)     const genderOptions = ['All', 'Unisex', 'Male', 'Female'];
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  95) 
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400  96)     return (
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  97)         <Col xs={xs} style={{
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  98)             borderRight: '1px solid lightgray'
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400  99)         }}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 100)             {!useSidebarFilter && (<h4>Filters</h4>)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 101)             <Form>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 102)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 103)                     <Form.Label><strong>Price</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 104)                     <Form.Group style={{marginLeft: '8px'}}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 105)                         <Form.Label>Min:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 106)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 107)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 108)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 109)                                 name='price_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 110)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 111)                                 value={getRangeValue(searchObject.price_start, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 112)                                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 113)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 114)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 115)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 116)                                     <InputGroup.Text>$</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 117)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 118)                                     name='price_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 119)                                     value={searchObject.price_start}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 120)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 121)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 122)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 123)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 124)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 125)                         <Form.Label>Max:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 126)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 127)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 128)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 129)                                 name='price_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 130)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 131)                                 value={getRangeValue(searchObject.price_end, maxPrice)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 132)                                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 133)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 134)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 135)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 136)                                     <InputGroup.Text>$</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 137)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 138)                                     name='price_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 139)                                     value={searchObject.price_end}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 140)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 141)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 142)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 143)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 144)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 145)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 146)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 147)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 148)                     <Form.Label><strong>Size</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 149)                     <Form.Group style={{marginLeft: '8px'}}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 150)                     <Form.Label>Min:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 151)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 152)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 153)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 154)                                 name='size_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 155)                                 onChange={(event) => handleRangeChange(event, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 156)                                 value={getRangeValue(searchObject.size_start, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 157)                                 />
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  92)     // If all brands are checked, empty brands in searchObject
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  93)     useEffect(() => {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  94)         if (allBrandsChecked) {
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400  95)             updateSearchObject('brands', []);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  96)         }
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  97)     }, [allBrandsChecked]);
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  98) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400  99) 
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 100)     const {maxSize, maxPrice} = searchDefaults;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 101)     const genderOptions = ['All', 'Unisex', 'Male', 'Female'];
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 102) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 103)     return (
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 104)         <Col xs={xs} style={{
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 105)             borderRight: '1px solid lightgray'
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 106)         }}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 107)             {!useSidebarFilter && (<h4>Filters</h4>)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 108)             <Form>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 109)                 <Form.Group style={{margin: '12px 0px'}}>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 110)                     <span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 111)                         <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 112)                     </span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 113)                     <span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 114)                         <Button size='sm' onClick={handleApplyClick}>Apply</Button>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 115)                     </span>
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 116)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 117)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 118)                     <Form.Label><strong>Price</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 119)                     <Form.Group style={{marginLeft: '8px'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 120)                         <Form.Label>Min:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 121)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 122)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 123)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 124)                                 name='price_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 125)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 126)                                 value={getRangeValue(searchObject.price_start, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 127)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 128)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 129)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 130)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 131)                                     <InputGroup.Text>$</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 132)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 133)                                     name='price_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 134)                                     value={searchObject.price_start}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 135)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 136)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 137)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 138)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 139)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 140)                         <Form.Label>Max:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 141)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 142)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 143)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 144)                                 name='price_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 145)                                 onChange={(event) => handleRangeChange(event, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 146)                                 value={getRangeValue(searchObject.price_end, maxPrice)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 147)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 148)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 149)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 150)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 151)                                     <InputGroup.Text>$</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 152)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 153)                                     name='price_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 154)                                     value={searchObject.price_end}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 155)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 156)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 157)                                 </InputGroup>
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 158)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 159)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 160)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 161)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 162)                                     name='size_start'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 163)                                     value={searchObject.size_start}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 164)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 165)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 166)                                     <InputGroup.Text>oz</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 167)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 168)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 169)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 170)                         <Form.Label>Max:</Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 171)                         <Form.Group as={Row}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 172)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 173)                                 <Form.Range
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 174)                                 name='size_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 175)                                 onChange={(event) => handleRangeChange(event, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 176)                                 value={getRangeValue(searchObject.size_end, maxSize)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 177)                                 />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 178)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 179)                             <Col xs="6">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 180)                                 <InputGroup className="mb-3">
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 181)                                     <Form.Control
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 182)                                     name='size_end'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 183)                                     value={searchObject.size_end}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 184)                                     onChange={handleFormChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 185)                                     />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 186)                                     <InputGroup.Text>oz</InputGroup.Text>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 187)                                 </InputGroup>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 188)                             </Col>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 189)                         </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 190)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 191)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 192)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 193)                     <Form.Label><strong>Gender</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 194)                     <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 195)                         <Form.Select name='gender' onChange={handleFormChange} value={searchObject.gender}>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 196)                             {genderOptions.map((option, i) => (
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 197)                                 <option key={i} value={option}>{option}</option>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 198)                             ))}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 199)                         </Form.Select>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 200)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 201)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 202)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 203)                     <Form.Label><strong>Brand</strong></Form.Label>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 204)                     <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 205)                         <Form.Check
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 206)                             type='checkbox'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 207)                             name='all'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 208)                             label={'All'}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 209)                             checked={allBrandsChecked}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 210)                             onChange={() => setAllBrandsChecked(!allBrandsChecked)}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 211)                         />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 212)                         {searchDefaults.brands.map((brand, i) => (
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 213)                             <Form.Check
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 214)                                 key={i}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 215)                                 type='checkbox'
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 216)                                 name={brand.brand}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 217)                                 label={`${brand.brand} (${brand.listingCount})`}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 218)                                 checked={searchObject.brands.includes(brand.brand) || allBrandsChecked}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 219)                                 onChange={handleBrandChange}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 220)                             />
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 221)                         ))}
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 222)                     </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 223)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 224)                 <Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 225)                     <span>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 226)                         <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 227)                     </span>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 228)                     <span>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 229)                         <Button size='sm' onClick={handleApplyClick}>Apply</Button>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 230)                     </span>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 231)                 </Form.Group>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 232)             </Form>
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 233)         </Col>
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 234)     )
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 235) }
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 236) 
-d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 237) export default FilterBar;
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 159)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 160)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 161)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 162)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 163)                     <Form.Label><strong>Size</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 164)                     <Form.Group style={{marginLeft: '8px'}}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 165)                     <Form.Label>Min:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 166)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 167)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 168)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 169)                                 name='size_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 170)                                 onChange={(event) => handleRangeChange(event, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 171)                                 value={getRangeValue(searchObject.size_start, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 172)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 173)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 174)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 175)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 176)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 177)                                     name='size_start'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 178)                                     value={searchObject.size_start}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 179)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 180)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 181)                                     <InputGroup.Text>oz</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 182)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 183)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 184)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 185)                         <Form.Label>Max:</Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 186)                         <Form.Group as={Row}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 187)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 188)                                 <Form.Range
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 189)                                 name='size_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 190)                                 onChange={(event) => handleRangeChange(event, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 191)                                 value={getRangeValue(searchObject.size_end, maxSize)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 192)                                 />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 193)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 194)                             <Col xs="6">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 195)                                 <InputGroup className="mb-3">
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 196)                                     <Form.Control
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 197)                                     name='size_end'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 198)                                     value={searchObject.size_end}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 199)                                     onChange={handleFormChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 200)                                     />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 201)                                     <InputGroup.Text>oz</InputGroup.Text>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 202)                                 </InputGroup>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 203)                             </Col>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 204)                         </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 205)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 206)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 207)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 208)                     <Form.Label><strong>Gender</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 209)                     <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 210)                         <Form.Select name='gender' onChange={handleFormChange} value={searchObject.gender}>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 211)                             {genderOptions.map((option, i) => (
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 212)                                 <option key={i} value={option}>{genderMapper[option]}</option>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 213)                             ))}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 214)                         </Form.Select>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 215)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 216)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 217)                 <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 218)                     <Form.Label><strong>Brand</strong></Form.Label>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 219)                     <Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 220)                         <Form.Check
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 221)                             type='checkbox'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 222)                             name='all'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 223)                             label={'All'}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 224)                             checked={allBrandsChecked}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 225)                             onChange={() => setAllBrandsChecked(!allBrandsChecked)}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 226)                         />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 227)                         {searchDefaults.brands.map((brand, i) => (
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 228)                             <Form.Check
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 229)                                 key={i}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 230)                                 type='checkbox'
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 231)                                 name={brand.brand}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 232)                                 label={`${brand.brand} (${brand.listingCount})`}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 233)                                 checked={searchObject.brands.includes(brand.brand) || allBrandsChecked}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 234)                                 onChange={handleBrandChange}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 235)                             />
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 236)                         ))}
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 237)                     </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 238)                 </Form.Group>
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 239)             </Form>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 240)         </Col>
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 241)     )
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 242) }
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 243) 
+d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 244) export default FilterBar;
 
 
 ./frontend/src/components/Browsing.js
@@ -595,7 +667,7 @@ d2fd97a4 (LakelonBailey 2023-10-16 18:06:50 -0400 42)         }}>
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 55)                                 <Card.Title>{f.fragrance.title} ({f.sizeoz} oz)</Card.Title>
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 56)                                 <div style={{marginLeft: '8px'}}>
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 57)                                     <Card.Subtitle>{f.fragrance.brand} ({genderMapper[f.fragrance.gender]})</Card.Subtitle>
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 58)                                     <Card.Subtitle style={{marginTop: '4px'}}><strong>${f.price.toFixed(2)}</strong></Card.Subtitle>
+831f5282 (LakelonBailey 2023-10-26 21:44:09 -0400 58)                                     <Card.Subtitle style={{marginTop: '4px'}}><strong>${f.price}</strong></Card.Subtitle>
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 59)                                 </div>
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 60)                                 <Button style={{marginTop: '12px'}} onClick={() => viewFragranceListing(f)} variant="primary" size="sm">See on {f.site}</Button>
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 61)                                 </Card.Body>
@@ -674,29 +746,93 @@ a074d914 (LakelonBailey     2023-10-24 11:32:57 -0400 56)             <input nam
 
 
 ./backend/utils/dbUpdater.js
-000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400  9) function dbUpdate() {
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 14) 		const pyproc = spawn("python", ["./scrapers/MasterScript.py"], {
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 15) 			maxBuffer: 1000 * 1000 * 10 // 10 MB
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 16) 		});
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 17) 
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 18) 		let output = '';
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 19) 		pyproc.stdout.on('data', (data) => {
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 20) 			output += data.toString();
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 21) 		});
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 23) 		pyproc.stdout.on("end", (data) => {
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 24) 			const ret = JSON.parse(output);
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 25) 
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 26) 			for(let i = 0; i < ret.length; i++){
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 37) 
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 39) 
-000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 58) }
-000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 59) 
-000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 60) module.exports = dbUpdate;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400   2) const {cleanData} = require('../utils/parsing');
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400   4) function dbUpdate(maxItemsPerScraper) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400   7) 	maxItemsPerScraper = maxItemsPerScraper || '';
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  10) 		const pyproc = spawn("python", ["./scrapers/MasterScript.py", maxItemsPerScraper], {
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  11) 			maxBuffer: 1000 * 1000 * 10 // 10 MB
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  12) 		});
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  13) 
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  14) 		let output = '';
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  15) 		pyproc.stdout.on('data', (data) => {
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  16) 			output += data.toString();
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  17) 		});
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  19) 		pyproc.stdout.on("end", (data) => {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  20) 			const ret = cleanData(JSON.parse(output));
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  21) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  45) 									sizeoz: ret[i].sizeoz
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  55) 									sizeoz: ret[i].sizeoz
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  64) 										sizeoz: ret[i].sizeoz
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  69) 												sizeoz: ret[i].sizeoz
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  80) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  82) 
+000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 102) }
+000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 103) 
+000f9d02 (LakelonBailey 2023-10-24 11:19:56 -0400 104) module.exports = dbUpdate;
 
 
 ./backend/utils/auth.js
 4de2b28b (LakelonBailey     2023-10-24 10:42:07 -0400 29)   signToken: function({ username, email, id, firstName, lastName}) {
 4de2b28b (LakelonBailey     2023-10-24 10:42:07 -0400 30)     const payload = { username, email, id, firstName, lastName };
+
+
+./backend/utils/parsing.js
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  1) const ML_TO_OZ_FACTOR = 0.0338;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  2) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  3) // Extract floating point from price string
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  4) // e.g. '$24.99' -> 24.99
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  5) function extractPrice(str) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  6)     return parseFloat(str.replace(/[^0-9.]/g, ''));
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  7) }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  8) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  9) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 10) // Use JavaScript's URL builder to parse hostname
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 11) function extractDomain(url) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 12)     try {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 13)         let parsedURL = new URL(url);
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 14)         return parsedURL.hostname;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 15)     } catch (e) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 16)         console.error("Invalid URL");
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 17)         return null;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 18)     }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 19) }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 20) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 21) function extractFloat(str) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 22)     const matches = str.match(/[-+]?[0-9]*\.?[0-9]+/);
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 23)     return matches ? parseFloat(matches[0]) : 0;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 24) }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 25) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 26) function cleanData(data) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 27)     return data.filter(item => item.title != 'N/A').map(item => {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 28)         const {size, ...data} = item;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 29) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 30)         // Designate size
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 31)         if (size.includes('oz')) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 32)             data.sizeoz = extractFloat(size);
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 33)         }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 34)         else if (size.includes('ml')) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 35)             data.sizeoz = extractFloat(size) * ML_TO_OZ_FACTOR;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 36)         }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 37) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 38)         data.sizeoz = parseFloat(data.sizeoz.toFixed(2));
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 39) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 40)         // Parse price string
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 41)         data.price = extractFloat(data.price);
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 42) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 43)         // Get site
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 44)         data.site = extractDomain(data.link);
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 45) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 46)         return data;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 47)     });
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 48) }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 49) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 50) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 51) module.exports = {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 52)     extractPrice,
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 53)     extractDomain,
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 54)     extractFloat,
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 55)     cleanData
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 56) }
 
 
 ./backend/models/User.js
@@ -716,113 +852,90 @@ a074d914 (LakelonBailey     2023-10-24 11:32:57 -0400 56)             <input nam
 
 
 ./backend/models/FragranceListing.js
+1a85abd5 backend/models/FragranceListing.js (LakelonBailey     2023-10-26 22:17:22 -0400 24)       type: DataTypes.FLOAT,
+1a85abd5 backend/models/FragranceListing.js (LakelonBailey     2023-10-26 22:17:22 -0400 34)       type: DataTypes.FLOAT
+4d6fbb34 backend/models/FragranceListing.js (LakelonBailey     2023-10-26 23:58:49 -0400 37)       type: DataTypes.FLOAT
 e0dcf24a backend/models/FragranceListing.js (LakelonBailey     2023-10-24 12:52:27 -0400 44)     },
 e0dcf24a backend/models/FragranceListing.js (LakelonBailey     2023-10-24 12:52:27 -0400 45)     link: {
 e0dcf24a backend/models/FragranceListing.js (LakelonBailey     2023-10-24 12:52:27 -0400 46)       type: DataTypes.STRING
 
 
 ./backend/scripts/seedData.js
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  1) const jomashopData = require('../data/jomashop.json');
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400  1) const fragranceData = require('../data/AllRecords.json');
 e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  2) const {FragranceListing, Fragrance} = require('../models');
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  3) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  4) // Extract floating point from price string
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  5) // e.g. '$24.99' -> 24.99
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  6) function parsePrice(str) {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  7)     return parseFloat(str.replace(/[^0-9.]/g, ''));
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  8) }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  9) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 10) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 11) // Use JavaScript's URL builder to parse hostname
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 12) function extractDomain(url) {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 13)     try {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 14)         let parsedURL = new URL(url);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 15)         return parsedURL.hostname;
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 16)     } catch (e) {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 17)         console.error("Invalid URL");
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 18)         return null;
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 19)     }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 20) }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 21) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 22) const cleanData = (data) => {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 23)     return data.filter(item => item.title != 'N/A').map(item => {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 24)         const {size, ...data} = item;
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 25) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 26)         // Designate size
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 27)         if (size.includes('oz')) {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 28)             data.sizeoz = size.replace('oz', '').trim();
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 29)         }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 30)         else if (size.includes('ml')) {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 31)             data.sizeml = size.replace('ml', '').trim();
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 32)         }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 33) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 34)         // Parse price string
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 35)         data.price = parsePrice(data.price);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 36) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 37)         // Get site
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 38)         data.site = extractDomain(data.link);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 39) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 40)         return data;
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 41)     });
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 42) }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 43) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 44) const destroyExistingData = async () => {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 45)     await FragranceListing.destroy({
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 46)         where: {}
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 47)     });
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 48)     await Fragrance.destroy({
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 49)         where: {}
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 50)     });
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 51) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 52) }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 53) const getFragranceMapKey = (item) => {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 54)     return `${item.gender}__${item.brand}__${item.title}__${item.concentration}`.toLowerCase();
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 55) }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 56) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 57) const loadFragrances = async () => {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 58)     await destroyExistingData();
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 59)     const data = cleanData(jomashopData);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 60)     const fragranceMap = new Map();
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 61)     const fragranceListings = []
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 62)     for (let item of data) {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 63) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 64)         // Create map key used to determine unique fragrances
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 65)         const mapKey = getFragranceMapKey(item);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 66)         let fragrance = fragranceMap.get(mapKey);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 67) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 68)         // If fragrance doesn't exist, create it.
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 69)         if (!fragrance) {
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 70)             fragrance = await Fragrance.create({
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 71)                 brand: item.brand,
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 72)                 title: item.title,
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 73)                 concentration: item.concentration,
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 74)                 gender: item.gender,
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 75)                 photoLink: item.photoLink
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 76)             });
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 77)             fragranceMap.set(mapKey, fragrance);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 78)         }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 79) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 80)         fragranceListings.push({
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 81)             fragranceId: fragrance.id,
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 82)             ...item
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 83)         });
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 84)     }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 85) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 86)     await FragranceListing.bulkCreate(fragranceListings);
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 87) }
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 88) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 89) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 90) loadFragrances();
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  3) const {cleanData} = require('../utils/parsing');
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  4) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  5) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  6) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  7) const destroyExistingData = async () => {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  8)     await FragranceListing.destroy({
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  9)         where: {}
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 10)     });
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 11)     await Fragrance.destroy({
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 12)         where: {}
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 13)     });
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 14) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 15) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 16) const getFragranceMapKey = (item) => {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 17)     return `${item.gender}__${item.brand}__${item.title}__${item.concentration}`.toLowerCase();
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 18) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 19) 
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 20) const loadFragrances = async () => {
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 21)     console.log('Destroying existing data...');
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 22)     await destroyExistingData();
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 23)     const data = cleanData(fragranceData);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 24) 
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 25)     const fragranceMap = new Map();
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 26)     const fragranceListings = [];
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 27) 
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 28)     for (let item of data) {
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 29) 
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 36)             fragrance = await Fragrance.create(item);
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 45) 
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 46)     console.log('Bulk creating FragranceListing records...');
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 47)     await FragranceListing.bulkCreate(fragranceListings);
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 48) 
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400 49)     console.log('Done.');
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 50) }
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 51)
 
 
 ./backend/scripts/dbUpdate.js
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 1) const dbUpdate = require('../utils/dbUpdater');
-2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400 2) dbUpdate();
+2e51808c (LakelonBailey 2023-10-25 19:33:34 -0400  1) const dbUpdate = require('../utils/dbUpdater');
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  2) let maxItemsPerScraper = null;
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  3) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  4) const printUsage = () => {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  5)     console.log('USAGE: node scripts/dbUpdate.js <max items per scraper (optional): int>')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  6) }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  7) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  8) if (process.argv.length > 2) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  9)     maxItemsPerScraper = parseInt(process.argv[2])
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 10)     if (isNaN(maxItemsPerScraper)) {
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 11)         console.log('ERROR: Improper usage');
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 12)         printUsage();
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 13)         process.exit();
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 14)     }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 15) }
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 16) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 17) dbUpdate(maxItemsPerScraper);
 
 
 ./backend/scrapers/MasterScript.py
-436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  4) import os
-436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  6) # Create data directory if it doesn't exist
-436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400 11) temp = asyncio.run(scrape_jomashop())
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  5) import os
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  6) import sys
+436e4dc0 (LakelonBailey 2023-10-24 11:53:10 -0400  8) # Create data directory if it doesn't exist
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 12) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 13) max_items_per_scraper = 10000
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 14) if len(sys.argv) > 1:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 15)     try:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 16)         max_items_per_scraper = int(sys.argv[1])
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 17)     except ValueError:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 18)         print(
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 19)             f"Invalid integer provided: '{sys.argv[1]}'. Defaulting to {max_items_per_scraper} as max items per scraper"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 20)         )
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 21) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 23)     pd.read_json(asyncio.run(scrape_jomashop(max_items_per_scraper)), orient="records"),
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 24)     pd.read_json(asyncio.run(scrape_maxaroma(max_items_per_scraper)), orient="records")
 
 
 ./backend/scrapers/giftExpress.py
@@ -864,27 +977,166 @@ e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 90) loadFragrances();
 
 
 ./backend/scrapers/maxaroma.py
-57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  60)                 name = next(name_div.find('div').stripped_strings)
-57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  61) 
-57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  71)                 gender = gender_row.find_next('td').find('span').text.strip()
-57e73947 (LakelonBailey 2023-10-16 17:29:41 -0400  72)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400   9) async def scrape_maxaroma(max_items):
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  14)     try:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  30)             while df.shape[0] < max_items:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  33) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  34)                 products = catalog.find_all('div', class_='product')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  46) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  47)                 await page.click('div#list-more.pb-2')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  50)                 items_left = max_items - df.shape[0]
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  51)                 for product in products[start_index:start_index + items_left]:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  81)                         # Gets a link to the product image
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 114) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 122) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 184)
 
 
 ./backend/scrapers/jomashop.py
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  10)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  11) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  39)             photoLink = product_item.find('img', class_='productImg')
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  40)             photoLink = photoLink.get('src') if photoLink else None
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  45) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400  68) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 106)                     # by can be used to indicate a fragrance by a brand,
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 129)                 price = price.text.strip()
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 131)                 price = "N/A"
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400   8) 
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400   9) def extract_price(string):
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400  10)     match = re.search(r'\$\d+\.\d{2}', string)
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400  11)     return match.group(0) if match else None
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400  12) 
+4d31b051 (LakelonBailey 2023-10-26 21:37:03 -0400  13) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  14) async def scrape_jomashop(max_items):
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  15)     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  16)     try:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  17)         async with async_playwright() as p:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  18) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  19)             data_list = []
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  20)             browser = await p.chromium.launch(headless = False)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  21)             page = await browser.new_page()
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  22) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  23)             await page.goto('https://jomashop.com/fragrances.html')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  24)             await page.wait_for_timeout(1000)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  25) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  26)             # Jomashop dynamically loads the page content so we must scroll
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  27)             # in order for the entire page to load
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  28)             async def scroll_down():
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  29)                 for _ in range(12):
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  30)                     await page.evaluate('window.scrollBy(0,600);')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  31)                     await page.wait_for_timeout(1000)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  32) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  33)             await scroll_down()
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  34) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  35)             await page.wait_for_selector('li.productItem')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  36)             page_content = await page.content()
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  37)             # Parse the HTML content using BeautifulSoup
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  38)             soup = BeautifulSoup(page_content, 'html.parser')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  39) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  40)             product_items = soup.find_all('li', class_='productItem')[:max_items]
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  41)             for product_item in product_items:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  42)                 brand = product_item.find('span',class_='brand-name')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  43)                 name = product_item.find('span', class_='name-out-brand')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  44)                 price = product_item.find('div', class_='now-price')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  45)                 link = product_item.find('a', class_='productName-link')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  46)                 photoLink = product_item.find('img', class_='productImg')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  47)                 photoLink = photoLink.get('src') if photoLink else None
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  48)                 gender = ""
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  49)                 size = ""
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  50)                 concentration = ""
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  51)                 formattedName = ""
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  52) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  53)                 if brand:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  54)                     brand = brand.text.strip()
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  56)                     brand = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  57) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  58)                 if name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  59)                     name = name.text.strip()
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  60)                     # Fragrance Gender Keywords
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  61)                     if "Men's" in name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  62)                         gender = "Male"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  63)                     elif "Men" in name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  64)                         gender = "Male"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  65)                     elif "(m)" in name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  66)                         gender = "Male"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  67)                     elif "Ladies" in name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  68)                         gender = "Female"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  69)                     elif "Women" in name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  70)                         gender = "Female"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  71)                     elif "(f)" in name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  72)                         gender = "Female"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  73)                     else:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  74)                         gender = "Unisex"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  75) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  76)                     # Bottle Size Formatting
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  77)                     if "oz" in name:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  78)                         # Regular expression pattern
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  79)                         # Digit followed by an optional .digit then oz
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  80)                         pattern = r'(\d+(\.\d+)?)\s*(oz)'
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  81)                         match = re.search(pattern, name)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  82)                         if match:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  83)                             size = f"{match.group(1)} oz"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  84)                         else:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  85)                             size = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  89)                     # Fragrance Concentration Parsing
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  90)                     # Jomashop does not have any standardization
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  91)                     # So many keywords must be checked
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  92)                     if "edt" in name.lower():
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  93)                         concentration = "EDT"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  94)                     elif "eau de toilette" in name.lower():
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  95)                         concentration = "EDT"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  96)                     elif "edp" in name.lower():
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  97)                         concentration = "EDP"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  98)                     elif "eau de parfum" in name.lower():
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400  99)                         concentration = "EDP"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 100)                     elif "parfum" in name.lower():
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 101)                         concentration = "Parfum"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 103)                         concentration = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 104)                     name_words = name.split()
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 105)                     for i, word in enumerate(name_words):
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 106) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 107)                         # We skip the gender and brand when storing the fragrance name
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 108)                         if word == brand or word == "Men's" or word == "Ladies" or word == "Unisex" or word == "-":
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 109)                             continue
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 110)                         # All keywords that indicate the name of the fragrance name has finished
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 111)                         elif re.match(r'.*(edp|edt|eau|parfum|perfume|/)$', word.lower()) or i == len(name_words):
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 112)                             break # Fragrance Concentration means we have finished storing the name
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 113)                         # by can be used to indicate a fragrance by a brand,
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 114)                         # or may be the actual title of a fragrance
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 115)                         elif re.match(r'.*(by|for)$', word.lower()) and i < len(name_words) - 1:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 116)                             if name_words[i+1] == brand:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 117)                                 break
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 118)                             if name_words[i+1] == "Men" or name_words[i+1] == "Women":
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 119)                                 break
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 120)                         else:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 121)                             if formattedName:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 122)                                 formattedName += " "
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 123)                             formattedName += word
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 127)                 else:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 128)                     name = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 129)                     size = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 130)                     gender = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 131)                     concentration = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 132)                     formattedName = "N/A"
+e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 133) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 134)                 if price:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 135)                     price = extract_price(price.get_text(strip=True))
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 136)                 else:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 137)                     price = None
 e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 138) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 148) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 150) 
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 151)             df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link, photoLink]
-e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 152)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 139)                 if link:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 140)                     link = link.get('href')
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 141)                     link = "https://www.jomashop.com" + link
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 142)                 else:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 143)                     link = "N/A"
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 144) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 145)                 #print("Brand:", brand)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 146)                 #print("Name:", name)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 147)                 #print("FormatName:", formattedName)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 148)                 #print("Concentration:", concentration)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 149)                 #print("Price:", price)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 150)                 #print("Gender:", gender)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 151)                 #print("Size:", size)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 152)                 #print("Link:",link)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 153)                 #print("-" * 30)
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 154) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 155)                 #["brand", "title", "concentration", "gender", "size", "price", "link"]
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 156) 
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 157)                 df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link, photoLink]
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 158)     finally:
+4d6fbb34 (LakelonBailey 2023-10-26 23:58:49 -0400 159)         return df.to_json(orient="records")
 
 
 ./backend/routes/fragranceListingRoutes.js
@@ -970,20 +1222,21 @@ e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 152)
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 80)             attributes: []
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 81)         }],
 6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 82)         group: ['fragrance.brand'],
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 83)     })
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 84) 
-969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 85)     // Return search defaults
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 86)     res.json({
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 87)         success: true,
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 88)         data: {
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 89)             ...aggregates[0],
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 90)             brands: brandGrouping.map(b => b.get())
-6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 91)         }
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 92)     });
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 93) });
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 94) 
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 83)         order: [['listingCount', 'DESC']]
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 84)     })
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 85) 
+969eb2da (LakelonBailey 2023-10-24 18:44:10 -0400 86)     // Return search defaults
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 87)     res.json({
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 88)         success: true,
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 89)         data: {
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 90)             ...aggregates[0],
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 91)             brands: brandGrouping.map(b => b.get())
+6884ac76 (LakelonBailey 2023-10-24 18:25:33 -0400 92)         }
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 93)     });
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 94) });
 916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 95) 
-916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 96) module.exports = router;
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 96) 
+916dd95a (LakelonBailey 2023-10-24 13:50:57 -0400 97) module.exports = router;
 
 
 ./backend/routes/index.js
@@ -995,3 +1248,8 @@ e0dcf24a (LakelonBailey 2023-10-24 12:52:27 -0400 152)
 
 ./backend/routes/userRoutes.js
 a074d914 backend/routes/user-routes.js (LakelonBailey     2023-10-24 11:32:57 -0400 10)         const newUser = await User.create(req.body);
+
+
+./.vscode/settings.json
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 1) {
+1a85abd5 (LakelonBailey 2023-10-26 22:17:22 -0400 2) }

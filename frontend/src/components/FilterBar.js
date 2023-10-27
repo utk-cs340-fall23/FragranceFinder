@@ -102,10 +102,14 @@ function FilterBar({
 
     return (
         <Col xs={xs} style={{
-            borderRight: '1px solid lightgray'
+            borderRight: '1px solid lightgray',
+            height: '100%',
         }}>
             {!useSidebarFilter && (<h4>Filters</h4>)}
-            <Form>
+            <Form style={{
+                maxHeight: '95%',
+                overflowY: 'auto'
+            }}>
                 <Form.Group style={{margin: '12px 0px'}}>
                     <span>
                         <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
