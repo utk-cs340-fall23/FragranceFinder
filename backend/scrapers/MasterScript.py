@@ -15,6 +15,6 @@ frames = [
 
 gdf = pd.concat(frames)
 
-gdf.to_json('data/AllRecords.json', orient='records')
+#gdf.to_json('data/AllRecords.json', orient='records')
 
-# print(gdf.to_json(orient='records'))
+print(gdf.to_json(orient='records'))
