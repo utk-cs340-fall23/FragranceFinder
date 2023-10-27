@@ -75,11 +75,22 @@ function dbUpdate() {
 											}
 										}).then(lst1 => {
 											if(lst1 == null){
+												// Create new list for size
 												console.log("Item exists but size doesn't exist");
+												FragranceListing.create({
+													fragranceId: ins.id,
+													price: ret[i].price,
+													link: ret[i].link,
+													sizeoz: ret[i].size
+												});
 											}
 											else{
+												// find a way to deal with converting price to float
 												console.log("Record(s) exist and smallest price needs to be found");
-												// find smallest price then insert
+												console.log(ins.price);
+												for(j = 0; j < lst1.length; j++){
+													console.log(lst1[j].price);
+												}
 											}
 										});
 									});
