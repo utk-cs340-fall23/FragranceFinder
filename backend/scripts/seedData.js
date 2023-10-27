@@ -1,5 +1,4 @@
-const jomashopData = require('../data/jomashop.json');
-const maxaromaData = require('../data/maxaroma.json')
+const fragranceData = require('../data/AllRecords.json');
 const {FragranceListing, Fragrance} = require('../models');
 
 // Extract floating point from price string
@@ -56,12 +55,14 @@ const getFragranceMapKey = (item) => {
 }
 
 const loadFragrances = async () => {
+    console.log('Destroying existing data...');
     await destroyExistingData();
-    const jomadata = cleanData(jomashopData);
-    const maxaromData = cleanData(maxaromaData)
+    const data = cleanData(fragranceData);
+
     const fragranceMap = new Map();
-    const fragranceListings = []
-    for (let item of jomadata) {
+    const fragranceListings = [];
+
+    for (let item of data) {
 
         // Create map key used to determine unique fragrances
         const mapKey = getFragranceMapKey(item);
@@ -69,13 +70,7 @@ const loadFragrances = async () => {
 
         // If fragrance doesn't exist, create it.
         if (!fragrance) {
-            fragrance = await Fragrance.create({
-                brand: item.brand,
-                title: item.title,
-                concentration: item.concentration,
-                gender: item.gender,
-                photoLink: item.photoLink
-            });
+            fragrance = await Fragrance.create(item);
             fragranceMap.set(mapKey, fragrance);
         }
 
@@ -84,32 +79,11 @@ const loadFragrances = async () => {
             ...item
         });
     }
-    // Max Aroma Fragrances
-    for (let item of maxaromData) {
-        // Create map key used to determine unique fragrances
-        const mapKey = getFragranceMapKey(item);
-        let fragrance = fragranceMap.get(mapKey);
 
-        // If fragrance doesn't exist, create it.
-        if (!fragrance) {
-            fragrance = await Fragrance.create({
-                brand: item.brand,
-                title: item.title,
-                concentration: item.concentration,
-                gender: item.gender,
-                photoLink: item.photoLink
-            });
-            fragranceMap.set(mapKey, fragrance);
-        }
-
-        fragranceListings.push({
-            fragranceId: fragrance.id,
-            ...item
-        });
-
-    }
-
+    console.log('Bulk creating FragranceListing records...');
     await FragranceListing.bulkCreate(fragranceListings);
+
+    console.log('Done.');
 }
 
 loadFragrances();
