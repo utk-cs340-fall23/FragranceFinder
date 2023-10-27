@@ -1,0 +1,352 @@
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) function Login() {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  6)   // Initialize empty form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  7)   const [formState, setFormState] = useState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8)     email: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)     password: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 10)   });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 11) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12)   const [error, setError] = useState('');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)   // Handle changing values in form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)   const handleFormChange = (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16)     setFormState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)       ...formState,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)       [event.target.name]: event.target.value
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)   // Handle submission of form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23)   const handleFormSubmit = async (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 24)     event.preventDefault();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 25) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)     const response = await sendPost('/api/users/login/', formStat:...skipping...
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) function Login() {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  6)   // Initialize empty form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  7)   const [formState, setFormState] = useState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8)     email: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)     password: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 10)   });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 11) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12)   const [error, setError] = useState('');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)   // Handle changing values in form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)   const handleFormChange = (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16)     setFormState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)       ...formState,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)       [event.target.name]: event.target.value
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)   // Handle submission of form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23)   const handleFormSubmit = async (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 24)     event.preventDefault();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 25) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)     const response = await sendPost('/api/users/login/', formState);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 27)     if (response.ok) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 28)         const { token } = response.data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 29)         auth.login(token);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 30)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 31)     else if (response.data && response.data.message) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32)         setError(response.data.message);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 34)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 35) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 36) 
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 37)   return(
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 38)       <div className="Auth-form-container">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 39)               <form className="Auth-form" onSubmit={handleFormSubmit}>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 40)                       <div className="Auth-form-content">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 41)                               <h3 className="Auth-form-title">Sign In</h3>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 42)                               <div className="text-center">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 43)                                       Not registered yet?{" "} <a href="signup">Sign Up</a>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 44)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 45)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 46)                                       <label>Email address: </label>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 47)                                       <input name="email" value={formState.email} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 48)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 49)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 50)                                       <label>Password: </label>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 51)                                       <input name="password" valu
+e={formState.password} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 52)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 53)                               <div className="d-grd gap-2 mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 54)                                       <button type="submit" class
+Name="btn btn-primary">Submit</button>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 55)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 56)                               <p className="text-center mt-2">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 57)                                       Forgot <a href="fpass">pass
+word?</a>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 58)                               </p>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 59)                               <p className="text-center mt-2"> 
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 60)                                       <a href="/">HOME</a>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 61)                               </p>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 62)                       </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 63)               </form>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 64)       </div>
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 65)   );
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 66) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 67) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 68) export default Login;
+
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) function Login() {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  6)   // Initialize empty form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  7)   const [formState, setFormState] = useState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8)     email: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)     password: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 10)   });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 11) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12)   const [error, setError] = useState('');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)   // Handle changing values in form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)   const handleFormChange = (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16)     setFormState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)       ...formState,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)       [event.target.name]: event.target.value
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)   // Handle submission of form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23)   const handleFormSubmit = async (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 24)     event.preventDefault();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 25) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)     const response = await sendPost('/api/users/login/', formStat:...skipping...
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) function Login() {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  6)   // Initialize empty form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  7)   const [formState, setFormState] = useState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8)     email: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)     password: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 10)   });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 11) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12)   const [error, setError] = useState('');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)   // Handle changing values in form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)   const handleFormChange = (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16)     setFormState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)       ...formState,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)       [event.target.name]: event.target.value
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)   // Handle submission of form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23)   const handleFormSubmit = async (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 24)     event.preventDefault();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 25) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)     const response = await sendPost('/api/users/login/', formState);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 27)     if (response.ok) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 28)         const { token } = response.data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 29)         auth.login(token);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 30)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 31)     else if (response.data && response.data.message) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32)         setError(response.data.message);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 34)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 35) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 36) 
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 37)   return(
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 38)       <div className="Auth-form-container">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 39)               <form className="Auth-form" onSubmit={handleFormSubmit}>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 40)                       <div className="Auth-form-content">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 41)                               <h3 className="Auth-form-title">Sign In</h3>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 42)                               <div className="text-center">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 43)                                       Not registered yet?{" "} <a href="signup">Sign Up</a>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 44)                               </div>
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 25) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)     const response = await sendPost('/api/users/login/', formState);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 27)     if (response.ok) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 28)         const { token } = response.data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 29)         auth.login(token);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 30)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 31)     else if (response.data && response.data.message) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32)         setError(response.data.message);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 34)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 35) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 36) 
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 37)   return(
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 38)       <div className="Auth-form-container">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 39)               <form className="Auth-form" onSubmit={handleFormSubmit}>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 40)                       <div className="Auth-form-content">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 41)                               <h3 className="Auth-form-title">Sign In</h3>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 42)                               <div className="text-center">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 43)                                       Not registered yet?{" "} <a href="signup">Sign Up</a>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 44)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 44)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 44)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 45)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 46)                                       <label>Email address: </label>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 47)                                       <input name="email" value={formState.email} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 48)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 49)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 50)                                       <label>Password: </label>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 51)                                       <input name="password" value={formState.password} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 52)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 53)                               <div className="d-grd gap-2 mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 54)                                       <button type="submit" className="btn btn-primary">Submit</button>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 55)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 56)                               <p className="text-center mt-2">
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 57)                                       Forgot <a href="fpass">password?</a>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 58)                               </p>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 59)                               <p className="text-center mt-2"> 
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 60)                                       <a href="/">HOME</a>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 61)                               </p>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 62)                       </div>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 63)               </form>
+00000000 (Not Committed Yet 2023-10-27 11:53:34 -0400 64)       </div>
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 65)   );
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 66) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 67) 
+
+jacobkennedy@Jacobs-MacBook-Pro-78 pages % git blame Signup.js
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) function Signup() {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  6)   // Initialize empty form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  7)   const [formState, setFormState] = useState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8)     email: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)     password: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 10)     username: '',
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 11)       firstName: '',
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 12)       lastName: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13)   });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)   const [error, setError] = useState(null);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)   // Handle changing values in form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)   const handleFormChange = (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     setFormState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)       ...formState,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21)       [event.target.name]: event.target.value
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)     });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 24) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 25)   // Handle submission of form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)   const handleFormSubmit = async (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 27)     event.preventDefault();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 28) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 29)     const response = await sendPost('/api/users/', formState);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 30)     if (response.ok) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 31)         const { token } = response.data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32)         auth.login(token);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 34)     else {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 35)         if (response.data.message) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 36)             setError(response.data.message);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 37)         }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 38)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 39)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 40) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 41) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 42)   return (
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 43)       <div className="Auth-form-container">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 44)               <form className="Auth-form" onSubmit={handleFormSub
+mit}>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 45)                       <div className="Auth-form-content">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 46)                               <h3 className="Auth-form-title">Sig
+n Up</h3>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 47)                               <div className="text-center">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 48)                                       Already registered?{" "} <a
+ href="login">Sign In</a>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 49)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 50)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 51)                                       <label>First Name:  </label
+>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 52)                                       <input name="firstName" val
+ue={formState.firstName} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 53)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 54)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 55)                                       <label>Last Name: </label>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 56)                                       <input name="lastName" valu
+e={formState.lastName} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 57)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 58)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 59)                                       <label>Email: </label>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 60)                                       <input name="email" value={
+formState.email} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 61)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 62)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 63)                                       <label>Username: </label>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 64)                                       <input name="username" valu
+e={formState.username} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 65)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 66)                               <div className="form-group mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 67)                                       <label>Password: </label>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 68)                                       <input name="password" valu
+e={formState.password} required onChange={handleFormChange}></input>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 69)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 70)                               <div className="d-grid gap-2 mt-3">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 71)                                       <div class="text-center">
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 72)                                               <button type="submi
+t" className="btn btn-primary">Submit</button>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 73)                                       </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 74)                                       <p className="text-center m
+t-2"> 
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 75)                                       <a href="/">HOME</a>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 76)                                       </p>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 77)                               </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 78)                       </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 79)               </form>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 80)       </div>
+00000000 (Not Committed Yet 2023-10-27 11:56:36 -0400 81)       )
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 82) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 83) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 84) export default Signup;
+
+Only added 2 lines to App.js, which included my path to the fpass pages
+
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 41) .App {
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 42)       background-color: white;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 43)   }
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 44)   
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 45)   .Auth-form-container {
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 46)       display: flex;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 47)       justify-content: center;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 48)       align-items: center;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 49)       width: 100vw;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 50)       height: 100vh;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 51)   }
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 52)   
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 53)   .Auth-form {
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 54)       width: 420px;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 55)       box-shadow: rgb(0 0 0 / 18%) 1px 1px 10px;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 56)       padding-top: 30px;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 57)       padding-bottom: 20px;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 58)       border-radius: 8px;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 59)       background-color: white;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 60)   }
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 61)   
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 62)   .Auth-form-content {
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 63)       padding-left: 12%;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 64)       padding-right: 12%;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 65)   }
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 66)   
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 67)   .Auth-form-title {
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 68)       text-align: center;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 69)       margin-bottom: 1em;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 70)       font-size: 24px;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 71)       color: rgb(34, 34, 34);
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 72)       font-weight: 800;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 73)   }
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 74)   
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 75)   label {
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 76)       font-size: 14px;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 77)       font-weight: 600;
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 78)       color: rgb(34, 34, 34);
+00000000 (Not Committed Yet 2023-10-27 11:59:25 -0400 79)   }
