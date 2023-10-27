@@ -7,6 +7,13 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 
 
+const genderMapper = {
+    'All': "All",
+    'Male': "Men's",
+    'Female': "Women's",
+    'Unisex': "Unisex",
+}
+
 function FilterBar({
     searchObject,
     setSearchObject,
@@ -99,6 +106,14 @@ function FilterBar({
         }}>
             {!useSidebarFilter && (<h4>Filters</h4>)}
             <Form>
+                <Form.Group style={{margin: '12px 0px'}}>
+                    <span>
+                        <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
+                    </span>
+                    <span>
+                        <Button size='sm' onClick={handleApplyClick}>Apply</Button>
+                    </span>
+                </Form.Group>
                 <Form.Group>
                     <Form.Label><strong>Price</strong></Form.Label>
                     <Form.Group style={{marginLeft: '8px'}}>
@@ -194,7 +209,7 @@ function FilterBar({
                     <Form.Group>
                         <Form.Select name='gender' onChange={handleFormChange} value={searchObject.gender}>
                             {genderOptions.map((option, i) => (
-                                <option key={i} value={option}>{option}</option>
+                                <option key={i} value={option}>{genderMapper[option]}</option>
                             ))}
                         </Form.Select>
                     </Form.Group>
@@ -220,14 +235,6 @@ function FilterBar({
                             />
                         ))}
                     </Form.Group>
-                </Form.Group>
-                <Form.Group>
-                    <span>
-                        <Button size='sm' style={{marginRight: '12px'}} variant='danger' onClick={resetSearchObject}>Reset</Button>
-                    </span>
-                    <span>
-                        <Button size='sm' onClick={handleApplyClick}>Apply</Button>
-                    </span>
                 </Form.Group>
             </Form>
         </Col>

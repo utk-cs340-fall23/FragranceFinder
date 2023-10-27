@@ -80,6 +80,7 @@ router.get('/search-defaults', async (req, res) => {
             attributes: []
         }],
         group: ['fragrance.brand'],
+        order: [['listingCount', 'DESC']]
     })
 
     // Return search defaults

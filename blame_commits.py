@@ -4,15 +4,39 @@ from datetime import datetime
 import sys
 import re
 
-IGNORED_DIRECTORIES = ['venv', 'node_modules', 'public', 'build', '__pycache__', '.git']
-IGNORED_FILES = ['package-lock.json', '.gitignore', '.DS_Store']
-IGNORED_EXTENSIONS = ['svg', 'env']
+"""
+Internal project tool for Fragrance Finder.
+
+Creates a proper commits.txt file for a sprint and prints
+edited files to the console.
+"""
+
+IGNORED_DIRECTORIES = [
+    'venv',
+    'node_modules',
+    'public',
+    'build',
+    '__pycache__',
+    '.git'
+]
+
+IGNORED_FILES = [
+    'package-lock.json',
+    '.gitignore',
+    '.DS_Store'
+]
+
+IGNORED_EXTENSIONS = [
+    'svg',
+    'env'
+]
 
 
 def extract_date(s):
     pattern = r'\b(\d{4}-\d{2}-\d{2})\b'
     match = re.search(pattern, s)
     return match.group(1) if match else None
+
 
 def git_blame_for_file(file_path, username, start_date):
     try:
@@ -77,13 +101,16 @@ if __name__ == "__main__":
     netid = input("Enter your NetID: ").lower().strip()
     username = input("Enter your GitHub username: ").lower().strip()
     sprint_num = int(input("Enter the sprint number: "))
-    start_date = input("Enter the sprint start date in YYYY-MM-DD format (ENTER to ignore): ").strip()
+    start_date = input(
+        "Enter the sprint start date in YYYY-MM-DD format (ENTER to ignore): "
+    ).strip()
 
     if start_date:
         try:
             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
         except ValueError:
-            print(f"ERROR: Invalid date format '{start_date}'. Format must be YYYY-MM-DDD.")
+            print(f"ERROR: Invalid date format '{start_date}'.\
+                  Format must be YYYY-MM-DDD.")
             sys.exit()
 
     result, files = recursive_git_blame(
