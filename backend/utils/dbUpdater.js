@@ -74,29 +74,31 @@ function dbUpdate() {
 												sizeoz: ret[i].size
 											}
 										}).then(lst1 => {
-											if(lst1 == null){
-												// Create new list for size
-												console.log("Item exists but size doesn't exist");
-												FragranceListing.create({
-													fragranceId: ins.id,
-													price: ret[i].price,
-													link: ret[i].link,
-													sizeoz: ret[i].size
-												});
-											}
-											else{
+											if(lst1 != null){
 												// find a way to deal with converting price to float
-												console.log("Record(s) exist and smallest price needs to be found");
-												console.log(ins.price);
-												for(j = 0; j < lst1.length; j++){
-													console.log(lst1[j].price);
-												}
+												console.log("Record(s) exist and smallest price needs to be found to email out");
 											}
+											
+											FragranceListing.create({
+												fragranceId: ins.id,
+												price: ret[i].price,
+												link: ret[i].link,
+												sizeoz: ret[i].size
+											});
 										});
 									});
 								}
 								else{
-									// Update list
+									
+									// check price change
+									
+									FragranceListing.update({
+										price: ret[i].price,
+									},{
+										where:{
+											id: lst.id
+										}
+									});
 								}
 							});
 						}
