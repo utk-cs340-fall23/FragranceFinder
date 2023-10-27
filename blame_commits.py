@@ -1,5 +1,7 @@
 import subprocess
 import os
+from datetime import datetime
+import sys
 
 
 def git_blame_for_file(file_path, username):
@@ -49,6 +51,14 @@ if __name__ == "__main__":
     netid = input("Enter your NetID: ").lower()
     username = input("Enter your GitHub username: ").lower()
     sprint_num = int(input("Enter the sprint number: "))
+    start_date = int(input("Enter the sprint start date in YYYY-MM-DD format (ENTER to ignore): "))
+
+    if start_date:
+        try:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        except ValueError:
+            print(f"Invalid date format '{start_date}'. Format must be YYYY-MM-DDD.")
+            sys.exit()
 
     directories_to_ignore = ['venv', 'node_modules', 'public', 'build', '__pycache__', '.git']
     files_to_ignore = ['package-lock.json', '.gitignore', '.DS_Store']
@@ -58,7 +68,8 @@ if __name__ == "__main__":
         username,
         ignore_dirs=directories_to_ignore,
         ignore_files=files_to_ignore,
-        ignore_extensions=extensions_to_ignore
+        ignore_extensions=extensions_to_ignore,
+        start_date=start_date
     )
 
     files_string = "\n".join(files)
