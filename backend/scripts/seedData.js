@@ -25,7 +25,7 @@ const cleanData = (data) => {
 
         // Designate size
         if (size.includes('oz')) {
-            data.sizeoz = size.replace('oz', '').trim();
+            data.sizeoz = parseFloat(size.replace('oz', '').trim());
         }
         else if (size.includes('ml')) {
             data.sizeml = size.replace('ml', '').trim();

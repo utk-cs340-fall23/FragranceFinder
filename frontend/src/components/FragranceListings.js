@@ -55,7 +55,7 @@ const FragranceListings = ({xs, fragranceListings, showFilters, useOffcanvasFilt
                                 <Card.Title>{f.fragrance.title} ({f.sizeoz} oz)</Card.Title>
                                 <div style={{marginLeft: '8px'}}>
                                     <Card.Subtitle>{f.fragrance.brand} ({genderMapper[f.fragrance.gender]})</Card.Subtitle>
-                                    <Card.Subtitle style={{marginTop: '4px'}}><strong>${f.price.toFixed(2)}</strong></Card.Subtitle>
+                                    <Card.Subtitle style={{marginTop: '4px'}}><strong>${f.price}</strong></Card.Subtitle>
                                 </div>
                                 <Button style={{marginTop: '12px'}} onClick={() => viewFragranceListing(f)} variant="primary" size="sm">See on {f.site}</Button>
                                 </Card.Body>
