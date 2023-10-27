@@ -1,3 +1,4 @@
+aura.py
 d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   1) # William Duff
 d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   2) # This program scrapes men's and women's fragrance information from aurafragrance.com
 7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400   3) # Last updated 10/25/2023
@@ -347,3 +348,117 @@ b7afb1f1 (Shmoopy 2023-10-25 15:45:43 -0400 346)         return df.to_json(orien
 d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400 347)
 d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400 348) if __name__ == "__main__":
 b7afb1f1 (Shmoopy 2023-10-25 15:45:43 -0400 349)     asyncio.run(scrapeAura())
+
+giftExpress.py
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400   8) import pandas as pd
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400  10) async def scrapeGiftExpress():
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400  11)     async with async_playwright() as p:
+8eac03ec (Shmoopy       2023-10-25 15:40:11 -0400  12)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "stock", "link", "photoLink"])
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400  92)                             position = title.find("by")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400  93)                             mensTitle = title[:position - 1]
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400  94)                             mensTitle = mensTitle.replace('\n', "")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400  95)                             mensConcentration = concentration.replace('\n', "").replace("Type: ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400  96)                             size = size.replace('\n', "").replace("(Tester) ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400  97)                             position = size.find("oz")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400  98)                             mensSizeOZ = size[:position - 1]
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400  99)                             if "Unisex" in gender:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 100)                                 mensGender = "Unisex"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 101)                             else:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 102)                                 mensGender = "Male"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 103)                             mensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 104)                             mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 105)
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 106)                             if mensConcentration == "Eau De Cologne":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 107)                                 mensConcentration = "EDC"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 108)                             elif mensConcentration == "Eau De Toilette":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 109)                                 mensConcentration = "EDT"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 110)                             elif mensConcentration == "Eau De Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 111)                                 mensConcentration = "EDP"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 112)                             elif mensConcentration == "Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 113)                                 mensConcentration = mensConcentration
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 114)                             else:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 115)                                 mensConcentration = "NA"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 116)
+e4c29e51 (Shmoopy       2023-10-25 15:30:43 -0400 117)                             df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2),
+8eac03ec (Shmoopy       2023-10-25 15:40:11 -0400 118)                                                float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 133)                     position = title.find("by")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 134)                     mensTitle = title[:position - 1]
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 135)                     mensTitle = mensTitle.replace('\n', "")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 136)                     mensConcentration = concentration.replace('\n', "").replace("Type: ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 137)                     size = size.replace('\n', "").replace("(Tester) ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 138)                     position = size.find("oz")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 139)                     mensSizeOZ = size[:position - 1]
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 140)                     if "Unisex" in gender:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 141)                         mensGender = "Unisex"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 142)                     else:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 143)                         mensGender = "Male"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 144)                     mensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 145)                     mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")        
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 146)
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 147)                     if mensConcentration == "Eau De Cologne":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 148)                         mensConcentration = "EDC"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 149)                     elif mensConcentration == "Eau De Toilette":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 150)                         mensConcentration = "EDT"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 151)                     elif mensConcentration == "Eau De Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 152)                         mensConcentration = "EDP"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 153)                     elif mensConcentration == "Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 154)                         mensConcentration = mensConcentration
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 155)                     else:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 156)                         mensConcentration = "NA"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 157)
+e4c29e51 (Shmoopy       2023-10-25 15:30:43 -0400 158)                     df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2),
+8eac03ec (Shmoopy       2023-10-25 15:40:11 -0400 159)                                         float(mensPrice), str(mensStock), str(mensLink), str(mensImageLink)]
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 236)                             position = title.find("by")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 237)                             womensTitle = title[:position - 1]
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 238)                             womensTitle = womensTitle.replace('\n', "")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 239)                             womensConcentration = concentration.replace('\n', "").replace("Type: ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 240)                             size = size.replace('\n', "").replace("(Tester) ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 241)                             position = size.find("oz")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 242)                             womensSizeOZ = size[:position - 1]
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 243)                             if "Unisex" in gender:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 244)                                 womensGender = "Unisex"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 245)                             else:
+8eac03ec (Shmoopy       2023-10-25 15:40:11 -0400 246)                                 womensGender = "Female"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 247)                             womensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 248)                             womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 249)
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 250)                             if womensConcentration == "Eau De Cologne":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 251)                                 womensConcentration = "EDC"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 252)                             elif womensConcentration == "Eau De Toilette":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 253)                                 womensConcentration = "EDT"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 254)                             elif womensConcentration == "Eau De Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 255)                                 womensConcentration = "EDP"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 256)                             elif womensConcentration == "Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 257)                                 womensConcentration = womensConcentration
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 258)                             else:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 259)                                 womensConcentration = "NA"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 260)
+e4c29e51 (Shmoopy       2023-10-25 15:30:43 -0400 261)                             df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2),
+8eac03ec (Shmoopy       2023-10-25 15:40:11 -0400 262)                                                float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 277)                     position = title.find("by")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 278)                     womensTitle = title[:position - 1]
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 279)                     womensTitle = womensTitle.replace('\n', "")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 280)                     womensConcentration = concentration.replace('\n', "").replace("Type: ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 281)                     size = size.replace('\n', "").replace("(Tester) ", "")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 282)                     position = size.find("oz")
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 283)                     womensSizeOZ = size[:position - 1]
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 284)                     if "Unisex" in gender:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 285)                         womensGender = "Unisex"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 286)                     else:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 287)                         womensGender = "Female"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 288)                     womensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 289)                     womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")      
+54de162d (LakelonBailey 2023-10-16 15:24:18 -0400 290)
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 291)                     if womensConcentration == "Eau De Cologne":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 292)                         womensConcentration = "EDC"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 293)                     elif womensConcentration == "Eau De Toilette":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 294)                         womensConcentration = "EDT"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 295)                     elif womensConcentration == "Eau De Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 296)                         womensConcentration = "EDP"
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 297)                     elif womensConcentration == "Parfum":
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 298)                         womensConcentration = womensConcentration
+7afcbcf0 (Shmoopy       2023-10-12 12:04:26 -0400 299)                     else:
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 300)                         womensConcentration = "NA"
+91edb194 (Shmoopy       2023-10-25 15:04:43 -0400 301)
+e4c29e51 (Shmoopy       2023-10-25 15:30:43 -0400 302)                     df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2),
+8eac03ec (Shmoopy       2023-10-25 15:40:11 -0400 303)                                         float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
