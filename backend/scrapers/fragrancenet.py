@@ -1,3 +1,5 @@
+# Kien Nguyen
+# Last updated: 10-25-23
 import asyncio
 import re
 import os
@@ -11,6 +13,35 @@ num_pages = 1
 
 # List of brand names to ignore in product names
 brand_names = ["Dolce & Gabbana", "Gianni Versace"]  # Add more brand names as needed
+
+# playing with getting the pricing after clicking on each button (to see real pricing)
+"""
+async def get_prices_for_boxes(page):
+    prices = {}
+    
+    # Find the dimensions element
+    dimensions_element = await page.wait_for_selector('.dimensions.solo')
+    aria_owns = await dimensions_element.get_attribute('aria-owns')
+
+    # Extract and split the box IDs
+    box_ids = aria_owns.split()
+
+    for box_id in box_ids:
+        attribute_selector = f'[aria-owns="{box_id}"]'
+        box_element = await page.wait_for_selector(attribute_selector)
+        await box_element.click()
+        
+        # Wait for the price element to become visible
+        await page.wait_for_selector(f'{box_id}[aria-selected="true"]')
+
+        # Extract the price
+        price_element = await page.querySelector('.pricing[data-price]')
+        price = await price_element.innerText()
+        
+        prices[box_id] = price
+
+    return prices
+"""
 
 async def get_product_info(browser, product):
     # Extract the link to the product
@@ -35,30 +66,24 @@ async def get_product_info(browser, product):
     pricing_elements = product_soup.find_all('div', class_='variantText solo')
 
     for pricing_element in pricing_elements:
-        dimname_span = pricing_element.find('div', class_='dimname').find('span', class_='text')
-        size_text = dimname_span.text.strip()
-
-        # Use regular expression to extract the numeric part for the size
-        size_match = re.search(r'(\d+\.\d+)', size_text)
-        
-        if size_match:
-            size = size_match.group(1)
-        else:
-            size = "Not found"
-        
+        # Extract the product size in ounces from the data-dim-value attribute
+        size_oz = pricing_element['data-dim-value']
+        # Convert the size to milliliters using the conversion factor
+        size_ml = float(size_oz) * 29.5735
+            
         # Extract the original price
         price = pricing_element.find('div', class_='pricing').text.strip()
-
-        # Extract the discount percentage
-        discount_element = pricing_element.find('div', class_='fnet-offer')
-        discount = discount_element.text.strip() if discount_element else "0% OFF"
-
-        # Calculate the discounted price
-        original_price = float(re.search(r'(\d+\.\d+)', price).group(1))
-        discount_percentage = float(re.search(r'(\d+)% OFF', discount).group(1)) / 100
-        discounted_price = original_price * (1 - discount_percentage)
-
-        print(f"Price: ${discounted_price:.2f}, Size: {size}, Discount: {discount}")
+        print(f"Price: {price:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
+    
+    """
+    # Get pricing and size details from the product page
+    prices = await get_prices_for_boxes(page)
+    # Process and print the prices
+    for box_id, price in prices.items():
+        print(f"Box ID: {box_id}, Price: {price}")
+    
+    print("\n")
+    """
 
     # Close the product page
     await page.close()
@@ -142,7 +167,6 @@ async def main():
                 print(f"Savings: {savings}")
                 print(f"Ratings: {ratings}")
                 
-                # Get pricing and size details from the product page
                 await get_product_info(browser, product)
                 print("\n")
                 
