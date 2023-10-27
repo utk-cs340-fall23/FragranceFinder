@@ -1,0 +1,349 @@
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   1) # William Duff
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   2) # This program scrapes men's and women's fragrance information from aurafragrance.com
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400   3) # Last updated 10/25/2023
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   4)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   5) import asyncio
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   6) from playwright.async_api import async_playwright
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   7) from bs4 import BeautifulSoup
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400   8) import pandas as pd
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400   9)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  10) async def scrapeAura():
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  11)     async with async_playwright() as p:
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400  12)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "sizeOZ", "sizeML", "price", "stock", "link", "photoLink"])  
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400  13)         browser = await p.chromium.launch()
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  14)         page = await browser.new_page()
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  15)
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400  16)         # Men's Fragrances from Aura Fragrance
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  17)         # Opening the Aura Fragrance men's catalog page, timeout required due to potential long loading times
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  18)         await page.goto("https://www.aurafragrance.com/collections/mens-fragrances?page=1", timeout = 600000)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  19)         html = await page.inner_html('#shopify-section-collection-template')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  20)         soup = BeautifulSoup(html, 'html.parser')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  21)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  22)         # Scraping list of all branfs for later use
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  23)         brandNames = []
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  24)         brandList = soup.find('ul', class_='advanced-filters')
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  25)         brandListItems = brandList.find_all('li', class_='advanced-filter')
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  26)         for i in range(0, len(brandListItems)):
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  27)             brandNames.append((brandListItems[i]).text)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  28)         brandNames[52] = "Dkny"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  29)         brandNames[56] = "Echt Kolnisch Wasser"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  30)         brandNames[68] = "Fcuk"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  31)         brandNames[113] = brandNames[113].replace('g', 'G')
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  32)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  33)         # Finding the total number of fragrances in the catalog to get the correct number of pages to scrape from
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  34)         pageList = []
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  35)         pageNumbersFind = soup.find('ul', class_='pagination-custom')
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  36)         pageListItems = pageNumbersFind.find_all('li')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  37)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  38)         for i in range(0, len(pageListItems)):
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  39)             pageList.append((pageListItems[i]).text)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  40)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  41)         totalPages = pageList[5].replace('\n', "")
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  42)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  43)         # Men's scraping
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  44)         for i in range(1, int(totalPages) + 1):
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  45)             fragPages = []
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  46)             catalogPage = "https://www.aurafragrance.com/collections/mens-fragrances?page=" + str(i)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  47)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  48)             # Opening the catalog page
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  49)             await page.goto(catalogPage, timeout = 600000)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  50)             html = await page.inner_html('#shopify-section-collection-template')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  51)             soup = BeautifulSoup(html, 'html.parser')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  52)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  53)             # Collecting links to individual fragrance pages
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  54)             targetDivs = soup.find_all('div', class_='grid-uniform')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  55)             targetDiv = targetDivs[1]
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  56)             linkTags = targetDiv.find_all('a')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  57)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  58)             for a in linkTags:
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  59)                 href = a.get('href')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  60)                 fragPages.append(href)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  61)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  62)             # Going to the individual fragrance page
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  63)             for j in range(0, len(fragPages)):
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  64)                 fragPage = "https://www.aurafragrance.com" + fragPages[j]
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  65)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  66)                 await page.goto(fragPage, timeout = 600000)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  67)                 html = await page.inner_html('#shopify-section-product-template')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  68)                 soup = BeautifulSoup(html, 'html.parser')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  69)                 sizes = []
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  70)                 stocks = []
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  71)                 prices = []
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  72)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  73)                 # Scraping size, stock, and price information from individual fragrance pages
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  74)                 sizeBoxes = soup.find('select', class_='product-variants')
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  75)                 sizeInfo = sizeBoxes.find_all('option')
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  76)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  77)                 for displayedSize in sizeInfo:
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  78)                     sizes.append(displayedSize.text)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  79)                     stocks.append(displayedSize.text)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  80)                     prices.append(displayedSize.text)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400  81)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  82)                 for k in range(0, len(sizes)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400  83)                     brand = ""
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400  84)                     link = fragPage
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  85)                     size = str(sizes[k])
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  86)                     stock = str(stocks[k])
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  87)                     price = str(prices[k])
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  88)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400  89)                     # Scraping brand, title, concentration, gender, and image link from individual fragrance page
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  90)                     infoCluster = soup.find('h1').text
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  91)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400  92)                     imageLinkContainer = soup.find('div', class_='product-photo-container')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400  93)                     imageLinkTag = imageLinkContainer.find('img')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400  94)                     imageLink = imageLinkTag.get('src')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400  95)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400  96)                     # Formatting size
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  97)                     if "O7" in size:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  98)                         size = size.replace("O7", "OZ")
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400  99)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 100)                     if ((("x" in size or "X" in size) and ("total" in size or "Samples" in size or "Sample" in size))
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 101)                         or ("Samples" in size or "Sample" in size) and ("OZ" not in size or "oz" not in size)
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 102)                         or ("1/3" in size) or (" Set " in infoCluster or " set " in infoCluster)):
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 103)                         continue
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 104)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 105)                     size = size.replace("\n", "").replace('z', 'Z').replace('o', 'O').replace(" ", "")
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 106)                     position = size.find('Z')
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 107)                     size = size[:position + 1]
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 108)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 109)                     if size[0] == ".":
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 110)                         size = "0" + size
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 111)
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 112)                     if size[0].isalpha():
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 113)                         position = size.find('/')
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 114)                         size = size[position + 1:]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 115)                     position = size.find('O')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 116)                     sizeOZ = size[:position]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 117)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 118)                     # Formatting the rest of the information
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 119)                     if '$' in stock:
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 120)                         stock = "In Stock"
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 121)
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 122)                         position = price.find('$')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 123)                         price = price[position + 1:]
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 124)                         price = price.replace(" USD", "")
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 125)                     else:
+92596527 (Shmoopy 2023-10-18 16:23:27 -0400 126)                         stock = "Sold Out"
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400 127)                         price = -1
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 128)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 129)                     if "EDP" in infoCluster:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 130)                         concentration = "EDP"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 131)                         infoCluster = infoCluster.replace("EDP", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 132)                     elif "EDT" in infoCluster:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 133)                         concentration = "EDT"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 134)                         infoCluster = infoCluster.replace("EDT", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 135)                     else:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 136)                         concentration = "NA"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 137)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 138)                     for m in range(0, len(brandNames)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 139)                         if brandNames[m] in infoCluster:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 140)                             brand = brandNames[m]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 141)                             infoCluster = infoCluster.replace(brand, "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 142)                     if len(brand) == 0:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 143)                         brand = "NA"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 144)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 145)                     if "Men" in infoCluster and "en and " not in infoCluster:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 146)                         gender = "Male"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 147)                         infoCluster = infoCluster.replace("for Men", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 148)                     elif "men" in infoCluster and "en and " not in infoCluster:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 149)                         gender = "Male"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 150)                         infoCluster = infoCluster.replace("for men", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 151)                     elif ("Men" in infoCluster and "en and " in infoCluster) or ("men" in infoCluster and "en and " in infoCluster):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 152)                         gender = "Unisex"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 153)                         position = infoCluster.find("for")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 154)                         infoCluster = infoCluster[:position]
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 155)                     else:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 156)                         gender = "Unisex"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 157)                         infoCluster = infoCluster.replace("Unisex", "")
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 158)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 159)                     infoCluster = infoCluster.replace("by", "").replace("   ", " ").replace("  ", " ")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 160)                     if len(infoCluster) == 0:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 161)                         title = "NA"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 162)                     else :
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 163)                         if infoCluster[0] == " ":
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 164)                             infoCluster = infoCluster[1:]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 165)                         if "By" in infoCluster and (infoCluster[0] != "B" and infoCluster[1] != "y"):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 166)                             position = infoCluster.find("By")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 167)                             infoCluster = infoCluster[:position]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 168)                         for m in range(1, len(infoCluster)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 169)                             if infoCluster[len(infoCluster) - 1] == " ":
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 170)                                 infoCluster = infoCluster[:len(infoCluster) - 1]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 171)                             else:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 172)                                 continue
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 173)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 174)                         title = infoCluster
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 175)
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400 176)                     # Databasing th results
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400 177)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2),
+477404ed (Shmoopy 2023-10-25 15:40:56 -0400 178)                                         float(price), str(stock), str(link), str(imageLink)]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 179)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 180)         # Women's Fragrances from Aura Fragrance
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400 181)         # Opening the Aura Fragrance women's catalog page, timeout required due to potential long loading times
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 182)         await page.goto("https://www.aurafragrance.com/collections/womens-fragrances?page=1", timeout = 600000)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 183)         html = await page.inner_html('#shopify-section-collection-template')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 184)         soup = BeautifulSoup(html, 'html.parser')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 185)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 186)         # Scraping list of all branfs for later use
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 187)         brandNames = []
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 188)         brandList = soup.find('ul', class_='advanced-filters')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 189)         brandListItems = brandList.find_all('li', class_='advanced-filter')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 190)         for i in range(0, len(brandListItems)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 191)             brandNames.append((brandListItems[i]).text)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 192)         brandNames[66] = "Dkny"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 193)         brandNames[70] = "Echt Kolnisch Wasser"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 194)         brandNames[87] = "Fcuk"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 195)         brandNames[132] = brandNames[132].replace('g', 'G')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 196)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 197)         # Finding the total number of fragrances in the catalog to get the correct number of pages to scrape from
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 198)         pageList = []
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 199)         pageNumbersFind = soup.find('ul', class_='pagination-custom')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 200)         pageListItems = pageNumbersFind.find_all('li')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 201)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 202)         for i in range(0, len(pageListItems)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 203)             pageList.append((pageListItems[i]).text)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 204)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 205)         totalPages = pageList[5].replace('\n', "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 206)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 207)         # Women's scraping
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 208)         for i in range(1, int(totalPages) + 1):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 209)             fragPages = []
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 210)             catalogPage = "https://www.aurafragrance.com/collections/womens-fragrances?page=" + str(i)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 211)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 212)             # Opening the catalog page
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 213)             await page.goto(catalogPage, timeout = 600000)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 214)             html = await page.inner_html('#shopify-section-collection-template')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 215)             soup = BeautifulSoup(html, 'html.parser')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 216)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 217)             # Collecting links to individual fragrance pages
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 218)             targetDivs = soup.find_all('div', class_='grid-uniform')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 219)             targetDiv = targetDivs[1]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 220)             linkTags = targetDiv.find_all('a')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 221)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 222)             for a in linkTags:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 223)                 href = a.get('href')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 224)                 fragPages.append(href)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 225)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 226)             # Going to the individual fragrance page
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 227)             for j in range(0, len(fragPages)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 228)                 fragPage = "https://www.aurafragrance.com" + fragPages[j]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 229)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 230)                 await page.goto(fragPage, timeout = 600000)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 231)                 html = await page.inner_html('#shopify-section-product-template')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 232)                 soup = BeautifulSoup(html, 'html.parser')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 233)                 sizes = []
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 234)                 stocks = []
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 235)                 prices = []
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 236)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 237)                 # Scraping size, stock, and price information from individual fragrance pages
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 238)                 sizeBoxes = soup.find('select', class_='product-variants')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 239)                 sizeInfo = sizeBoxes.find_all('option')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 240)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 241)                 for displayedSize in sizeInfo:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 242)                     sizes.append(displayedSize.text)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 243)                     stocks.append(displayedSize.text)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 244)                     prices.append(displayedSize.text)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 245)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 246)                 for k in range(0, len(sizes)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 247)                     brand = ""
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 248)                     link = fragPage
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 249)                     size = str(sizes[k])
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 250)                     stock = str(stocks[k])
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 251)                     price = str(prices[k])
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 252)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 253)                     # Scraping brand, title, concentration, gender, and image link from individual fragrance page
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 254)                     infoCluster = soup.find('h1').text
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 255)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 256)                     imageLinkContainer = soup.find('div', class_='product-photo-container')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 257)                     imageLinkTag = imageLinkContainer.find('img')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 258)                     imageLink = imageLinkTag.get('src')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 259)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 260)                     # Formatting size
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 261)                     if "O7" in size:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 262)                         size = size.replace("O7", "OZ")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 263)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 264)                     if ((("x" in size or "X" in size) and ("total" in size or "Samples" in size or "Sample" in size))
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 265)                         or ("Samples" in size or "Sample" in size) and ("OZ" not in size or "oz" not in size)
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 266)                         or ("1/3" in size) or (" Set " in infoCluster or " set " in infoCluster)):
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 267)                         continue
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 268)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 269)                     size = size.replace("\n", "").replace('z', 'Z').replace('o', 'O').replace(" ", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 270)                     position = size.find('Z')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 271)                     size = size[:position + 1]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 272)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 273)                     if size[0] == ".":
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 274)                         size = "0" + size
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 275)
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 276)                     if size[0].isalpha():
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 277)                         position = size.find('/')
+36ba616b (Shmoopy 2023-10-25 00:44:10 -0400 278)                         size = size[position + 1:]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 279)                     position = size.find('O')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 280)                     sizeOZ = size[:position]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 281)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 282)                     # Formatting the rest of the information
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 283)                     if '$' in stock:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 284)                         stock = "In Stock"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 285)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 286)                         position = price.find('$')
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 287)                         price = price[position + 1:]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 288)                         price = price.replace(" USD", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 289)                     else:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 290)                         stock = "Sold Out"
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400 291)                         price = -1
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 292)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 293)                     if "EDP" in infoCluster:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 294)                         concentration = "EDP"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 295)                         infoCluster = infoCluster.replace("EDP", "")
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 296)                     elif "EDT" in infoCluster:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 297)                         concentration = "EDT"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 298)                         infoCluster = infoCluster.replace("EDT", "")
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 299)                     else:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 300)                         concentration = "NA"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 301)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 302)                     for m in range(0, len(brandNames)):
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 303)                         if brandNames[m] in infoCluster:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 304)                             brand = brandNames[m]
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 305)                             infoCluster = infoCluster.replace(brand, "")
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 306)                     if len(brand) == 0:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 307)                         brand = "NA"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 308)
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 309)                     if "Women" in infoCluster and "en and " not in infoCluster:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 310)                         gender = "Female"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 311)                         infoCluster = infoCluster.replace("for Women", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 312)                     elif "women" in infoCluster and "en and " not in infoCluster:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 313)                         gender = "Female"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 314)                         infoCluster = infoCluster.replace("for women", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 315)                     elif ("Women" in infoCluster and "en and " in infoCluster) or ("women" in infoCluster and "en and " in infoCluster):     
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 316)                         gender = "Unisex"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 317)                         position = infoCluster.find("for")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 318)                         infoCluster = infoCluster[:position]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 319)                     else:
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 320)                         gender = "Unisex"
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 321)                         infoCluster = infoCluster.replace("Unisex", "")
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 322)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 323)                     infoCluster = infoCluster.replace("by", "").replace("   ", " ").replace("  ", " ")
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 324)                     if len(infoCluster) == 0:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 325)                         title = "NA"
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 326)                     else :
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 327)                         if infoCluster[0] == " ":
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 328)                             infoCluster = infoCluster[1:]
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 329)                         if "By" in infoCluster and (infoCluster[0] != "B" and infoCluster[1] != "y"):
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 330)                             position = infoCluster.find("By")
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 331)                             infoCluster = infoCluster[:position]
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 332)                         for m in range(1, len(infoCluster)):
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 333)                             if infoCluster[len(infoCluster) - 1] == " ":
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 334)                                 infoCluster = infoCluster[:len(infoCluster) - 1]
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 335)                             else:
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 336)                                 continue
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 337)
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 338)                         title = infoCluster
+5cf4bf9c (Shmoopy 2023-10-24 10:27:29 -0400 339)
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400 340)                     # Databasing th results
+7b1e4b13 (Shmoopy 2023-10-25 15:34:26 -0400 341)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2),
+477404ed (Shmoopy 2023-10-25 15:40:56 -0400 342)                                         float(price), str(stock), str(link), str(imageLink)]
+5392ca6b (Shmoopy 2023-10-24 23:34:22 -0400 343)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400 344)         browser.close()
+b7afb1f1 (Shmoopy 2023-10-25 15:45:43 -0400 345)
+b7afb1f1 (Shmoopy 2023-10-25 15:45:43 -0400 346)         return df.to_json(orient="columns")
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400 347)
+d97a9a11 (Shmoopy 2023-10-16 22:45:18 -0400 348) if __name__ == "__main__":
+b7afb1f1 (Shmoopy 2023-10-25 15:45:43 -0400 349)     asyncio.run(scrapeAura())
