@@ -5,6 +5,12 @@ from bs4 import BeautifulSoup
 import re
 import pandas as pd
 
+
+def extract_price(string):
+    match = re.search(r'\$\d+\.\d{2}', string)
+    return match.group(0) if match else None
+
+
 async def scrape_jomashop():
     async with async_playwright() as p:
         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
@@ -125,10 +131,9 @@ async def scrape_jomashop():
                 formattedName = "N/A"
 
             if price:
-                price = price.find('span')
-                price = price.text.strip()
+                price = extract_price(price.get_text(strip=True))
             else:
-                price = "N/A"
+                price = None
 
             if link:
                 link = link.get('href')
