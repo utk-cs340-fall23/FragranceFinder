@@ -1,17 +1,13 @@
 const { Fragrance, FragranceListing } = require("../models");
-const sequelize = require("../config/db");
-const PORT = process.env.PORT || 3001;
-const express = require('express');
-const app = express();
+const {cleanData} = require('../utils/parsing');
 
-require('dotenv').config();
-
-function dbUpdate() {
+function dbUpdate(maxItemsPerScraper) {
 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
 	const spawn = require("child_process").spawn;
+	maxItemsPerScraper = maxItemsPerScraper || '';
 
 	function scrapeWeb(){
-		const pyproc = spawn("python", ["./scrapers/MasterScript.py"], {
+		const pyproc = spawn("python", ["./scrapers/MasterScript.py", maxItemsPerScraper], {
 			maxBuffer: 1000 * 1000 * 10 // 10 MB
 		});
 
@@ -21,7 +17,7 @@ function dbUpdate() {
 		});
 
 		pyproc.stdout.on("end", (data) => {
-			const ret = JSON.parse(output);
+			const ret = cleanData(JSON.parse(output));
 
 			for(let i = 0; i < ret.length; i++){
 				if(ret[i].brand != "N/A" && ret[i].title != "N/A" && ret[i].concentration != "N/A" && ret[i].gender != "N/A"){
@@ -46,7 +42,7 @@ function dbUpdate() {
 									fragranceId: ins.id,
 									price: ret[i].price,
 									link: ret[i].link,
-									sizeoz: ret[i].size
+									sizeoz: ret[i].sizeoz
 								});
 							});
 						}
@@ -56,7 +52,7 @@ function dbUpdate() {
 								where:{
 									fragranceId: res.id,
 									link: ret[i].link,
-									sizeoz: ret[i].size
+									sizeoz: ret[i].sizeoz
 								}
 							}).then(lst => {
 								if(lst == null){
@@ -65,32 +61,25 @@ function dbUpdate() {
 										fragranceId: res.id,
 										price: ret[i].price,
 										link: ret[i].link,
-										sizeoz: ret[i].size
+										sizeoz: ret[i].sizeoz
 									}).then(ins => {
 										FragranceListing.findAll({
 											where:{
 												fragranceId: res.id,
-												sizeoz: ret[i].size
+												sizeoz: ret[i].sizeoz
 											}
 										}).then(lst1 => {
 											if(lst1 != null){
 												// find a way to deal with converting price to float
 												console.log("Record(s) exist and smallest price needs to be found to email out");
 											}
-											
-											FragranceListing.create({
-												fragranceId: ins.id,
-												price: ret[i].price,
-												link: ret[i].link,
-												sizeoz: ret[i].size
-											});
 										});
 									});
 								}
 								else{
-									
+
 									// check price change
-									
+
 									FragranceListing.update({
 										price: ret[i].price,
 									},{

@@ -6,13 +6,12 @@ import re
 import json
 import pandas as pd
 
-async def scrape_maxaroma():
+async def scrape_maxaroma(max_items):
 
     all_fragrances = []
 
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
-
-    try: 
+    try:
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless = False)
             page = await browser.new_page()
@@ -28,11 +27,11 @@ async def scrape_maxaroma():
 
             # Prints the current list of fragrances, even if exiting early
             #atexit.register(print_fragrances)
-            while True:
+            while df.shape[0] < max_items:
                 catalog_content = await page.content()
                 catalog = BeautifulSoup(catalog_content, 'html.parser')
-            
-                products = catalog.find_all('div', class_='product') 
+
+                products = catalog.find_all('div', class_='product')
                 data_page = catalog.find('div', class_='pb-2', id='list-more')
                 data_page = data_page.find('a', class_='list-more d-block')
                 data_page = int(data_page['data-page'])
@@ -44,11 +43,12 @@ async def scrape_maxaroma():
                 if data_page == 1:
                     await page.wait_for_timeout(7000)
                     await page.mouse.click(0,0)
-            
-                await page.click('div#list-more.pb-2') 
+
+                await page.click('div#list-more.pb-2')
                 # We have 25 products per data_page, page 1 = 0-24, page 2 = 25-49, etc...
                 start_index = (data_page - 1) * 25
-                for product in products[start_index:]:
+                items_left = max_items - df.shape[0]
+                for product in products[start_index:start_index + items_left]:
 
                     fragrance = {}
                     link = product.find('a')
@@ -78,7 +78,7 @@ async def scrape_maxaroma():
 
                         price_div = product_parser.find('div',class_='dtl_salestext')
 
-                        # Gets a link to the product image 
+                        # Gets a link to the product image
                         photoLink = product_parser.find('img', class_='product-img')
                         photoLink = photoLink.get('src') if photoLink else None
                         if photoLink: fragrance['photoLink'] = photoLink
@@ -111,7 +111,7 @@ async def scrape_maxaroma():
                             size = None
                         else:
                             size = size.lower()
-                            
+
                             # If there is no space between the number and the size specifier one is added
                             # 3.4oz becomes 3.4 oz
                             size = re.sub(r'(?<=[0-9])oz', ' oz', size)
@@ -119,7 +119,7 @@ async def scrape_maxaroma():
                             split_size = size.split()
 
                             if (len(split_size) >= 2):
-                                
+
                                 if (split_size[1] == "oz"):
                                     sizeoz = float(split_size[0])
                                     fragrance["sizeoz"] = sizeoz
@@ -181,7 +181,7 @@ async def scrape_maxaroma():
 
             return df.to_json(orient="records")
 
-            
+
 
 #if __name__ == "__main__":
 #    asyncio.run(scrape_maxaroma())

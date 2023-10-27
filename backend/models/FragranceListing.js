@@ -34,7 +34,7 @@ FragranceListing.init(
       type: DataTypes.FLOAT
     },
     sizeml: {
-      type: DataTypes.STRING
+      type: DataTypes.FLOAT
     },
     reviews: {
       type: DataTypes.STRING

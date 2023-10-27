@@ -1,45 +1,8 @@
 const fragranceData = require('../data/AllRecords.json');
 const {FragranceListing, Fragrance} = require('../models');
-
-// Extract floating point from price string
-// e.g. '$24.99' -> 24.99
-function parsePrice(str) {
-    return parseFloat(str.replace(/[^0-9.]/g, ''));
-}
+const {cleanData} = require('../utils/parsing');
 
 
-// Use JavaScript's URL builder to parse hostname
-function extractDomain(url) {
-    try {
-        let parsedURL = new URL(url);
-        return parsedURL.hostname;
-    } catch (e) {
-        console.error("Invalid URL");
-        return null;
-    }
-}
-
-const cleanData = (data) => {
-    return data.filter(item => item.title != 'N/A').map(item => {
-        const {size, ...data} = item;
-
-        // Designate size
-        if (size.includes('oz')) {
-            data.sizeoz = parseFloat(size.replace('oz', '').trim());
-        }
-        else if (size.includes('ml')) {
-            data.sizeml = size.replace('ml', '').trim();
-        }
-
-        // Parse price string
-        data.price = parsePrice(data.price);
-
-        // Get site
-        data.site = extractDomain(data.link);
-
-        return data;
-    });
-}
 
 const destroyExistingData = async () => {
     await FragranceListing.destroy({
