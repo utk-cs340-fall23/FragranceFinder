@@ -1,5 +1,7 @@
-const { Fragrance, FragranceListing } = require("../models");
+const { Fragrance, FragranceListing, UserFragrance } = require("../models");
 const {cleanData} = require('../utils/parsing');
+const sequelize = require('../config/db');
+const {Sequelize} = require('sequelize');
 
 function dbUpdate(maxItemsPerScraper) {
 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
@@ -63,22 +65,12 @@ function dbUpdate(maxItemsPerScraper) {
 										link: ret[i].link,
 										sizeoz: ret[i].sizeoz
 									}).then(ins => {
-										FragranceListing.findAll({
-											where:{
-												fragranceId: res.id,
-												sizeoz: ret[i].sizeoz
-											}
-										}).then(lst1 => {
-											if(lst1 != null){
-												// find a way to deal with converting price to float
-												console.log("Record(s) exist and smallest price needs to be found to email out");
-											}
-										});
+										// find smallest and check if is new smallest
 									});
 								}
 								else{
 
-									// check price change
+									// check if new smallest or if another price is smallest
 
 									FragranceListing.update({
 										price: ret[i].price,
@@ -98,7 +90,25 @@ function dbUpdate(maxItemsPerScraper) {
 		});
 	}
 
-	scrapeWeb();
+	function emailUpdate(type, fid, price){ // 0: lowest price increase; 1: lowest price decrease; 2: new lowest price
+		UserFragrance.findAll({
+			where:{
+				fragranceId: fid
+			}
+		}).then(rt => {
+			//
+		});
+	}
+
+	async function findSmallest(fid, size){
+		let lowest = await sequelize.query("SELECT * FROM fragrance_listing WHERE fragrance_id="+fid+" AND sizeoz LIKE "+size+" ORDER BY price ASC LIMIT 1", {type: Sequelize.QueryTypes.SELECT});
+		return lowest[0];
+	}
+
+	findSmallest(141, 4.2).then(query => {
+		console.log(query);
+	});
+	//scrapeWeb();
 }
 
 module.exports = dbUpdate;
