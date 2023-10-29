@@ -64,14 +64,9 @@ function dbUpdate(maxItemsPerScraper) {
 										price: ret[i].price,
 										link: ret[i].link,
 										sizeoz: ret[i].sizeoz
-									}).then(ins => {
-										// find smallest and check if is new smallest
 									});
 								}
 								else{
-
-									// check if new smallest or if another price is smallest
-
 									FragranceListing.update({
 										price: ret[i].price,
 									},{
@@ -80,6 +75,16 @@ function dbUpdate(maxItemsPerScraper) {
 										}
 									});
 								}
+								
+								findSmallest(res.id, ret[i].sizeoz).then(query => {
+									if(query != null){
+										if(query.price > ret[i].price){
+											//email user of price drop
+											//console.log(res.id);
+										}
+									}
+								});
+								
 							});
 						}
 					}).catch((error) => {
@@ -105,10 +110,7 @@ function dbUpdate(maxItemsPerScraper) {
 		return lowest[0];
 	}
 
-	findSmallest(141, 4.2).then(query => {
-		console.log(query);
-	});
-	//scrapeWeb();
+	scrapeWeb();
 }
 
 module.exports = dbUpdate;
