@@ -17,7 +17,7 @@ async def scrape_jomashop(max_items):
         async with async_playwright() as p:
 
             data_list = []
-            browser = await p.chromium.launch(headless = False)
+            browser = await p.chromium.launch(headless = True)
             page = await browser.new_page()
 
             await page.goto('https://jomashop.com/fragrances.html')

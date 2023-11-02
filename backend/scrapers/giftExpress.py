@@ -303,7 +303,7 @@ async def scrapeGiftExpress():
                                         float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
                     
         browser.close()
-
+        
         return df.to_json(orient="columns")
 
 if __name__ == "__main__":
