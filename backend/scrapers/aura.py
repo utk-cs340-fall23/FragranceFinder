@@ -341,7 +341,7 @@ async def scrapeAura():
                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
                                         float(price), str(stock), str(link), str(imageLink)]
                     
-        browser.close()
+        await browser.close()
         
         return df.to_json(orient="columns")
         
