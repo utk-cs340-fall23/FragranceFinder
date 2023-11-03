@@ -9,7 +9,7 @@ import pandas as pd
 
 async def scrapeAura():
     async with async_playwright() as p:
-        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "stock", "link", "photoLink"])
+        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
         browser = await p.chromium.launch()
         page = await browser.new_page()
     
@@ -175,7 +175,7 @@ async def scrapeAura():
                         
                     # Databasing th results
                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                        float(price), str(stock), str(link), str(imageLink)]
+                                        float(price), str(link), str(imageLink)]
                         
         # Women's Fragrances from Aura Fragrance
         # Opening the Aura Fragrance women's catalog page, timeout required due to potential long loading times
@@ -339,9 +339,9 @@ async def scrapeAura():
                         
                     # Databasing th results
                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                        float(price), str(stock), str(link), str(imageLink)]
+                                        float(price), str(link), str(imageLink)]
                     
-        browser.close()
+        await browser.close()
         
         return df.to_json(orient="columns")
         
