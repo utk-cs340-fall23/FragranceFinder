@@ -302,7 +302,7 @@ async def scrapeGiftExpress():
                     df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
                                         float(womensPrice), str(womensStock), str(womensLink), str(womensImageLink)]
                     
-        browser.close()
+        await browser.close()
         
         return df.to_json(orient="columns")
 
