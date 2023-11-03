@@ -44,9 +44,9 @@ async def get_prices_for_boxes(page):
     return prices
 """
 
-async def get_product_info(browser, product, df):
+async def get_product_info(browser, df, brand, name, concentration, gender, link, photoLink):
     # Extract the link to the product
-    link = product.find('a', href=True)['href']
+    # link = product.find('a', href=True)['href']
     
     # Create a new page in the browser
     page = await browser.new_page()
@@ -76,7 +76,7 @@ async def get_product_info(browser, product, df):
         price = pricing_element.find('div', class_='pricing').text.strip()
         
         # Add the details to the DataFrame
-        #df.loc[len(df)] = [brand, name, concentration, gender, size_oz, price, link, photoLink]
+        df.loc[len(df)] = [brand, name, concentration, gender, size_oz, price, link, photoLink]
         print(f"Price: {price:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
     
     """
@@ -91,100 +91,102 @@ async def get_product_info(browser, product, df):
 
     # Close the product page
     await page.close()
+    return df
 
 async def main():
-    # Launch the Playwright browser
-        
-    async with async_playwright() as p:
-        df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
-        # trying to get it run through without incognito (to grab proper pricing)
-        # but it doesn't bypass through the bot security check
-        """
-        app_data_path = os.getenv("LOCALAPPDATA")
-        user_data_path = os.path.join(app_data_path, 'Chromium\\User_Data\\Default')
-        context = await p.chromium.launch_persistent_context(user_data_path, headless=False, channel="chrome", user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
-        # Create a new page in the browser
-        page = await context.new_page()
-        """
-        
-        browser = await p.chromium.launch(headless=False)
-        
-        # Create a new page in the browser
-        page = await browser.new_page()
-        
-        # Iterate through the specified number of pages
-        for page_number in range(1, num_pages + 1):
-            # Generate the search URL for each page
-            search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
+    df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+    try:
+        async with async_playwright() as p:
+            # trying to get it run through without incognito (to grab proper pricing)
+            # but it doesn't bypass through the bot security check
+            """
+            app_data_path = os.getenv("LOCALAPPDATA")
+            user_data_path = os.path.join(app_data_path, 'Chromium\\User_Data\\Default')
+            context = await p.chromium.launch_persistent_context(user_data_path, headless=False, channel="chrome", user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+            # Create a new page in the browser
+            page = await context.new_page()
+            """
+            # Launch the Playwright browser
+            browser = await p.chromium.launch(headless=False)
+            
+            # Create a new page in the browser
+            page = await browser.new_page()
+            
+            # Iterate through the specified number of pages
+            for page_number in range(1, num_pages + 1):
+                # Generate the search URL for each page
+                search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
 
-            # Navigate to the search URL
-            await page.goto(search_url)
+                # Navigate to the search URL
+                await page.goto(search_url)
 
-            # Wait for the page to load
-            await page.wait_for_selector('.resultItem.heightSync')
+                # Wait for the page to load
+                await page.wait_for_selector('.resultItem.heightSync')
 
-            # Extract the HTML content of the result set
-            product_data = await page.inner_html('#resultSet')
+                # Extract the HTML content of the result set
+                product_data = await page.inner_html('#resultSet')
 
-            # Parse the HTML content using BeautifulSoup
-            soup = BeautifulSoup(product_data, 'html.parser')
+                # Parse the HTML content using BeautifulSoup
+                soup = BeautifulSoup(product_data, 'html.parser')
 
-            # Find all product items on the page
-            product_items = soup.find_all('div', class_='resultItem heightSync')
+                # Find all product items on the page
+                product_items = soup.find_all('div', class_='resultItem heightSync')
 
-            # Iterate through each product on the page
-            for product in product_items:
-                # Extract the name of the product
-                name = product.find('span', class_='brand-name').text.strip()
+                # Iterate through each product on the page
+                for product in product_items:
+                    # Extract the name of the product
+                    name = product.find('span', class_='brand-name').text.strip()
 
-                # Check if any brand names should be ignored
-                for brand_name in brand_names:
-                    name = name.replace(brand_name, "").strip()
+                    # Check if any brand names should be ignored
+                    for brand_name in brand_names:
+                        name = name.replace(brand_name, "").strip()
 
-                # Extract the brand with a try-except block
-                try:
-                    brand_element = product.find('p', class_='des').find('a')
-                    brand = brand_element.text.strip()
-                except AttributeError:
-                    brand = "Brand not available"
+                    # Extract the brand with a try-except block
+                    try:
+                        brand_element = product.find('p', class_='des').find('a')
+                        brand = brand_element.text.strip()
+                    except AttributeError:
+                        brand = "Brand not available"
 
-                # Extract the gender information
-                gender = product.find('span', class_='gender-badge').text.strip()
-                
-                # Extract the link to the product
-                link = product.find('a', href=True)['href']
+                    # Extract the gender information
+                    gender = product.find('span', class_='gender-badge').text.strip()
+                    
+                    # Extract the link to the product
+                    link = product.find('a', href=True)['href']
 
-                # Extract the savings information
-                savings = product.find('span', class_='savings').text.strip()
+                    # Extract the savings information
+                    savings = product.find('span', class_='savings').text.strip()
 
-                # Extract the ratings information
-                ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
-                
-                photoLink = product.find('img',src=True)['src']
-                
-                concentration = product.find('p', class_='desc').text.strip()
-                if(concentration == "eau de toilette"):
-                    concentration = "EDT"
-                elif(concentration == "eau de parfum"):
-                    concentration = "EDP"
-                
-                # Print the extracted data
-                print(f"Name: {name}")
-                print(f"Brand: {brand}")
-                print(f"Gender: {gender}")
-                print(f"Link: {link}")
-                print(f"Savings: {savings}")
-                print(f"Ratings: {ratings}")
-                print(f"Image: {photoLink}")
-                print(f"Concentration: {concentration}")
-                
-                await get_product_info(browser, product, df)
-                print("\n")
-                
-        # Close the browser when done
-        await browser.close()
-    #return df.to_json(orient="records")
+                    # Extract the ratings information
+                    ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
+                    
+                    photoLink = product.find('img',src=True)['src']
+                    
+                    concentration = product.find('p', class_='desc').text.strip()
+                    if(concentration == "eau de toilette"):
+                        concentration = "EDT"
+                    elif(concentration == "eau de parfum"):
+                        concentration = "EDP"
+                    
+                    # Print the extracted data
+                    print(f"Name: {name}")
+                    print(f"Brand: {brand}")
+                    print(f"Gender: {gender}")
+                    print(f"Link: {link}")
+                    print(f"Savings: {savings}")
+                    print(f"Ratings: {ratings}")
+                    print(f"Image: {photoLink}")
+                    print(f"Concentration: {concentration}")
+                    
+                    df = await get_product_info(browser, df, brand, name, concentration, gender, link, photoLink)
+                    print("\n")
+                    
+            # Close the browser when done
+            await browser.close()
+    finally:
+        return df.to_json(orient="records")
 
 # Run the main function
 if __name__ == "__main__":
     asyncio.run(main())
+    
