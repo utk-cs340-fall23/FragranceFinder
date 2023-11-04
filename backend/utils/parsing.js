@@ -1,4 +1,10 @@
 const ML_TO_OZ_FACTOR = 0.0338;
+const genderMapper = {
+    'All': "All",
+    'Male': "Men's",
+    'Female': "Women's",
+    'Unisex': "Unisex",
+}
 
 // Extract floating point from price string
 // e.g. '$24.99' -> 24.99
@@ -35,14 +41,14 @@ function cleanData(data) {
             data.sizeoz = extractFloat(size) * ML_TO_OZ_FACTOR;
         }
 
-        data.sizeoz = parseFloat(data.sizeoz.toFixed(2));
+        data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
 
         // Parse price string
         data.price = extractFloat(data.price);
 
         // Get site
         data.site = extractDomain(data.link);
-
+        data.gender = genderMapper[data.gender] || null;
         return data;
     });
 }
