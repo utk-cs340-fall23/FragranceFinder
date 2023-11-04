@@ -1,23 +1,34 @@
-import React from "react";
+import React, {useEffect, useState, useRef} from "react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import Card from 'react-bootstrap/Card';
 import Col from "react-bootstrap/Col";
 import Placeholder from 'react-bootstrap/Placeholder';
 import Button from "react-bootstrap/Button";
 import { FaFilter } from 'react-icons/fa';
+import InputGroup from 'react-bootstrap/InputGroup'
+import Form from "react-bootstrap/Form";
 
-const FragranceListings = ({xs, fragranceListings, showFilters, useOffcanvasFilters}) => {
+function FragranceListings({
+    xs,
+    fragranceListings,
+    showFilters,
+    useOffcanvasFilters,
+    setSearchInput,
+    loadMoreListings,
+    totalRows
+}){
     const range = [...Array(50).keys()];
+    const tempSearchInput = useRef('');
 
     const viewFragranceListing = (fragranceListing) => {
         window.open(fragranceListing.link, '_blank');
     }
 
-    const genderMapper = {
-        'Male': "Men's",
-        'Female': "Women's",
-        'Unisex': "Unisex",
+    const handleSearchInputSubmit = (event) => {
+        event.preventDefault();
+        setSearchInput(tempSearchInput.current);
     }
+
     const placeholders = range.map(i => (
         <Card key={i} style={{}}>
             <Card.Img variant="top" src="holder.js/100px180" />
@@ -32,18 +43,40 @@ const FragranceListings = ({xs, fragranceListings, showFilters, useOffcanvasFilt
             <Placeholder.Button variant="primary" xs={6} />
             </Card.Body>
         </Card>
-    ))
+    ));
 
-    const resultsCount = fragranceListings?.length;
+    const containerRef = useRef(null); // Ref for the scrollable container
+
+    // Scroll event handler
+    const onScroll = () => {
+        const container = containerRef.current;
+
+        // Check if the user has scrolled to the bottom
+        if (Math.round(container.scrollHeight - container.scrollTop) <= container.clientHeight) {
+            loadMoreListings();
+        }
+    }
 
     return (
         <Col xs={xs} style={{
             maxHeight: '100%',
         }}>
-            <h4>Results {resultsCount == null ? '' : `(${resultsCount})`} {useOffcanvasFilters && (
+            <Form onSubmit={handleSearchInputSubmit}>
+                <InputGroup className="mb-3">
+                    <Form.Control
+                    placeholder="Search"
+                    aria-label="Search"
+                    onChange={(event) => tempSearchInput.current = event.target.value}
+                    />
+                    <Button type="submit" variant="outline-primary">
+                    Button
+                    </Button>
+                </InputGroup>
+            </Form>
+            <h4>Results ({totalRows}) {useOffcanvasFilters && (
                 <Button variant="secondary" onClick={showFilters}><FaFilter /> Filters</Button>
             )}</h4>
-            <div style={{maxHeight: '95%', overflowY: 'auto'}}>
+            <div style={{maxHeight: '95%', overflowY: 'auto'}} onScroll={onScroll} ref={containerRef}>
                 <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}} style={{maxWidth: '95%'}}>
                 <Masonry columnsCount={3} gutter="10px">
                     {fragranceListings == null ? placeholders :
@@ -54,7 +87,7 @@ const FragranceListings = ({xs, fragranceListings, showFilters, useOffcanvasFilt
                                 <Card.Body>
                                 <Card.Title>{f.fragrance.title} ({f.sizeoz} oz)</Card.Title>
                                 <div style={{marginLeft: '8px'}}>
-                                    <Card.Subtitle>{f.fragrance.brand} ({genderMapper[f.fragrance.gender]})</Card.Subtitle>
+                                    <Card.Subtitle>{f.fragrance.brand} ({f.fragrance.gender})</Card.Subtitle>
                                     <Card.Subtitle style={{marginTop: '4px'}}><strong>${f.price}</strong></Card.Subtitle>
                                 </div>
                                 <Button style={{marginTop: '12px'}} onClick={() => viewFragranceListing(f)} variant="primary" size="sm">See on {f.site}</Button>

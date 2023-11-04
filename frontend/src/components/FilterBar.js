@@ -6,13 +6,6 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 
 
-const genderMapper = {
-    'All': "All",
-    'Male': "Men's",
-    'Female': "Women's",
-    'Unisex': "Unisex",
-}
-
 function FilterBar({
     searchObject,
     setSearchObject,
@@ -212,7 +205,7 @@ function FilterBar({
                     <Form.Group>
                         <Form.Select name='gender' onChange={handleFormChange} value={searchObject.gender}>
                             {genderOptions.map((option, i) => (
-                                <option key={i} value={option}>{genderMapper[option]}</option>
+                                <option key={i} value={option}>{option}</option>
                             ))}
                         </Form.Select>
                     </Form.Group>
