@@ -73,6 +73,7 @@ const Browsing = ({style}) => {
             setFragranceListings(fragranceListingsRef.current);
           }
           else {
+            paginationPage.current = 0;
             fragranceListingsRef.current = response.data.data;
             setFragranceListings(fragranceListingsRef.current);
           }
