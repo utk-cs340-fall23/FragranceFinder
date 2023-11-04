@@ -16,33 +16,26 @@ num_pages = 1
 brand_names = ["Dolce & Gabbana", "Gianni Versace"]  # Add more brand names as needed
 
 # playing with getting the pricing after clicking on each button (to see real pricing)
-"""
-async def get_prices_for_boxes(page):
+async def get_prices(page):
     prices = {}
-    
-    # Find the dimensions element
-    dimensions_element = await page.wait_for_selector('.dimensions.solo')
-    aria_owns = await dimensions_element.get_attribute('aria-owns')
 
     # Extract and split the box IDs
-    box_ids = aria_owns.split()
-
-    for box_id in box_ids:
-        attribute_selector = f'[aria-owns="{box_id}"]'
-        box_element = await page.wait_for_selector(attribute_selector)
-        await box_element.click()
-        
-        # Wait for the price element to become visible
-        await page.wait_for_selector(f'{box_id}[aria-selected="true"]')
-
-        # Extract the price
-        price_element = await page.querySelector('.pricing[data-price]')
-        price = await price_element.innerText()
-        
-        prices[box_id] = price
-
+    variant_text = await page.locator('.variantText.solo').all()
+    index = 0
+    for element in variant_text:
+        await element.click()
+        # Extract the HTML content of the product page
+        product_page_data = await page.content()
+        # Parse the product page using BeautifulSoup
+        product_soup = BeautifulSoup(product_page_data, 'html.parser')
+        pricing_element = product_soup.find('span', class_='pwcprice')
+        # Get the price from the data-price attribute
+        # Extract the pricing text and data-price attribute
+        price = pricing_element.get('data-price')
+        prices[index] = price
+        index += 1
+        #prices[box_id] = price
     return prices
-"""
 
 async def get_product_info(browser, df, brand, name, concentration, gender, link, photoLink):
     # Extract the link to the product
@@ -63,37 +56,26 @@ async def get_product_info(browser, df, brand, name, concentration, gender, link
     # Parse the product page using BeautifulSoup
     product_soup = BeautifulSoup(product_page_data, 'html.parser')
 
+    prices = await get_prices(page)
+    
     # Extract pricing and size details
     pricing_elements = product_soup.find_all('div', class_='variantText solo')
-
+    index = 0
     for pricing_element in pricing_elements:
         # Extract the product size in ounces from the data-dim-value attribute
         size_oz = pricing_element['data-dim-value']
         # Convert the size to milliliters using the conversion factor
         size_ml = float(size_oz) * 29.5735
-            
-        # Extract the original price
-        price = pricing_element.find('div', class_='pricing').text.strip()
-        
         # Add the details to the DataFrame
-        df.loc[len(df)] = [brand, name, concentration, gender, size_oz, price, link, photoLink]
-        print(f"Price: {price:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
-    
-    """
-    # Get pricing and size details from the product page
-    prices = await get_prices_for_boxes(page)
-    # Process and print the prices
-    for box_id, price in prices.items():
-        print(f"Box ID: {box_id}, Price: {price}")
-    
-    print("\n")
-    """
-
+        #print(f"Price: {prices[index]:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
+        df.loc[len(df)] = [brand, name, concentration, gender, size_oz, prices[index], link, photoLink]
+        index += 1
+    #print('\n')
     # Close the product page
     await page.close()
     return df
 
-async def main():
+async def scrape_fragrancenet(max_items):
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
     try:
         async with async_playwright() as p:
@@ -168,6 +150,7 @@ async def main():
                     elif(concentration == "eau de parfum"):
                         concentration = "EDP"
                     
+                    """
                     # Print the extracted data
                     print(f"Name: {name}")
                     print(f"Brand: {brand}")
@@ -177,9 +160,10 @@ async def main():
                     print(f"Ratings: {ratings}")
                     print(f"Image: {photoLink}")
                     print(f"Concentration: {concentration}")
+                    """
                     
                     df = await get_product_info(browser, df, brand, name, concentration, gender, link, photoLink)
-                    print("\n")
+                    # print("\n")
                     
             # Close the browser when done
             await browser.close()
@@ -188,5 +172,5 @@ async def main():
 
 # Run the main function
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(scrape_fragrancenet(0))
     
