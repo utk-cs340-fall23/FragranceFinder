@@ -114,7 +114,8 @@ function FilterBar({
             )}
             <Form style={{
                 maxHeight: '95%',
-                overflowY: 'auto'
+                overflowY: 'auto',
+                overflowX: 'hidden'
             }}>
                 <Form.Group style={{margin: '12px 0px'}}>
 
@@ -221,7 +222,10 @@ function FilterBar({
                 </Form.Group>
                 <Form.Group>
                     <Form.Label><strong>Brand</strong></Form.Label>
-                    <Form.Group>
+                    <Form.Group style={{
+                        maxHeight: '40vh',
+                        overflowY: 'auto'
+                    }}>
                         <Form.Check
                             type='checkbox'
                             name='all'
