@@ -1,0 +1,28 @@
+.auth-container {
+    background-color: #f8f9fa;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw;
+    border: 1px solid red;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.auth-box {
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    min-height: fit-content;
+    margin-top: 40%;
+}
+
+.auth-box h1 {
+    width: 100%;
+    text-align: center;
+}
+
+
+.signup-form > * {
+    margin: 12px 0;
+}

@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import auth from '../utils/auth';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {FaCog} from 'react-icons/fa';
+import '../assets/css/navbar.css';
 
 function Navigation({style}) {
     const profile = auth.getProfile();
@@ -13,7 +14,7 @@ function Navigation({style}) {
     ) : '';
 
   return (
-    <Navbar className="bg-body-tertiary" style={style}>
+    <Navbar className="navigation bg-body-tertiary" style={style}>
       <Container>
         <Navbar.Brand href="/"><h2>Fragrance Finder</h2></Navbar.Brand>
         <Navbar.Toggle />

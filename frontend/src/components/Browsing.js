@@ -150,9 +150,10 @@ const Browsing = ({style}) => {
               height: '100%'
             }}>
             <Offcanvas show={showSidebar} onHide={hideFilters}>
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title>Filters</Offcanvas.Title>
-              </Offcanvas.Header>
+              <Offcanvas.Header closeButton style={{
+                display: 'flex',
+                justifyContent: 'end'
+              }}/>
               <Offcanvas.Body>
                 <FilterBar
                 xs={12}

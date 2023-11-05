@@ -1,6 +1,9 @@
 import {useState} from "react";
 import auth from '../utils/auth';
 import { sendPost } from "../utils/requests";
+import { Form, Button, Container, Row, Col, Toast } from 'react-bootstrap';
+import AuthForm from "../components/AuthForm";
+import '../assets/css/auth.css';
 
 function Login() {
   // Initialize empty form
@@ -9,7 +12,8 @@ function Login() {
     password: '',
   });
 
-  const [error, setError] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Handle changing values in form
   const handleFormChange = (event) => {
@@ -29,35 +33,45 @@ function Login() {
         auth.login(token);
     }
     else if (response.data && response.data.message) {
-        setError(response.data.message);
+        setErrorMessage(response.data.message);
+        setShowToast(true);
     }
   }
 
-
   return (
-    <div className="App">
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}>
-        <h2>Login</h2>
-        <form onSubmit={handleFormSubmit} style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '500px',
-        }}>
-            <input name="email" value={formState.email} placeholder="Email" required onChange={handleFormChange}></input>
-            <input name="password" value={formState.password} placeholder="Password" required onChange={handleFormChange}></input>
-            <button type="submit">Submit</button>
-            {error && (
-                <div style={{color: 'red'}}>
-                    <p>{error}</p>
-                </div>
-            )}
-        </form>
-      </div>
-    </div>
+    <AuthForm
+    setShowToast={setShowToast}
+    showToast={showToast}
+    errorMessage={errorMessage}
+    >
+      <h1>Login</h1>
+      <Form onSubmit={handleFormSubmit}>
+      <Form.Group controlId="formBasicEmail">
+        <Form.Label>Email address</Form.Label>
+        <Form.Control
+          type="email"
+          placeholder="Enter email"
+          name="email"
+          value={formState.email}
+          onChange={handleFormChange}
+        />
+      </Form.Group>
+
+      <Form.Group controlId="formBasicPassword">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          type="password"
+          placeholder="Password"
+          name="password"
+          value={formState.password}
+          onChange={handleFormChange}
+        />
+      </Form.Group>
+        <Button variant="primary" type="submit" className="w-100 mt-3">
+          Submit
+        </Button>
+      </Form>
+    </AuthForm>
   );
 }
 
