@@ -234,95 +234,66 @@ dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400   5) import AuthForm from 
 dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  17)   const [showToast, setShowToast] = useState(false);
 dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  18)   const [errorMessage, setErrorMessage] = useState('');
 dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  39)             setErrorMessage(response.data.message);
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  45)   // return (
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  46)   //   <div className="App">
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  47)   //     <div style={{
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  48)   //       display: 'flex',
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  49)   //       flexDirection: 'column',
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  50)   //       alignItems: 'center',
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  51)   //     }}>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  52)   //       <h2>Signup</h2>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  53)   //       <form onSubmit={handleFormSubmit} style={{
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  54)   //         display: 'flex',
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  55)   //         flexDirection: 'column',
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  56)   //         width: '500px',
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  57)   //       }}>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  58)   //           <input name="firstName" value={formState.firstName} placeholder="First Name" required onChange={handleFormChange}></input>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  59)   //           <input name="lastName" value={formState.lastName} placeholder="Last Name" required onChange={handleFormChange}></input>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  60)   //           <input name="username" value={formState.username} placeholder="Username" required onChange={handleFormChange}></input>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  61)   //           <input name="email" value={formState.email} placeholder="Email" required onChange={handleFormChange}></input>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  62)   //           <input name="password" value={formState.password} placeholder="Password" required onChange={handleFormChange}></input>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  63)   //           <button type="submit">Submit</button>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  64)   //           {error && (
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  65)   //               <div style={{color: 'red'}}>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  66)   //                   <p>{error}</p>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  67)   //               </div>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  68)   //           )}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  69)   //       </form>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  70)   //     </div>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  71)   //   </div>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  72)   // );
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  73) 
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  75)     <AuthForm
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  76)     setShowToast={setShowToast}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  77)     showToast={showToast}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  78)     errorMessage={errorMessage}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  79)     >
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  80)       <h1>Sign Up</h1>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  81)       <Form onSubmit={handleFormSubmit} className="signup-form">
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  82)         <Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  83)           <Form.Label>First Name</Form.Label>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  84)           <Form.Control
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  85)             placeholder="Enter first name"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  86)             name="firstName"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  87)             value={formState.firstName}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  88)             onChange={handleFormChange}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  89)           />
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  90)         </Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  91)         <Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  92)           <Form.Label>Last Name</Form.Label>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  93)           <Form.Control
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  94)             placeholder="Enter last name"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  95)             name="lastName"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  96)             value={formState.lastName}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  45)     <AuthForm
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  46)     setShowToast={setShowToast}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  47)     showToast={showToast}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  48)     errorMessage={errorMessage}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  49)     >
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  50)       <h1>Sign Up</h1>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  51)       <Form onSubmit={handleFormSubmit} className="signup-form">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  52)         <Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  53)           <Form.Label>First Name</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  54)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  55)             placeholder="Enter first name"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  56)             name="firstName"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  57)             value={formState.firstName}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  58)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  59)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  60)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  61)         <Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  62)           <Form.Label>Last Name</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  63)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  64)             placeholder="Enter last name"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  65)             name="lastName"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  66)             value={formState.lastName}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  67)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  68)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  69)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  70)         <Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  71)           <Form.Label>Username</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  72)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  73)             placeholder="Enter username"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  74)             name="username"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  75)             value={formState.username}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  76)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  77)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  78)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  79)         <Form.Group controlId="formBasicEmail">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  80)           <Form.Label>Email address</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  81)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  82)             type="email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  83)             placeholder="Enter email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  84)             name="email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  85)             value={formState.email}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  86)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  87)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  88)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  89) 
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  90)         <Form.Group controlId="formBasicPassword">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  91)           <Form.Label>Password</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  92)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  93)             type="password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  94)             placeholder="Password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  95)             name="password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  96)             value={formState.password}
 dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  97)             onChange={handleFormChange}
 dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  98)           />
 dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  99)         </Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 100)         <Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 101)           <Form.Label>Username</Form.Label>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 102)           <Form.Control
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 103)             placeholder="Enter username"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 104)             name="username"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 105)             value={formState.username}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 106)             onChange={handleFormChange}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 107)           />
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 108)         </Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 109)         <Form.Group controlId="formBasicEmail">
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 110)           <Form.Label>Email address</Form.Label>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 111)           <Form.Control
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 112)             type="email"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 113)             placeholder="Enter email"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 114)             name="email"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 115)             value={formState.email}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 116)             onChange={handleFormChange}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 117)           />
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 118)         </Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 119) 
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 120)         <Form.Group controlId="formBasicPassword">
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 121)           <Form.Label>Password</Form.Label>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 122)           <Form.Control
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 123)             type="password"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 124)             placeholder="Password"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 125)             name="password"
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 126)             value={formState.password}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 127)             onChange={handleFormChange}
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 128)           />
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 129)         </Form.Group>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 130)         <Button variant="primary" type="submit" className="w-100 mt-3">
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 131)           Submit
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 132)         </Button>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 133)       </Form>
-dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 134)     </AuthForm>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 100)         <Button variant="primary" type="submit" className="w-100 mt-3">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 101)           Submit
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 102)         </Button>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 103)       </Form>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 104)     </AuthForm>
 
 
 ./frontend/src/pages/Login.js
