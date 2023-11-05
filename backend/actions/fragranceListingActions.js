@@ -66,6 +66,7 @@ async function getfragranceListings(req, res) {
 
         fragranceWhere[Op.and] = searchConditions;
     }
+
     const fragranceSubquery = {
         model: Fragrance,
         where: fragranceWhere
@@ -107,7 +108,8 @@ async function getfragranceListings(req, res) {
         include: [fragranceSubquery],
         offset: page * FRAGRANCE_QUERY_LIMIT,
         limit: FRAGRANCE_QUERY_LIMIT,
-        order: sortBy
+        order: sortBy,
+        subQuery: false
     });
 
     const listingsWithWatchlisted = fragranceListings.rows.map(f => {
