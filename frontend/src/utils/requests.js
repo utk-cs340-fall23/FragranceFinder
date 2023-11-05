@@ -44,3 +44,17 @@ export const sendPost = async (url, data) => {
 
     return await setData(res);
 }
+
+// Default method to send a DELETE request
+export const sendDelete = async (url, data) => {
+    const res = await fetch(url, {
+      method: 'DELETE',
+      body: JSON.stringify(data),
+      headers: {
+        ...getDefaultHeaders(),
+        'Content-Type': 'application/json',
+      }
+    })
+
+    return await setData(res);
+}

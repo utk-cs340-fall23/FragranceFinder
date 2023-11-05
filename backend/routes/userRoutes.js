@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { User } = require('../models');
-const { signToken, authMiddleware } = require('../utils/auth');
+const { signToken, validateToken } = require('../utils/auth');
 
 
 router.post('/', async (req, res) => {
@@ -27,8 +27,11 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/me', authMiddleware, async (req, res) => {
-    res.json(req.user);
+
+router.get('/validate-token', async (req, res) => {
+    res.json({
+        success: validateToken(req)
+    });
 })
 
 

@@ -1,4 +1,5 @@
 import decode from 'jwt-decode';
+import { sendGet } from './requests';
 
 class AuthService {
 
@@ -30,8 +31,22 @@ class AuthService {
         }
     }
 
+    async validateToken() {
+        if (!this.loggedIn()) {
+            return false;
+        }
+        const response = await sendGet('/api/users/validate-token/');
+        return (
+            response.ok && response.data?.success
+        );
+    }
+
     getToken() {
         return localStorage.getItem('id_token');
+    }
+
+    removeToken() {
+        localStorage.removeItem('id_token');
     }
 
     // "log in" the user by setting token in local storage
@@ -45,7 +60,7 @@ class AuthService {
     // "log out" the user by removing local storage token
     // and redirecting to home page
     logout() {
-        localStorage.removeItem('id_token');
+        this.removeToken();
         window.location.assign('/');
     }
 }

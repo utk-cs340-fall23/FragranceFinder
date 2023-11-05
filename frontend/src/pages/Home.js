@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Browsing from '../components/Browsing';
+import auth from '../utils/auth';
 
 const Home = () => {
+    const checkLoginStatus = async () => {
+        const validToken = await auth.validateToken();
+        if (!validToken) {
+            auth.removeToken();
+        }
+    }
+
+    useEffect(() => {
+        checkLoginStatus();
+    }, []);
+
     return (
         <div style={{
             height: '100vh',

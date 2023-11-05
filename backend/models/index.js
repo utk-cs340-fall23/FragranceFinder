@@ -7,14 +7,14 @@ const UserFragrance = require('./UserFragrance');
 // create associations
 User.belongsToMany(Fragrance, {
     through: UserFragrance,
-    as: 'watchlisted_fragrances',
+    as: 'watchlist',
     foreignKey: 'userId',
     onDelete: 'SET NULL'
 });
 
 Fragrance.belongsToMany(User, {
     through: UserFragrance,
-    as: 'watchlisted_fragrances',
+    as: 'watchlist',
     foreignKey: 'fragranceId',
     onDelete: 'SET NULL'
 });

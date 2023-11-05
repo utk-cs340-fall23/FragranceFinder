@@ -1,26 +1,13 @@
 const router = require('express').Router();
 const { fragranceListingActions } = require('../actions');
+const {attachUserMiddleware} = require('../utils/auth');
 
-router.get('/', async (req, res) => {
-    try {
-        await fragranceListingActions.getfragranceListings(req, res);
-    }
-    catch (err) {
-        res.json({
-            success: false
-        });
-    }
+router.get('/', attachUserMiddleware, async (req, res) => {
+    fragranceListingActions.getfragranceListings(req, res);
 });
 
 router.get('/search-defaults', async (req, res) => {
-    try {
-        await fragranceListingActions.getSearchDefaults(req, res);
-    }
-    catch (err) {
-        res.json({
-            success: false
-        });
-    }
+    fragranceListingActions.getSearchDefaults(req, res);
 });
 
 module.exports = router;

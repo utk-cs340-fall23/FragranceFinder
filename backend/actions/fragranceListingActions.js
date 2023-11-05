@@ -1,5 +1,4 @@
-const router = require('express').Router();
-const { FragranceListing, Fragrance } = require('../models');
+const { FragranceListing, Fragrance, User } = require('../models');
 const {Op} = require('sequelize');
 const sequelize = require('../config/db');
 const {Sequelize} = require('sequelize');
@@ -65,24 +64,44 @@ async function getfragranceListings(req, res) {
 
         fragranceWhere[Op.and] = searchConditions;
     }
+    const fragranceSubquery = {
+        model: Fragrance,
+        where: fragranceWhere
+    }
+
+    if (req.user) {
+        fragranceSubquery.include = [{
+            model: User,
+            as: 'watchlist',
+            through: {
+                attributes: []
+            },
+            attributes: ['id'],
+            where: {
+                id: req.user.id
+            },
+            required: false
+        }]
+    }
 
     // Get data and return
     const fragranceListings = await FragranceListing.findAndCountAll({
         where: fragranceListingWhere,
-        include: {
-            model: Fragrance,
-            where: fragranceWhere
-        },
+        include: [fragranceSubquery],
         offset: page * FRAGRANCE_QUERY_LIMIT,
         limit: FRAGRANCE_QUERY_LIMIT,
         order: sortBy
     });
 
+    const listingsWithWatchlisted = fragranceListings.rows.map(f => {
+        const plainFragrance = f.get({ plain: true });
+        plainFragrance.fragrance.watchlisted = !!f.fragrance.watchlist?.length;
+        return plainFragrance;
+    });
+
     res.json({
         success: true,
-        data: fragranceListings.rows.map(f => f.get({
-            plain: true
-        })),
+        data: listingsWithWatchlisted,
         totalCount: fragranceListings.count
     });
 };
