@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 import Card from 'react-bootstrap/Card';
 import Col from "react-bootstrap/Col";
@@ -6,6 +6,8 @@ import Button from "react-bootstrap/Button";
 import { FaFilter } from 'react-icons/fa';
 import InputGroup from 'react-bootstrap/InputGroup'
 import Form from "react-bootstrap/Form";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 function FragranceListings({
     xs,
@@ -14,10 +16,13 @@ function FragranceListings({
     useOffcanvasFilters,
     setSearchInput,
     loadMoreListings,
-    totalRows
+    totalRows,
+    sortBy,
+    setSortBy,
+    sortByOptions
 }){
     const tempSearchInput = useRef('');
-    const containerRef = useRef(null); // Ref for the scrollable container
+    const containerRef = useRef(null); // Ref for the scrollable container }
 
     const viewFragranceListing = (fragranceListing) => {
         window.open(fragranceListing.link, '_blank');
@@ -52,8 +57,18 @@ function FragranceListings({
                     onChange={(event) => tempSearchInput.current = event.target.value}
                     />
                     <Button type="submit" variant="outline-primary">
-                    Button
+                    Search
                     </Button>
+                    <DropdownButton
+                    variant="outline-secondary"
+                    title={`Sort By: ${sortBy.name}`}
+                    >
+                        {Object.values(sortByOptions).map((sortByOption, i) => (
+                            <Dropdown.Item  key={i} onClick={() => setSortBy(sortByOption)} active={sortByOption.name === sortBy.name}>
+                                {sortByOption.name}
+                            </Dropdown.Item>
+                        ))}
+                    </DropdownButton>
                 </InputGroup>
             </Form>
             <h4>Results ({totalRows}) {useOffcanvasFilters && (

@@ -9,7 +9,10 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 const SMALL_SCREEN_CUTOFF = 800;
 
 const Browsing = ({style}) => {
-    // Handle screen size changes with the next few variables/functions
+
+    /*
+    STATES
+    */
     const [useOffcanvasFilters, setUseOffcanvasFilters] = useState(
       window.innerWidth < SMALL_SCREEN_CUTOFF
     );
@@ -18,40 +21,78 @@ const Browsing = ({style}) => {
     const isFirstRender = useRef(true);
     const totalRows = useRef(0);
     const paginationPage = useRef(0);
+    const [showSidebar, setShowSidebar] = useState(false);
+    const [searchDefaults, setSearchDefaults] = useState({
+      maxPrice: 1000,
+      maxSize: 100,
+      brands: []
+    });
+    const sortByOptions = {
+      none: {
+        val: '',
+        name: 'None'
+      },
+      title_ASC: {
+          val: 'title,ASC',
+          name: 'Title (A -> Z)'
+      },
+      title_DESC: {
+        val: 'title,DESC',
+        name: 'Title (Z -> A)'
+      },
+      brand_ASC: {
+        val: 'brand,ASC',
+        name: 'Brand (A -> Z)'
+      },
+      brand_DESC: {
+        val: 'brand,DESC',
+        name: 'Brand (Z -> A)'
+      },
+      price_DESC: {
+          val: 'price,DESC',
+          name: 'Price (high -> low)'
+      },
+      price_ASC: {
+          val: 'price,ASC',
+          name: 'Price (low -> high)'
+      },
+      size_DESC: {
+          val: 'sizeoz,DESC',
+          name: 'Size (high -> low)'
+      },
+      size_ASC: {
+          val: 'sizeoz,ASC',
+          name: 'Size (low -> high)'
+      },
+    }
+    const [sortBy, setSortBy] = useState(sortByOptions.none);
+
+    const [defaultSearchObject, setDefaultSearchObject] = useState({
+      priceStart: 0,
+      priceEnd: searchDefaults.maxPrice,
+      sizeStart: 0,
+      sizeEnd: searchDefaults.maxSize,
+      brands: searchDefaults.brands,
+      gender: 'All',
+      sortBy: sortBy.val
+    });
+
+    const [searchObject, setSearchObject] = useState(defaultSearchObject);
+    const [fragranceListings, setFragranceListings] = useState([]);
+    const fragranceListingsRef = useRef(fragranceListings);
+
+    /*
+    FUNCTIONS
+    */
+    const showFilters = () => setShowSidebar(true);
+
+    const hideFilters = () => setShowSidebar(false);
 
     const updateScreenState = () => {
         setUseOffcanvasFilters(
             window.innerWidth < SMALL_SCREEN_CUTOFF
         );
     };
-
-    useEffect(() => {
-        window.addEventListener('resize', updateScreenState);
-
-        return () => {
-            window.removeEventListener('resize', updateScreenState);
-        }
-    }, []);
-
-    // Initialize variables related to searching
-    const [searchDefaults, setSearchDefaults] = useState({
-      maxPrice: 1000,
-      maxSize: 100,
-      brands: []
-    });
-
-    const [defaultSearchObject, setDefaultSearchObject] = useState({
-      price_start: 0,
-      price_end: searchDefaults.maxPrice,
-      size_start: 0,
-      size_end: searchDefaults.maxSize,
-      brands: searchDefaults.brands,
-      gender: 'All'
-    });
-
-    const [searchObject, setSearchObject] = useState(defaultSearchObject);
-    const [fragranceListings, setFragranceListings] = useState([]);
-    const fragranceListingsRef = useRef(fragranceListings);
 
     // Use searchObject to search for fragrances
     const searchFragrances = useCallback(async (params, page) => {
@@ -78,7 +119,7 @@ const Browsing = ({style}) => {
             setFragranceListings(fragranceListingsRef.current);
           }
       }
-  }, []);
+    }, []);
 
     const loadMoreListings = () => {
       if (fragranceListings.length < totalRows.current) {
@@ -101,16 +142,29 @@ const Browsing = ({style}) => {
 
       setSearchObject({
         ...searchObject,
-        price_end: newMaxPrice,
-        size_end: newMaxSize
+        priceEnd: newMaxPrice,
+        sizeEnd: newMaxSize
       });
 
       setDefaultSearchObject({
         ...defaultSearchObject,
-        price_end: newMaxPrice,
-        size_end: newMaxSize
+        priceEnd: newMaxPrice,
+        sizeEnd: newMaxSize
       });
     }
+
+    /*
+    EFFECTS
+    */
+    useEffect(() => {
+        window.addEventListener('resize', updateScreenState);
+
+        return () => {
+            window.removeEventListener('resize', updateScreenState);
+        }
+    }, []);
+
+
 
     // Get search defaults
     useEffect(() => {
@@ -122,11 +176,12 @@ const Browsing = ({style}) => {
       else {
         searchFragrances({
           ...searchObject,
-          searchInput: searchInput
+          searchInput: searchInput,
+          sortBy: sortBy.val
         });
       }
 
-    }, [searchInput]);
+    }, [searchInput, sortBy]);
 
 
     // Search fragrances again when defaultSearchObject is completed
@@ -137,12 +192,30 @@ const Browsing = ({style}) => {
       [defaultSearchObject]
     );
 
+    const filterBarProps = {
+      searchObject: searchObject,
+      setSearchObject: setSearchObject,
+      searchFragrances: searchFragrances,
+      defaultSearchObject: defaultSearchObject,
+      searchDefaults: searchDefaults,
+      useSidebarFilter: useOffcanvasFilters,
+      hideFilters: hideFilters
+    }
 
-    const [showSidebar, setShowSidebar] = useState(false);
+    const fragranceListingsProps = {
+      fragranceListings: fragranceListings,
+      showFilters: showFilters,
+      useOffcanvasFilters: useOffcanvasFilters,
+      setSearchInput: setSearchInput,
+      totalRows: totalRows.current,
+      loadMoreListings: loadMoreListings,
+      sortBy: sortBy,
+      setSortBy: setSortBy,
+      sortByOptions: sortByOptions
+    }
 
     if (useOffcanvasFilters) {
-      const showFilters = () => setShowSidebar(true);
-      const hideFilters = () => setShowSidebar(false);
+
 
       return (
           <Container style={style}>
@@ -157,24 +230,13 @@ const Browsing = ({style}) => {
               <Offcanvas.Body>
                 <FilterBar
                 xs={12}
-                searchObject={searchObject}
-                setSearchObject={setSearchObject}
-                searchFragrances={searchFragrances}
-                defaultSearchObject={defaultSearchObject}
-                searchDefaults={searchDefaults}
-                useSidebarFilter={useOffcanvasFilters}
-                hideFilters={hideFilters}
+                {...filterBarProps}
                 />
               </Offcanvas.Body>
             </Offcanvas>
               <FragranceListings
               xs={12}
-              fragranceListings={fragranceListings}
-              showFilters={showFilters}
-              useOffcanvasFilters={true}
-              setSearchInput={setSearchInput}
-              totalRows={totalRows.current}
-              loadMoreListings={loadMoreListings}
+              {...fragranceListingsProps}
               />
             </Row>
           </Container>
@@ -188,18 +250,11 @@ const Browsing = ({style}) => {
             }}>
               <FilterBar
               xs={4}
-              searchObject={searchObject}
-              setSearchObject={setSearchObject}
-              searchFragrances={searchFragrances}
-              defaultSearchObject={defaultSearchObject}
-              searchDefaults={searchDefaults}
+              {...filterBarProps}
               />
               <FragranceListings
               xs={8}
-              fragranceListings={fragranceListings}
-              setSearchInput={setSearchInput}
-              totalRows={totalRows.current}
-              loadMoreListings={loadMoreListings}
+              {...fragranceListingsProps}
               />
             </Row>
           </Container>

@@ -126,17 +126,17 @@ function FilterBar({
                         <Form.Group as={Row}>
                             <Col xs="6">
                                 <Form.Range
-                                name='price_start'
+                                name='priceStart'
                                 onChange={(event) => handleRangeChange(event, maxPrice)}
-                                value={getRangeValue(searchObject.price_start, maxPrice)}
+                                value={getRangeValue(searchObject.priceStart, maxPrice)}
                                 />
                             </Col>
                             <Col xs="6">
                                 <InputGroup className="mb-3">
                                     <InputGroup.Text>$</InputGroup.Text>
                                     <Form.Control
-                                    name='price_start'
-                                    value={searchObject.price_start}
+                                    name='priceStart'
+                                    value={searchObject.priceStart}
                                     onChange={handleFormChange}
                                     />
                                 </InputGroup>
@@ -146,17 +146,17 @@ function FilterBar({
                         <Form.Group as={Row}>
                             <Col xs="6">
                                 <Form.Range
-                                name='price_end'
+                                name='priceEnd'
                                 onChange={(event) => handleRangeChange(event, maxPrice)}
-                                value={getRangeValue(searchObject.price_end, maxPrice)}
+                                value={getRangeValue(searchObject.priceEnd, maxPrice)}
                                 />
                             </Col>
                             <Col xs="6">
                                 <InputGroup className="mb-3">
                                     <InputGroup.Text>$</InputGroup.Text>
                                     <Form.Control
-                                    name='price_end'
-                                    value={searchObject.price_end}
+                                    name='priceEnd'
+                                    value={searchObject.priceEnd}
                                     onChange={handleFormChange}
                                     />
                                 </InputGroup>
@@ -171,16 +171,16 @@ function FilterBar({
                         <Form.Group as={Row}>
                             <Col xs="6">
                                 <Form.Range
-                                name='size_start'
+                                name='sizeStart'
                                 onChange={(event) => handleRangeChange(event, maxSize)}
-                                value={getRangeValue(searchObject.size_start, maxSize)}
+                                value={getRangeValue(searchObject.sizeStart, maxSize)}
                                 />
                             </Col>
                             <Col xs="6">
                                 <InputGroup className="mb-3">
                                     <Form.Control
-                                    name='size_start'
-                                    value={searchObject.size_start}
+                                    name='sizeStart'
+                                    value={searchObject.sizeStart}
                                     onChange={handleFormChange}
                                     />
                                     <InputGroup.Text>oz</InputGroup.Text>
@@ -191,16 +191,16 @@ function FilterBar({
                         <Form.Group as={Row}>
                             <Col xs="6">
                                 <Form.Range
-                                name='size_end'
+                                name='sizeEnd'
                                 onChange={(event) => handleRangeChange(event, maxSize)}
-                                value={getRangeValue(searchObject.size_end, maxSize)}
+                                value={getRangeValue(searchObject.sizeEnd, maxSize)}
                                 />
                             </Col>
                             <Col xs="6">
                                 <InputGroup className="mb-3">
                                     <Form.Control
-                                    name='size_end'
-                                    value={searchObject.size_end}
+                                    name='sizeEnd'
+                                    value={searchObject.sizeEnd}
                                     onChange={handleFormChange}
                                     />
                                     <InputGroup.Text>oz</InputGroup.Text>
