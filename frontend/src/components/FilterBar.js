@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
+import auth from '../utils/auth';
 
 
 function FilterBar({
@@ -117,9 +118,18 @@ function FilterBar({
                 overflowY: 'auto',
                 overflowX: 'hidden'
             }}>
-                <Form.Group style={{margin: '12px 0px'}}>
-
-                </Form.Group>
+                {auth.loggedIn() && (
+                    <Form.Group style={{margin: '12px 0'}}>
+                        <Form.Label><strong>Watchlist</strong></Form.Label>
+                        <Form.Group>
+                            <Form.Select name='watchlisted' onChange={handleFormChange} value={searchObject.watchlisteed}>
+                                <option value=''>All</option>
+                                <option value={true}>Watchlisted Only</option>
+                                <option value={false}>Un-watchlisted Only</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Form.Group>
+                )}
                 <Form.Group>
                     <Form.Label><strong>Price</strong></Form.Label>
                     <Form.Group style={{marginLeft: '8px'}}>

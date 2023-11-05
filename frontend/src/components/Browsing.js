@@ -74,7 +74,8 @@ const Browsing = ({style}) => {
       sizeEnd: searchDefaults.maxSize,
       brands: searchDefaults.brands,
       gender: 'All',
-      sortBy: sortBy.val
+      sortBy: sortBy.val,
+      watchlisted: ''
     });
 
     const [searchObject, setSearchObject] = useState(defaultSearchObject);

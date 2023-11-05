@@ -1,6 +1,7 @@
 const fragranceData = require('../data/AllRecords.json');
 const {FragranceListing, Fragrance} = require('../models');
 const {cleanData} = require('../utils/parsing');
+const sequelize = require('../config/db');
 
 
 
@@ -49,4 +50,6 @@ const loadFragrances = async () => {
     console.log('Done.');
 }
 
-loadFragrances();
+sequelize.sync({ force: false, alter: true }).then(() => {
+    loadFragrances();
+});

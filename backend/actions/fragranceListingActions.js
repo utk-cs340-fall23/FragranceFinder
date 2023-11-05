@@ -1,4 +1,4 @@
-const { FragranceListing, Fragrance, User } = require('../models');
+const { FragranceListing, Fragrance, User, UserFragrance} = require('../models');
 const {Op} = require('sequelize');
 const sequelize = require('../config/db');
 const {Sequelize} = require('sequelize');
@@ -14,8 +14,10 @@ async function getfragranceListings(req, res) {
         brands,
         gender,
         searchInput,
-        page,
+        page
     } = req.query;
+
+    const watchlisted = req.query.watchlisted;
 
     let sortBy = req.query.sortBy ? req.query.sortBy.split(',') : undefined;
     if (sortBy) {
@@ -80,8 +82,23 @@ async function getfragranceListings(req, res) {
             where: {
                 id: req.user.id
             },
-            required: false
+            required: watchlisted == 'true'
         }]
+    }
+
+    // Define a subquery for non-watchlisted items if needed
+    if (watchlisted == 'false' && req.user) {
+         const entries = await UserFragrance.findAll({
+            attributes: ['fragranceId'],
+            where: {
+                userId: req.user.id
+            },
+            raw: true
+        });
+
+        fragranceWhere.id = {
+            [Op.notIn]: entries.map(entry => entry.fragranceId)
+        };
     }
 
     // Get data and return
