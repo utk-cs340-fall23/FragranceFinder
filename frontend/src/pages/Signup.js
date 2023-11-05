@@ -41,36 +41,6 @@ function Signup() {
     }
   }
 
-
-  // return (
-  //   <div className="App">
-  //     <div style={{
-  //       display: 'flex',
-  //       flexDirection: 'column',
-  //       alignItems: 'center',
-  //     }}>
-  //       <h2>Signup</h2>
-  //       <form onSubmit={handleFormSubmit} style={{
-  //         display: 'flex',
-  //         flexDirection: 'column',
-  //         width: '500px',
-  //       }}>
-  //           <input name="firstName" value={formState.firstName} placeholder="First Name" required onChange={handleFormChange}></input>
-  //           <input name="lastName" value={formState.lastName} placeholder="Last Name" required onChange={handleFormChange}></input>
-  //           <input name="username" value={formState.username} placeholder="Username" required onChange={handleFormChange}></input>
-  //           <input name="email" value={formState.email} placeholder="Email" required onChange={handleFormChange}></input>
-  //           <input name="password" value={formState.password} placeholder="Password" required onChange={handleFormChange}></input>
-  //           <button type="submit">Submit</button>
-  //           {error && (
-  //               <div style={{color: 'red'}}>
-  //                   <p>{error}</p>
-  //               </div>
-  //           )}
-  //       </form>
-  //     </div>
-  //   </div>
-  // );
-
   return (
     <AuthForm
     setShowToast={setShowToast}

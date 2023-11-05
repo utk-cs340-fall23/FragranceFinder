@@ -1,0 +1,420 @@
+./frontend/src/components/FilterBar.js
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400  97)             borderRight: '1px solid lightgray',
+a665bdcb (LakelonBailey 2023-10-27 08:19:38 -0400  98)             height: '100%',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 100)             {true && (
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 101)                 <h4>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 102)                     <span style={{
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 103)                         marginRight: '12px'
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 104)                     }}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 105)                         Filters
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 106)                     </span>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 113)                 </h4>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 114)             )}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 115)             <Form style={{
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 116)                 maxHeight: '95%',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 117)                 overflowY: 'auto'
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 118)             }}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 119)                 <Form.Group style={{margin: '12px 0px'}}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 120) 
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 217)                                 <option key={i} value={option}>{option}</option>
+
+
+./frontend/src/components/AuthForm.js
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  1) import {useState} from "react";
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  2) import auth from '../utils/auth';
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  3) import { sendPost } from "../utils/requests";
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  4) import { Form, Button, Container, Row, Col, Toast } from 'react-bootstrap';
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  5) import Navigation from "./Navigation";
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  6) import '../assets/css/auth.css';
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  7) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  8) function AuthForm({ setShowToast, showToast, errorMessage, children}) {
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  9)   return (
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 10)     <Container fluid className="auth-container">
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 11)         <Navigation />
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 12)       <Row className="justify-content-center align-items-center">
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 13)         <Col md={6} lg={4}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 14)           <div className="auth-box">
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 15)             {children}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 16)             <Toast
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 17)             onClose={() => setShowToast(false)}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 18)             show={showToast}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 19)             delay={3000}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 20)             autohide
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 21)             bg="warning"
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 22)             className="d-inline-block m-1 w-100"
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 23)             position="middle-center"
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 24)           >
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 25)              {/* <Toast.Header>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 26)               <strong className="me-auto">Login Error</strong>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 27)             </Toast.Header> */}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 28)             <Toast.Body><strong>{errorMessage}</strong></Toast.Body>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 29)           </Toast>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 30)           </div>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 31)         </Col>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 32)       </Row>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 33)     </Container>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 34)   );
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 35) }
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 36) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 37) export default AuthForm;
+
+
+./frontend/src/components/Browsing.js
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400   1) import React, {useEffect, useState, useRef, useCallback} from 'react';
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  17)     const [searchInput, setSearchInput] = useState('');
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  18)     const isFirstRender = useRef(true);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  19)     const totalRows = useRef(0);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  20)     const paginationPage = useRef(0);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  21) 
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  53)     const [fragranceListings, setFragranceListings] = useState([]);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  54)     const fragranceListingsRef = useRef(fragranceListings);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  57)     const searchFragrances = useCallback(async (params, page) => {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  58)       const {append, ...searchParams} = params;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  61)           `${url}?${new URLSearchParams({
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  62)             ...searchParams,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  63)             page: page || 0
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  64)           }).toString()}`
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  67)           totalRows.current = response.data.totalCount;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  68) 
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  69)           if (append) {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  70)             fragranceListingsRef.current = fragranceListingsRef.current.concat(
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  71)               response.data.data
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  72)             );
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  73)             setFragranceListings(fragranceListingsRef.current);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  74)           }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  75)           else {
+a894fa60 (LakelonBailey 2023-11-04 02:13:59 -0400  76)             paginationPage.current = 0;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  77)             fragranceListingsRef.current = response.data.data;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  78)             setFragranceListings(fragranceListingsRef.current);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  79)           }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  80)       }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  81)   }, []);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  82) 
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  83)     const loadMoreListings = () => {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  84)       if (fragranceListings.length < totalRows.current) {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  85)         paginationPage.current += 1;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  86)         searchFragrances({
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  87)           ...searchObject,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  88)           searchInput: searchInput,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  89)           append: true
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  90)         }, paginationPage.current);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 117)       if (isFirstRender.current) {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 118)         isFirstRender.current = false;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 119)         getSearchDefaults();
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 120)         return;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 121)       }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 122)       else {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 123)         searchFragrances({
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 124)           ...searchObject,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 125)           searchInput: searchInput
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 126)         });
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 127)       }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 128) 
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 129)     }, [searchInput]);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 130) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 153)               <Offcanvas.Header closeButton style={{
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 154)                 display: 'flex',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 155)                 justifyContent: 'end'
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 156)               }}/>
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 175)               setSearchInput={setSearchInput}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 176)               totalRows={totalRows.current}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 177)               loadMoreListings={loadMoreListings}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 197)               <FragranceListings
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 198)               xs={8}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 199)               fragranceListings={fragranceListings}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 200)               setSearchInput={setSearchInput}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 201)               totalRows={totalRows.current}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 202)               loadMoreListings={loadMoreListings}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 203)               />
+
+
+./frontend/src/components/Navigation.js
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  8) import '../assets/css/navbar.css';
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 17)     <Navbar className="navigation bg-body-tertiary" style={style}>
+
+
+./frontend/src/components/FragranceListings.js
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  1) import React, {useRef} from "react";
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  7) import InputGroup from 'react-bootstrap/InputGroup'
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  8) import Form from "react-bootstrap/Form";
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 10) function FragranceListings({
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 11)     xs,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 12)     fragranceListings,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 13)     showFilters,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 14)     useOffcanvasFilters,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 15)     setSearchInput,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 16)     loadMoreListings,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 17)     totalRows
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 18) }){
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 19)     const tempSearchInput = useRef('');
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 20)     const containerRef = useRef(null); // Ref for the scrollable container
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 26)     const handleSearchInputSubmit = (event) => {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 27)         event.preventDefault();
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 28)         setSearchInput(tempSearchInput.current);
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 29)         containerRef.current.scrollTop = 0;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 31) 
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 33)     // Scroll event handler
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 34)     const onScroll = () => {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 35)         const container = containerRef.current;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 36) 
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 37)         // Check if the user has scrolled to the bottom
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 38)         if (Math.round(container.scrollHeight - container.scrollTop) <= container.clientHeight) {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 39)             loadMoreListings();
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 40)         }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 41)     }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 47)             <Form onSubmit={handleSearchInputSubmit}>
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 48)                 <InputGroup className="mb-3">
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 49)                     <Form.Control
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 50)                     placeholder="Search"
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 51)                     aria-label="Search"
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 52)                     onChange={(event) => tempSearchInput.current = event.target.value}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 53)                     />
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 54)                     <Button type="submit" variant="outline-primary">
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 55)                     Button
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 56)                     </Button>
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 57)                 </InputGroup>
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 58)             </Form>
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 59)             <h4>Results ({totalRows}) {useOffcanvasFilters && (
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 62)             <div style={{maxHeight: '95%', overflowY: 'auto', paddingBottom: '100px'}} onScroll={onScroll} ref={containerRef}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 65)                     {(fragranceListings.length
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 72)                                     <Card.Subtitle>{f.fragrance.brand} ({f.fragrance.gender})</Card.Subtitle>
+
+
+./frontend/src/assets/css/auth.css
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  1) .auth-container {
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  2)     background-color: #f8f9fa;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  3)     margin: 0 !important;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  4)     padding: 0 !important;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  5)     width: 100vw;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  6)     border: 1px solid red;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  7)     height: 100vh;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  8)     overflow: hidden;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  9) }
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 10) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 11) .auth-box {
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 12)     padding: 2rem;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 13)     background: #ffffff;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 14)     border-radius: 15px;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 15)     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 16)     min-height: fit-content;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 17)     margin-top: 40%;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 18) }
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 19) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 20) .auth-box h1 {
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 21)     width: 100%;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 22)     text-align: center;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 23) }
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 24) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 25) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 26) .signup-form > * {
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 27)     margin: 12px 0;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 28) }
+
+
+./frontend/src/assets/css/navbar.css
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 1) .navigation {
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 2)   border-bottom: 1px solid lightgray;
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 3)   box-shadow: 0 0 5px rgba(0, 0, 0, .10);
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 4) }
+
+
+./frontend/src/pages/Home.js
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  7)         <div style={{
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  8)             height: '100vh',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  9)             overflow: 'hidden'
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 10)         }}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 12)                 height: '5%',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 16)                 height: '95%',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 20)         </div>
+
+
+./frontend/src/pages/Signup.js
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400   4) import { Form, Button, Container, Row, Col, Toast } from 'react-bootstrap';
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400   5) import AuthForm from "../components/AuthForm";
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  17)   const [showToast, setShowToast] = useState(false);
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  18)   const [errorMessage, setErrorMessage] = useState('');
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  39)             setErrorMessage(response.data.message);
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  45)   // return (
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  46)   //   <div className="App">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  47)   //     <div style={{
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  48)   //       display: 'flex',
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  49)   //       flexDirection: 'column',
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  50)   //       alignItems: 'center',
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  51)   //     }}>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  52)   //       <h2>Signup</h2>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  53)   //       <form onSubmit={handleFormSubmit} style={{
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  54)   //         display: 'flex',
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  55)   //         flexDirection: 'column',
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  56)   //         width: '500px',
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  57)   //       }}>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  58)   //           <input name="firstName" value={formState.firstName} placeholder="First Name" required onChange={handleFormChange}></input>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  59)   //           <input name="lastName" value={formState.lastName} placeholder="Last Name" required onChange={handleFormChange}></input>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  60)   //           <input name="username" value={formState.username} placeholder="Username" required onChange={handleFormChange}></input>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  61)   //           <input name="email" value={formState.email} placeholder="Email" required onChange={handleFormChange}></input>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  62)   //           <input name="password" value={formState.password} placeholder="Password" required onChange={handleFormChange}></input>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  63)   //           <button type="submit">Submit</button>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  64)   //           {error && (
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  65)   //               <div style={{color: 'red'}}>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  66)   //                   <p>{error}</p>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  67)   //               </div>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  68)   //           )}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  69)   //       </form>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  70)   //     </div>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  71)   //   </div>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  72)   // );
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  73) 
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  75)     <AuthForm
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  76)     setShowToast={setShowToast}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  77)     showToast={showToast}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  78)     errorMessage={errorMessage}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  79)     >
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  80)       <h1>Sign Up</h1>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  81)       <Form onSubmit={handleFormSubmit} className="signup-form">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  82)         <Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  83)           <Form.Label>First Name</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  84)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  85)             placeholder="Enter first name"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  86)             name="firstName"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  87)             value={formState.firstName}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  88)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  89)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  90)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  91)         <Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  92)           <Form.Label>Last Name</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  93)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  94)             placeholder="Enter last name"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  95)             name="lastName"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  96)             value={formState.lastName}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  97)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  98)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  99)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 100)         <Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 101)           <Form.Label>Username</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 102)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 103)             placeholder="Enter username"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 104)             name="username"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 105)             value={formState.username}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 106)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 107)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 108)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 109)         <Form.Group controlId="formBasicEmail">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 110)           <Form.Label>Email address</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 111)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 112)             type="email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 113)             placeholder="Enter email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 114)             name="email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 115)             value={formState.email}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 116)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 117)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 118)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 119) 
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 120)         <Form.Group controlId="formBasicPassword">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 121)           <Form.Label>Password</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 122)           <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 123)             type="password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 124)             placeholder="Password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 125)             name="password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 126)             value={formState.password}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 127)             onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 128)           />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 129)         </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 130)         <Button variant="primary" type="submit" className="w-100 mt-3">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 131)           Submit
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 132)         </Button>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 133)       </Form>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 134)     </AuthForm>
+
+
+./frontend/src/pages/Login.js
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  4) import { Form, Button, Container, Row, Col, Toast } from 'react-bootstrap';
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  5) import AuthForm from "../components/AuthForm";
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400  6) import '../assets/css/auth.css';
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 15)   const [showToast, setShowToast] = useState(false);
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 16)   const [errorMessage, setErrorMessage] = useState('');
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 36)         setErrorMessage(response.data.message);
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 37)         setShowToast(true);
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 42)     <AuthForm
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 43)     setShowToast={setShowToast}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 44)     showToast={showToast}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 45)     errorMessage={errorMessage}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 46)     >
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 47)       <h1>Login</h1>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 48)       <Form onSubmit={handleFormSubmit}>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 49)       <Form.Group controlId="formBasicEmail">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 50)         <Form.Label>Email address</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 51)         <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 52)           type="email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 53)           placeholder="Enter email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 54)           name="email"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 55)           value={formState.email}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 56)           onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 57)         />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 58)       </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 59) 
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 60)       <Form.Group controlId="formBasicPassword">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 61)         <Form.Label>Password</Form.Label>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 62)         <Form.Control
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 63)           type="password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 64)           placeholder="Password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 65)           name="password"
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 66)           value={formState.password}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 67)           onChange={handleFormChange}
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 68)         />
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 69)       </Form.Group>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 70)         <Button variant="primary" type="submit" className="w-100 mt-3">
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 71)           Submit
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 72)         </Button>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 73)       </Form>
+dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 74)     </AuthForm>
+
+
+./backend/utils/parsing.js
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  2) const genderMapper = {
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  3)     'All': "All",
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  4)     'Male': "Men's",
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  5)     'Female': "Women's",
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  6)     'Unisex': "Unisex",
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  7) }
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400 44)         data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400 51)         data.gender = genderMapper[data.gender] || null;
+
+
+./backend/scrapers/MasterScript.py
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 12) 
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 13) scrapers = [
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 14)     scrape_jomashop,
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 17) ]
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 18) 
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 21)         *[scraper(max_items) for scraper in scrapers]
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 35) result = asyncio.run(get_data(max_items_per_scraper))
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 37) gdf = pd.concat(list(map(
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 38)     lambda data: pd.read_json(data, orient='records'),
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 39)     result
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 40) )))
+
+
+./backend/routes/fragranceListingRoutes.js
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400   7) const FRAGRANCE_QUERY_LIMIT = 20;
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  16)         gender,
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  17)         searchInput,
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  18)         page
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  46)     // Filter based on searchInput if provided
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  47)     if (searchInput && searchInput.trim() !== '') {
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  48)         const searchTerms = searchInput.trim().split(' ');
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  49)         const searchConditions = searchTerms.map(term => ({
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  50)             [Op.or]: [
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  51)                 { brand: { [Op.like]: `%${term}%` } },
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  52)                 { title: { [Op.like]: `%${term}%` } },
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  53)                 { gender: { [Op.like]: `%${term}%` } }
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  54)             ]
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  55)         }));
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  56) 
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  57)         fragranceWhere[Op.and] = searchConditions;
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  58)     }
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  59) 
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  61)     const fragranceListings = await FragranceListing.findAndCountAll({
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  67)         offset: page * FRAGRANCE_QUERY_LIMIT,
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  68)         limit: FRAGRANCE_QUERY_LIMIT
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  73)         data: fragranceListings.rows.map(f => f.get({
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  75)         })),
+33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  76)         totalCount: fragranceListings.count
