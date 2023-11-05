@@ -122,7 +122,7 @@ function FilterBar({
                     <Form.Group style={{margin: '12px 0'}}>
                         <Form.Label><strong>Watchlist</strong></Form.Label>
                         <Form.Group>
-                            <Form.Select name='watchlisted' onChange={handleFormChange} value={searchObject.watchlisteed}>
+                            <Form.Select name='watchlisted' onChange={handleFormChange} value={searchObject.watchlisted}>
                                 <option value=''>All</option>
                                 <option value={true}>Watchlisted Only</option>
                                 <option value={false}>Un-watchlisted Only</option>

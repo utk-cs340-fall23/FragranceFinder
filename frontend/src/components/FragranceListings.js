@@ -88,7 +88,7 @@ function FragranceListings({
                     <Button variant="secondary" onClick={showFilters}><FaFilter /> Filters</Button>
                 )}</h4>
                 <div style={{maxHeight: '95%', overflowY: 'auto', paddingBottom: '100px'}} onScroll={onScroll} ref={containerRef}>
-                    <ResponsiveMasonry columnsCountBreakPoints={{0: 1, 400: 2, 1000: 3, 1500: 4}} style={{maxWidth: '95%'}}>
+                    <ResponsiveMasonry columnsCountBreakPoints={{0: 1, 400: 2, 1000: 3}} style={{maxWidth: '95%'}}>
                         <Masonry columnsCount={3} gutter="10px">
                             {(fragranceListings.length
                                 ? fragranceListings.map((f, i) => (

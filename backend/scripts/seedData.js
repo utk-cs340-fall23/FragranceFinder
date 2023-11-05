@@ -19,7 +19,6 @@ const getFragranceMapKey = (item) => {
 }
 
 const loadFragrances = async () => {
-    console.log('Destroying existing data...');
     await destroyExistingData();
     const data = cleanData(fragranceData);
 

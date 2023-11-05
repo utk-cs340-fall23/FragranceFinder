@@ -47,7 +47,7 @@ function FragranceListingCard({
             <Card.Body>
             <Card.Title>{fragrance.title} ({fragranceListing.sizeoz} oz)</Card.Title>
             <div style={{marginLeft: '8px'}}>
-                <Card.Subtitle>{fragrance.brand} ({fragrance.gender})</Card.Subtitle>
+                <Card.Subtitle>{fragrance.brand} ({fragrance.gender}) - {fragrance.concentration}</Card.Subtitle>
                 <Card.Subtitle style={{marginTop: '4px'}}><strong>${fragranceListing.price}</strong></Card.Subtitle>
             </div>
             {isWatchlisted
