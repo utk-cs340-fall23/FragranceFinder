@@ -124,12 +124,12 @@ const Browsing = ({style}) => {
 
     const loadMoreListings = () => {
       if (fragranceListings.length < totalRows.current) {
-        paginationPage.current += 1;
         searchFragrances({
           ...searchObject,
           searchInput: searchInput,
+          sortBy: sortBy.val,
           append: true
-        }, paginationPage.current);
+        }, ++paginationPage.current);
       }
     }
 

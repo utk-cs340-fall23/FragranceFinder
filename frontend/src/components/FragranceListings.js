@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
-import Card from 'react-bootstrap/Card';
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { FaFilter } from 'react-icons/fa';
@@ -11,6 +10,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import FragranceListingCard from "./FragranceListingCard";
 import Modal from "react-bootstrap/Modal";
 
+const PROGRESSIVE_LOADING_TRIGGER_DIFF = 20 // pixels;
 function FragranceListings({
     xs,
     fragranceListings,
@@ -50,7 +50,8 @@ function FragranceListings({
         const container = containerRef.current;
 
         // Check if the user has scrolled to the bottom
-        if (Math.round(container.scrollHeight - container.scrollTop) <= container.clientHeight) {
+        const diff = Math.round(container.scrollHeight - container.scrollTop) - container.clientHeight;
+        if (diff < PROGRESSIVE_LOADING_TRIGGER_DIFF) {
             loadMoreListings();
         }
     }
