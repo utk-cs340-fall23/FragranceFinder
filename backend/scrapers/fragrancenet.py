@@ -61,15 +61,22 @@ async def get_product_info(browser, df, brand, name, concentration, gender, link
     # Extract pricing and size details
     pricing_elements = product_soup.find_all('div', class_='variantText solo')
     index = 0
+    #print(f"Brand: {brand}")
+    #print(f"Name: {name}")
+    #print(f"Concentration: {concentration}")
+    #rint(f"Gender: {gender}")
     for pricing_element in pricing_elements:
         # Extract the product size in ounces from the data-dim-value attribute
         size_oz = pricing_element['data-dim-value']
         # Convert the size to milliliters using the conversion factor
         size_ml = float(size_oz) * 29.5735
-        # Add the details to the DataFrame
+        # Print the extracted data
         #print(f"Price: {prices[index]:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
+        # Add the details to the DataFrame
         df.loc[len(df)] = [brand, name, concentration, gender, size_oz, prices[index], link, photoLink]
         index += 1
+    #print(f"Link: {link}")
+    #print(f"Image: {photoLink}")
     #print('\n')
     # Close the product page
     await page.close()
@@ -88,14 +95,18 @@ async def scrape_fragrancenet(max_items):
             # Create a new page in the browser
             page = await context.new_page()
             """
+            headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+            }
             # Launch the Playwright browser
             browser = await p.chromium.launch(headless=False)
+            
             
             # Create a new page in the browser
             page = await browser.new_page()
             
-            # Iterate through the specified number of pages
-            for page_number in range(1, num_pages + 1):
+            page_number = 1
+            while df.shape[0] <= max_items:  # Infinite loop to keep scraping
                 # Generate the search URL for each page
                 search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
 
@@ -137,10 +148,10 @@ async def scrape_fragrancenet(max_items):
                     link = product.find('a', href=True)['href']
 
                     # Extract the savings information
-                    savings = product.find('span', class_='savings').text.strip()
+                    # savings = product.find('span', class_='savings').text.strip()
 
                     # Extract the ratings information
-                    ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
+                    # ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
                     
                     photoLink = product.find('img',src=True)['src']
                     
@@ -149,22 +160,16 @@ async def scrape_fragrancenet(max_items):
                         concentration = "EDT"
                     elif(concentration == "eau de parfum"):
                         concentration = "EDP"
-                    
-                    """
-                    # Print the extracted data
-                    print(f"Name: {name}")
-                    print(f"Brand: {brand}")
-                    print(f"Gender: {gender}")
-                    print(f"Link: {link}")
-                    print(f"Savings: {savings}")
-                    print(f"Ratings: {ratings}")
-                    print(f"Image: {photoLink}")
-                    print(f"Concentration: {concentration}")
-                    """
-                    
+                                     
                     df = await get_product_info(browser, df, brand, name, concentration, gender, link, photoLink)
-                    # print("\n")
                     
+                    # Check if the maximum number of items has been reached
+                    if df.shape[0] >= max_items:
+                        break
+                
+                # Increment the page number
+                page_number += 1
+                
             # Close the browser when done
             await browser.close()
     finally:
@@ -172,5 +177,4 @@ async def scrape_fragrancenet(max_items):
 
 # Run the main function
 if __name__ == "__main__":
-    asyncio.run(scrape_fragrancenet(0))
-    
+    asyncio.run(scrape_fragrancenet(100))
