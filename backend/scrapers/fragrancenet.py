@@ -64,7 +64,7 @@ async def get_product_info(browser, df, brand, name, concentration, gender, link
     #print(f"Brand: {brand}")
     #print(f"Name: {name}")
     #print(f"Concentration: {concentration}")
-    #rint(f"Gender: {gender}")
+    #print(f"Gender: {gender}")
     for pricing_element in pricing_elements:
         # Extract the product size in ounces from the data-dim-value attribute
         size_oz = pricing_element['data-dim-value']
@@ -103,11 +103,13 @@ async def scrape_fragrancenet(max_items):
             
             
             # Create a new page in the browser
-            page = await browser.new_page()
+            # page = await browser.new_page()
             
             page_number = 1
+            #for page_number in range(1, num_pages + 1):
             while df.shape[0] <= max_items:  # Infinite loop to keep scraping
                 # Generate the search URL for each page
+                page = await browser.new_page()
                 search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
 
                 # Navigate to the search URL
@@ -169,6 +171,7 @@ async def scrape_fragrancenet(max_items):
                 
                 # Increment the page number
                 page_number += 1
+                await page.close()
                 
             # Close the browser when done
             await browser.close()
@@ -177,4 +180,4 @@ async def scrape_fragrancenet(max_items):
 
 # Run the main function
 if __name__ == "__main__":
-    asyncio.run(scrape_fragrancenet(100))
+    asyncio.run(scrape_fragrancenet(50))
