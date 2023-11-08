@@ -2,6 +2,7 @@ const { Fragrance, FragranceListing, UserFragrance } = require("../models");
 const {cleanData} = require('../utils/parsing');
 const sequelize = require('../config/db');
 const {Sequelize} = require('sequelize');
+require('dotenv').config();
 
 function dbUpdate(maxItemsPerScraper) {
 	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
@@ -9,7 +10,8 @@ function dbUpdate(maxItemsPerScraper) {
 	maxItemsPerScraper = maxItemsPerScraper || '';
 
 	function scrapeWeb(){
-		const pyproc = spawn("python", ["./scrapers/MasterScript.py", maxItemsPerScraper], {
+		const pythonPath = process.env.PYTHON_PATH || 'python';
+		const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
 			maxBuffer: 1000 * 1000 * 10 // 10 MB
 		});
 
@@ -75,7 +77,7 @@ function dbUpdate(maxItemsPerScraper) {
 										}
 									});
 								}
-								
+
 								findSmallest(res.id, ret[i].sizeoz).then(query => {
 									if(query != null){
 										if(query.price > ret[i].price){
@@ -84,7 +86,7 @@ function dbUpdate(maxItemsPerScraper) {
 										}
 									}
 								});
-								
+
 							});
 						}
 					}).catch((error) => {

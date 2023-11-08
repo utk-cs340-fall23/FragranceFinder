@@ -26,7 +26,7 @@ function Navigation({style}) {
                Signed in as: {fullName}
              </Navbar.Text>
              <NavDropdown title={<FaCog />}>
-              <NavDropdown.Item href="#logout" onClick={auth.logout}>
+              <NavDropdown.Item href="#logout" onClick={() => auth.logout()}>
               Log Out
               </NavDropdown.Item>
             </NavDropdown>
