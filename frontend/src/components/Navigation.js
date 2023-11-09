@@ -9,9 +9,6 @@ import '../assets/css/navbar.css';
 
 function Navigation({style}) {
     const profile = auth.getProfile();
-    const fullName = profile ? (
-        `${profile.firstName} ${profile.lastName}`
-    ) : '';
 
   return (
     <Navbar className="navigation bg-body-tertiary" style={style}>
@@ -23,7 +20,7 @@ function Navigation({style}) {
         ? (
           <Nav className='me-auto'>
               <Navbar.Text>
-               Signed in as: {fullName}
+               Signed in as: {profile.firstName} {profile.lastName}
              </Navbar.Text>
              <NavDropdown title={<FaCog />}>
               <NavDropdown.Item href="#logout" onClick={() => auth.logout()}>

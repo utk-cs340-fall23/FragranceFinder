@@ -10,7 +10,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import FragranceListingCard from "./FragranceListingCard";
 import Modal from "react-bootstrap/Modal";
 
-const PROGRESSIVE_LOADING_TRIGGER_DIFF = 20 // pixels;
+const PROGRESSIVE_LOADING_TRIGGER_DIFF = 5; // pixels;
 function FragranceListings({
     xs,
     fragranceListings,

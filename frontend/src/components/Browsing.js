@@ -94,7 +94,7 @@ const Browsing = ({style}) => {
             window.innerWidth < SMALL_SCREEN_CUTOFF
         );
     };
-
+    console.log(fragranceListings.length);
     // Use searchObject to search for fragrances
     const searchFragrances = useCallback(async (params, page) => {
       const {append, ...searchParams} = params;
@@ -108,6 +108,8 @@ const Browsing = ({style}) => {
       if (response.ok && response.data.success) {
           totalRows.current = response.data.totalCount;
 
+          // If append is true, we are using progressive load and
+          // need to add new fragrances to existing fragrances
           if (append) {
             fragranceListingsRef.current = fragranceListingsRef.current.concat(
               response.data.data
@@ -122,6 +124,8 @@ const Browsing = ({style}) => {
       }
     }, []);
 
+    // If we haven't reached the total rows,
+    // query more fragrance listings
     const loadMoreListings = () => {
       if (fragranceListings.length < totalRows.current) {
         searchFragrances({
@@ -133,6 +137,7 @@ const Browsing = ({style}) => {
       }
     }
 
+    // Get the default values for the filters
     const getSearchDefaults = async () => {
       const response = await sendGet('/api/fragrance-listings/search-defaults');
       const searchDefaultsData = response.data.data;
@@ -165,9 +170,8 @@ const Browsing = ({style}) => {
         }
     }, []);
 
-
-
-    // Get search defaults
+    // We don't want to search fragrance listings on the
+    // first render since we want to get searchDefaults first
     useEffect(() => {
       if (isFirstRender.current) {
         isFirstRender.current = false;
@@ -193,6 +197,7 @@ const Browsing = ({style}) => {
       [defaultSearchObject]
     );
 
+    // Collect props
     const filterBarProps = {
       searchObject: searchObject,
       setSearchObject: setSearchObject,
@@ -216,8 +221,6 @@ const Browsing = ({style}) => {
     }
 
     if (useOffcanvasFilters) {
-
-
       return (
           <Container style={style}>
             <Row style={{

@@ -19,10 +19,12 @@ async function getfragranceListings(req, res) {
 
     const watchlisted = req.query.watchlisted;
 
+    // Parse the sortBy field. This involves determining which model (Fragrance or FragranceListing)
+    // that the field belongs to
     let sortBy = req.query.sortBy ? req.query.sortBy.split(',') : undefined;
     if (sortBy) {
-        const fragranceSearchByFields = Object.keys(Fragrance.getAttributes());
-        if (fragranceSearchByFields.includes(sortBy[0])) {
+        const fragranceFields = Object.keys(Fragrance.getAttributes());
+        if (fragranceFields.includes(sortBy[0])) {
             sortBy.unshift({model: Fragrance})
         }
         sortBy = [sortBy]
@@ -72,6 +74,8 @@ async function getfragranceListings(req, res) {
         where: fragranceWhere
     }
 
+    // If there's a valid user, filter on whether or
+    // not the fragrance is watchlisted
     if (req.user) {
         fragranceSubquery.include = [{
             model: User,
@@ -102,7 +106,8 @@ async function getfragranceListings(req, res) {
         };
     }
 
-    // Get data and return
+    // Call find and count since we need to know the total rows
+    // even though we're limiting results
     const fragranceListings = await FragranceListing.findAndCountAll({
         where: fragranceListingWhere,
         include: [fragranceSubquery],
@@ -126,6 +131,7 @@ async function getfragranceListings(req, res) {
 };
 
 async function getSearchDefaults(req, res) {
+
     // Aggregate max price and max size
     const aggregates = await sequelize.query(`
         SELECT

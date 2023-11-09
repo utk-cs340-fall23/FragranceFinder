@@ -1,10 +1,9 @@
-import React, {useRef, useState} from "react";
+import React from "react";
 import Card from 'react-bootstrap/Card';
 import Button from "react-bootstrap/Button";
-import Modal from 'react-bootstrap/Modal';
 import CardLink from 'react-bootstrap/CardLink';
 import auth from '../utils/auth';
-import { sendGet, sendPost, sendD, sendDelete} from "../utils/requests";
+import { sendPost, sendDelete} from "../utils/requests";
 
 function FragranceListingCard({
     fragranceListing,
@@ -15,7 +14,12 @@ function FragranceListingCard({
     const fragrance = fragranceListing.fragrance;
     const isWatchlisted = fragranceWatchlistedMapper[fragrance.id];
 
+    // Add a fragrance to watchlist and update
+    // its watchlisted state
     const addToWatchlist = async () => {
+
+        // Don't allow watchlisting if the user isn't logged
+        // in
         const isLoggedIn = await auth.validateToken();
         if (!isLoggedIn) {
             handleShowLoginModal();
@@ -31,6 +35,8 @@ function FragranceListingCard({
         }
     }
 
+    // Remove a fragrance from watchlist and update its watchlisted
+    // state.
     const removeFromWatchlist = async () => {
         const response = await sendDelete(`/api/watchlist/${fragrance.id}`);
         if (response.ok) {

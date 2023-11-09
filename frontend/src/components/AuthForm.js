@@ -1,7 +1,4 @@
-import {useState} from "react";
-import auth from '../utils/auth';
-import { sendPost } from "../utils/requests";
-import { Form, Button, Container, Row, Col, Toast } from 'react-bootstrap';
+import { Container, Row, Col, Toast } from 'react-bootstrap';
 import Navigation from "./Navigation";
 import '../assets/css/auth.css';
 
@@ -22,9 +19,6 @@ function AuthForm({ setShowToast, showToast, errorMessage, children}) {
             className="d-inline-block m-1 w-100"
             position="middle-center"
           >
-             {/* <Toast.Header>
-              <strong className="me-auto">Login Error</strong>
-            </Toast.Header> */}
             <Toast.Body><strong>{errorMessage}</strong></Toast.Body>
           </Toast>
           </div>

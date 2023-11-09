@@ -4,6 +4,8 @@ import Browsing from '../components/Browsing';
 import auth from '../utils/auth';
 
 const Home = () => {
+
+    // Validate token at first page opening
     const checkLoginStatus = async () => {
         const validToken = await auth.validateToken();
         if (!validToken) {

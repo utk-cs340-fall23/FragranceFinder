@@ -1,22 +1,15 @@
 const {UserFragrance} = require('../models');
 
 async function addFragranceToWatchlist(req, res) {
-    const existingItem = await UserFragrance.findOne({
+    const [item, _] = await UserFragrance.findCreateFind({
         where: {
             fragranceId: req.params.fragranceId,
             userId: req.user.id
         }
     });
 
-    if (!existingItem) {
-        await UserFragrance.create({
-            fragranceId: req.params.fragranceId,
-            userId: req.user.id
-        });
-    }
-
     res.json({
-        success: true
+        success: !!item
     });
 }
 

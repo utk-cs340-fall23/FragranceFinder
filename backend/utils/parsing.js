@@ -48,7 +48,7 @@ function cleanData(data) {
 
         // Get site
         data.site = extractDomain(data.link);
-        data.gender = genderMapper[data.gender] || null;
+        data.gender = genderMapper[data.gender] || data.gender;
         return data;
     });
 }

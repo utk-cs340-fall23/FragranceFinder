@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const secret = process.env.JWT_SECRET;
-const expiration = '2h';
 
 function getTokenFromRequest(req) {
+
   // Allows token to be sent via req.body, req.query, or headers
   let token = req.headers.authorization || req.body?.token || req.query?.token;
 
