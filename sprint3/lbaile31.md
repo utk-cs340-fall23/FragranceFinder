@@ -1,23 +1,28 @@
-# Sprint 2
+# Sprint 3
 Name: Lakelon Bailey:
 GitHub username: LakelonBailey
 Project: Fragrance Finder
 
 ## What you planned to do:
-* Construct the basic frontend interface/structure
-* Create filter bar skeleton
+* Add the ability to sort fragrance results.
+* Add a general search bar for fragrance browsing.
+* Add the ability to add/remove items from watchlist.
+* Add the ability to view watchlisted/un-watchlisted items.
 
 # What you did not do:
 * N/A
 
 # What problems you encountered
-* Some data type conversion miscommunications.
-* It was challenging to make all web scrapers produce similar results.
+* N/A
 
 # Issues Worked on:
-* [#34](https://github.com/utk-cs340-fall23/FragranceFinder/issues/34) Creating skeleton for searching/filtering fragrances using React Bootstrap
-* [#42](https://github.com/utk-cs340-fall23/FragranceFinder/issues/42) Create API endpoint for fragrance searching/filtering
+* [#13](https://github.com/utk-cs340-fall23/FragranceFinder/issues/13) Create search bar
 * [#43](https://github.com/utk-cs340-fall23/FragranceFinder/issues/43) Create API endpoint for determining search defaults
+* [#45](https://github.com/utk-cs340-fall23/FragranceFinder/issues/45) Style sign in page
+* [#46](https://github.com/utk-cs340-fall23/FragranceFinder/issues/46) Style sign up page
+* [#55](https://github.com/utk-cs340-fall23/FragranceFinder/issues/55) Add ability to sort fragrance browsing results
+* [#56](https://github.com/utk-cs340-fall23/FragranceFinder/issues/56) Add ability to add/remove items from watchlist
+* [#57](https://github.com/utk-cs340-fall23/FragranceFinder/issues/57) Add ability to filter watchlisted/un-watchlisted items
 
 # Files you worked on
 * frontend/src/components/FragranceListingCard.js
@@ -48,8 +53,15 @@ Project: Fragrance Finder
 * backend/utils/dbUpdater.js
 
 # What you accomplished
-I created the user interface and backend API endpoints necessary for users to filter and browse fragrances.
-- Users are able to filter on brand, gender, price range, and size range.
-- Users are able to scroll through fragrance listings and view the fragrances on the original site.
+Main tasks:
+- I added the ability to sort fragrance results on 8 different field and direction combinations.
+- I implemented a search bar for fragrance browsing that searches key words against brand, title, and gender.
+- I added the ability for users to add/remove items from their watchlist from the browsing interface.
+- I added the ability for users to filter fragrances on watchlisted status if they are logged in.
 
-I also helped in small ways with other aspects of the application, such as refining database models/structures and helping resolve issues with web scraping and data management.
+Additional tasks:
+- I improved state management/performance across a few existing components.
+- I styled the login and signup pages with react-bootstrap components.
+- I improved file structure by separating actions from routes.
+
+Overall, I accomplished the completion of all MVP functionality associated with the web application. This encompasses almost all of my responsibility for the project, as I decided to work on the web application while the others created scrapers for all the websites. In the final sprint, I plan on improving styling and frontend state management/performance. I also plan on helping out the team in finishing their tasks if needed.
