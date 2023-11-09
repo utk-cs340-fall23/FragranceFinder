@@ -33,7 +33,7 @@ async function processData(data) {
     const newLowestPrices = {};
 
     console.log('Processing fragrances...');
-    for (let newFragrance of data){
+    for (let newFragrance of data) {
 
         // Get existing Fragrance
         const [fragrance, fragranceCreated] = await Fragrance.findCreateFind({
@@ -153,6 +153,24 @@ async function processData(data) {
         // Email
     }
 }
+function scrapeWeb(){
+    const pythonPath = process.env.PYTHON_PATH || 'python';
+
+    console.log('Scraping fragrances...');
+    const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
+        maxBuffer: 1000 * 1000 * 10 // 10 MB
+    });
+
+    let output = '';
+    pyproc.stdout.on('data', (data) => {
+        output += data.toString();
+    });
+
+    pyproc.stdout.on("end", async (data) => {
+        await processData(cleanData(JSON.parse(output)));
+    });
+}
+
 async function dbUpdate(maxItemsPerScraper) {
     // const data = require('../data/AllRecords.json');
     // await processData(cleanData(data));
@@ -160,24 +178,6 @@ async function dbUpdate(maxItemsPerScraper) {
     // https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
     const spawn = require("child_process").spawn;
     maxItemsPerScraper = maxItemsPerScraper || '';
-
-    function scrapeWeb(){
-        const pythonPath = process.env.PYTHON_PATH || 'python';
-
-        console.log('Scraping fragrances...');
-        const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
-            maxBuffer: 1000 * 1000 * 10 // 10 MB
-        });
-
-        let output = '';
-        pyproc.stdout.on('data', (data) => {
-            output += data.toString();
-        });
-
-        pyproc.stdout.on("end", async (data) => {
-            await processData(cleanData(JSON.parse(output)));
-        });
-    }
 
     scrapeWeb();
 }
