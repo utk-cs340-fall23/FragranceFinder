@@ -424,79 +424,80 @@ f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 129)         </>
 
 
 ./frontend/src/components/FragranceListingCard.js
-9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500  1) import React from "react";
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  2) import Card from 'react-bootstrap/Card';
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  3) import Button from "react-bootstrap/Button";
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  4) import CardLink from 'react-bootstrap/CardLink';
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  5) import auth from '../utils/auth';
-9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500  6) import { sendPost, sendDelete} from "../utils/requests";
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  7) 
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  8) function FragranceListingCard({
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  9)     fragranceListing,
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 10)     handleShowLoginModal,
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 11)     fragranceWatchlistedMapper,
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 12)     setFragranceWatchlistedMapper
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 13) }){
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 14)     const fragrance = fragranceListing.fragrance;
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 15)     const isWatchlisted = fragranceWatchlistedMapper[fragrance.id];
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 16) 
-9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 17)     // Add a fragrance to watchlist and update
-9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 18)     // its watchlisted state
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 19)     const addToWatchlist = async () => {
-9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 20) 
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 22)         const isLoggedIn = await auth.validateToken();
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 23)         if (!isLoggedIn) {
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 24)             handleShowLoginModal();
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 25)             return;
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 26)         }
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 27) 
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 28)         const response = await sendPost(`/api/watchlist/${fragrance.id}`);
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 29)         if (response.ok) {
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 30)             setFragranceWatchlistedMapper({
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 31)                 ...fragranceWatchlistedMapper,
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 32)                 [fragrance.id]: true
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 33)             });
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 34)         }
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 35)     }
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 36) 
-9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 37)     // Remove a fragrance from watchlist and update its watchlisted
-9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 38)     // state.
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 39)     const removeFromWatchlist = async () => {
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 40)         const response = await sendDelete(`/api/watchlist/${fragrance.id}`);
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 41)         if (response.ok) {
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 42)             setFragranceWatchlistedMapper({
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 43)                 ...fragranceWatchlistedMapper,
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 44)                 [fragrance.id]: false
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 45)             });
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 46)         }
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 47)     }
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 48) 
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 49)     return (
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 50)         <Card className={isWatchlisted ? 'border-info' : ''}>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 51)             <Card.Img  style={{cursor: 'pointer'}} variant="top" src={fragrance.photoLink} onClick={() => window.open(fragranceListing.link, '_blank')} />
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 52)             <Card.Body>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 53)             <Card.Title>{fragrance.title} ({fragranceListing.sizeoz} oz)</Card.Title>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 54)             <div style={{marginLeft: '8px'}}>
-79a90afe (LakelonBailey     2023-11-05 18:09:36 -0500 55)                 <Card.Subtitle>{fragrance.brand} ({fragrance.gender}) - {fragrance.concentration}</Card.Subtitle>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 56)                 <Card.Subtitle style={{marginTop: '4px'}}><strong>${fragranceListing.price}</strong></Card.Subtitle>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 57)             </div>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 58)             {isWatchlisted
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 59)             ? (
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 60)                 <Button style={{marginTop: '12px'}} size="sm" variant="danger" onClick={removeFromWatchlist}>Remove from watchlist</Button>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 61)             )
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 62)             : (
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 63)                 <Button style={{marginTop: '12px'}} size="sm" variant="info" onClick={addToWatchlist}>Add to watchlist</Button>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 64)             )
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 65)             }
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 66)             <div style={{marginTop: '12px'}}>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 67)                 <CardLink href={fragranceListing.link} target="_blank">See on {fragranceListing.site.replace('www.', '')}</CardLink>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 68)             </div>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 69)             </Card.Body>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 70)         </Card>
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 71)     )
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 72) };
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 73) 
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 74) export default FragranceListingCard;
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  1) import React from "react";
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  2) import Card from 'react-bootstrap/Card';
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  3) import Button from "react-bootstrap/Button";
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  4) import CardLink from 'react-bootstrap/CardLink';
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  5) import auth from '../utils/auth';
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  6) import { sendPost, sendDelete} from "../utils/requests";
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  7) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  8) function FragranceListingCard({
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  9)     fragranceListing,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 10)     handleShowLoginModal,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 11)     fragranceWatchlistedMapper,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 12)     setFragranceWatchlistedMapper
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 13) }){
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 14)     const fragrance = fragranceListing.fragrance;
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 15)     const isWatchlisted = fragranceWatchlistedMapper[fragrance.id];
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 16) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 17)     // Add a fragrance to watchlist and update
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 18)     // its watchlisted state
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 19)     const addToWatchlist = async () => {
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 20) 
+5b492b8b (LakelonBailey 2023-11-09 10:49:21 -0500 21)         // Don't allow watchlisting if the user isn't logged in
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 22)         const isLoggedIn = await auth.validateToken();
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 23)         if (!isLoggedIn) {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 24)             handleShowLoginModal();
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 25)             return;
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 26)         }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 27) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 28)         const response = await sendPost(`/api/watchlist/${fragrance.id}`);
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 29)         if (response.ok) {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 30)             setFragranceWatchlistedMapper({
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 31)                 ...fragranceWatchlistedMapper,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 32)                 [fragrance.id]: true
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 33)             });
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 34)         }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 35)     }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 36) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 37)     // Remove a fragrance from watchlist and update its watchlisted
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 38)     // state.
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 39)     const removeFromWatchlist = async () => {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 40)         const response = await sendDelete(`/api/watchlist/${fragrance.id}`);
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 41)         if (response.ok) {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 42)             setFragranceWatchlistedMapper({
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 43)                 ...fragranceWatchlistedMapper,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 44)                 [fragrance.id]: false
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 45)             });
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 46)         }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 47)     }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 48) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 49)     return (
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 50)         <Card className={isWatchlisted ? 'border-info' : ''}>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 51)             <Card.Img  style={{cursor: 'pointer'}} variant="top" src={fragrance.photoLink} onClick={() => window.open(fragranceListing.link, '_blank')} />
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 52)             <Card.Body>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 53)             <Card.Title>{fragrance.title} ({fragranceListing.sizeoz} oz)</Card.Title>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 54)             <div style={{marginLeft: '8px'}}>
+79a90afe (LakelonBailey 2023-11-05 18:09:36 -0500 55)                 <Card.Subtitle>{fragrance.brand} ({fragrance.gender}) - {fragrance.concentration}</Card.Subtitle>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 56)                 <Card.Subtitle style={{marginTop: '4px'}}><strong>${fragranceListing.price}</strong></Card.Subtitle>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 57)             </div>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 58)             {isWatchlisted
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 59)             ? (
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 60)                 <Button style={{marginTop: '12px'}} size="sm" variant="danger" onClick={removeFromWatchlist}>Remove from watchlist</Button>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 61)             )
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 62)             : (
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 63)                 <Button style={{marginTop: '12px'}} size="sm" variant="info" onClick={addToWatchlist}>Add to watchlist</Button>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 64)             )
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 65)             }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 66)             <div style={{marginTop: '12px'}}>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 67)                 <CardLink href={fragranceListing.link} target="_blank">See on {fragranceListing.site.replace('www.', '')}</CardLink>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 68)             </div>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 69)             </Card.Body>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 70)         </Card>
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 71)     )
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 72) };
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 73) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 74) export default FragranceListingCard;
 
 
 ./frontend/src/assets/css/auth.css
