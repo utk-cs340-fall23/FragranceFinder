@@ -1,16 +1,16 @@
 # William Duff
 # This program scrapes men's and women's fragrance information from venbafragrance.com
-# Last updated 11/8/2023
+# Last updated 11/09/2023
 
 import asyncio
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
 
-async def scrapeVenba():
+async def scrape_venba(max_items):
     async with async_playwright() as p:
         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
-        browser = await p.chromium.launch(headless = False)
+        browser = await p.chromium.launch()
         page = await browser.new_page()
         
         # Men's Fragrances from Venba Fragrance
@@ -290,4 +290,4 @@ async def scrapeVenba():
         return df.to_json(orient="columns")
         
 if __name__ == "__main__":
-    asyncio.run(scrapeVenba())
+    asyncio.run(scrape_venba())

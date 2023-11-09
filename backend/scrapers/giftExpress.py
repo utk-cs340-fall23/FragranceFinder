@@ -1,13 +1,13 @@
 # William Duff
 # This program scrapes men's and women's fragrance information from giftexpress.com
-# Last updated 10/25/2023
+# Last updated 11/09/2023
 
 import asyncio
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
 
-async def scrapeGiftExpress():
+async def scrape_giftexpress(max_items):
     async with async_playwright() as p:
         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
         browser = await p.chromium.launch()
@@ -307,4 +307,4 @@ async def scrapeGiftExpress():
         return df.to_json(orient="columns")
 
 if __name__ == "__main__":
-    asyncio.run(scrapeGiftExpress())
+    asyncio.run(scrape_giftexpress())

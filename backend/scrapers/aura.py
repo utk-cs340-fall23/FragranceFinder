@@ -1,13 +1,13 @@
 # William Duff
 # This program scrapes men's and women's fragrance information from aurafragrance.com
-# Last updated 10/25/2023
+# Last updated 11/09/2023
 
 import asyncio
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
 
-async def scrapeAura():
+async def scrape_aura(max_items):
     async with async_playwright() as p:
         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
         browser = await p.chromium.launch()
@@ -346,4 +346,4 @@ async def scrapeAura():
         return df.to_json(orient="columns")
         
 if __name__ == "__main__":
-    asyncio.run(scrapeAura())
+    asyncio.run(scrape_aura())
