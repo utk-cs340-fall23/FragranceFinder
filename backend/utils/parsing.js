@@ -12,6 +12,10 @@ function extractPrice(str) {
     return parseFloat(str.replace(/[^0-9.]/g, ''));
 }
 
+function isEmptyFragrance(newFragrance) {
+    return newFragrance.brand == "N/A" || newFragrance.title == "N/A" || newFragrance.concentration == "N/A" || newFragrance.gender == "N/A";
+}
+
 
 // Use JavaScript's URL builder to parse hostname
 function extractDomain(url) {
@@ -30,9 +34,9 @@ function extractFloat(str) {
 }
 
 function cleanData(data) {
-    return data.filter(item => item.title != 'N/A').map(item => {
-        const {size, ...data} = item;
-
+    return data.filter(item => !isEmptyFragrance(item)).map(item => {
+        let {size, ...data} = item;
+        size = size.toString();
         // Designate size
         if (size.includes('oz')) {
             data.sizeoz = extractFloat(size);
@@ -44,6 +48,7 @@ function cleanData(data) {
         data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
 
         // Parse price string
+        data.price = data.price.toString();
         data.price = extractFloat(data.price);
 
         // Get site
