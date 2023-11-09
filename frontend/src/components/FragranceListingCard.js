@@ -18,8 +18,7 @@ function FragranceListingCard({
     // its watchlisted state
     const addToWatchlist = async () => {
 
-        // Don't allow watchlisting if the user isn't logged
-        // in
+        // Don't allow watchlisting if the user isn't logged in
         const isLoggedIn = await auth.validateToken();
         if (!isLoggedIn) {
             handleShowLoginModal();

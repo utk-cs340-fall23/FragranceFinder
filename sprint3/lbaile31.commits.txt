@@ -88,43 +88,37 @@ c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 228)                          
 
 
 ./frontend/src/components/AuthForm.js
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  1) import {useState} from "react";
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  2) import auth from '../utils/auth';
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  3) import { sendPost } from "../utils/requests";
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  4) import { Form, Button, Container, Row, Col, Toast } from 'react-bootstrap';
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  5) import Navigation from "./Navigation";
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  6) import '../assets/css/auth.css';
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  7) 
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  8) function AuthForm({ setShowToast, showToast, errorMessage, children}) {
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  9)   return (
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 10)     <Container fluid className="auth-container">
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 11)         <Navigation />
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 12)       <Row className="justify-content-center align-items-center">
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 13)         <Col md={6} lg={4}>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 14)           <div className="auth-box">
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 15)             {children}
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 16)             <Toast
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 17)             onClose={() => setShowToast(false)}
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 18)             show={showToast}
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 19)             delay={3000}
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 20)             autohide
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 21)             bg="warning"
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 22)             className="d-inline-block m-1 w-100"
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 23)             position="middle-center"
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 24)           >
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 25)              {/* <Toast.Header>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 26)               <strong className="me-auto">Login Error</strong>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 27)             </Toast.Header> */}
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 28)             <Toast.Body><strong>{errorMessage}</strong></Toast.Body>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 29)           </Toast>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 30)           </div>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 31)         </Col>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 32)       </Row>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 33)     </Container>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 34)   );
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 35) }
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 36) 
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 37) export default AuthForm;
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  1) import { Container, Row, Col, Toast } from 'react-bootstrap';
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  2) import Navigation from "./Navigation";
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  3) import '../assets/css/auth.css';
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  4) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  5) function AuthForm({ setShowToast, showToast, errorMessage, children}) {
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  6)   return (
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  7)     <Container fluid className="auth-container">
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  8)         <Navigation />
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  9)       <Row className="justify-content-center align-items-center">
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 10)         <Col md={6} lg={4}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 11)           <div className="auth-box">
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 12)             {children}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 13)             <Toast
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 14)             onClose={() => setShowToast(false)}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 15)             show={showToast}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 16)             delay={3000}
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 17)             autohide
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 18)             bg="warning"
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 19)             className="d-inline-block m-1 w-100"
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 20)             position="middle-center"
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 21)           >
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 22)             <Toast.Body><strong>{errorMessage}</strong></Toast.Body>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 23)           </Toast>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 24)           </div>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 25)         </Col>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 26)       </Row>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 27)     </Container>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 28)   );
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 29) }
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 30) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 31) export default AuthForm;
 
 
 ./frontend/src/components/Browsing.js
@@ -198,7 +192,7 @@ c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  83)     const fragranceListin
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  94)             window.innerWidth < SMALL_SCREEN_CUTOFF
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  95)         );
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  96)     };
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  97) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  97)     console.log(fragranceListings.length);
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  99)     const searchFragrances = useCallback(async (params, page) => {
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 100)       const {append, ...searchParams} = params;
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 103)           `${url}?${new URLSearchParams({
@@ -207,98 +201,104 @@ c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 105)             page: page ||
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 106)           }).toString()}`
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 109)           totalRows.current = response.data.totalCount;
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 110) 
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 111)           if (append) {
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 112)             fragranceListingsRef.current = fragranceListingsRef.current.concat(
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 113)               response.data.data
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 114)             );
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 115)             setFragranceListings(fragranceListingsRef.current);
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 116)           }
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 117)           else {
-a894fa60 (LakelonBailey 2023-11-04 02:13:59 -0400 118)             paginationPage.current = 0;
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 119)             fragranceListingsRef.current = response.data.data;
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 120)             setFragranceListings(fragranceListingsRef.current);
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 121)           }
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 122)       }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 123)     }, []);
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 124) 
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 125)     const loadMoreListings = () => {
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 126)       if (fragranceListings.length < totalRows.current) {
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 127)         searchFragrances({
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 128)           ...searchObject,
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 129)           searchInput: searchInput,
-e7935b4b (LakelonBailey 2023-11-07 10:49:12 -0500 130)           sortBy: sortBy.val,
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 131)           append: true
-e7935b4b (LakelonBailey 2023-11-07 10:49:12 -0500 132)         }, ++paginationPage.current);
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 146)         priceEnd: newMaxPrice,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 147)         sizeEnd: newMaxSize
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 152)         priceEnd: newMaxPrice,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 153)         sizeEnd: newMaxSize
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 157)     /*
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 158)     EFFECTS
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 159)     */
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 160)     useEffect(() => {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 161)         window.addEventListener('resize', updateScreenState);
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 162) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 163)         return () => {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 164)             window.removeEventListener('resize', updateScreenState);
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 165)         }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 166)     }, []);
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 111)           // If append is true, we are using progressive load and
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 112)           // need to add new fragrances to existing fragrances
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 113)           if (append) {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 114)             fragranceListingsRef.current = fragranceListingsRef.current.concat(
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 115)               response.data.data
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 116)             );
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 117)             setFragranceListings(fragranceListingsRef.current);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 118)           }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 119)           else {
+a894fa60 (LakelonBailey 2023-11-04 02:13:59 -0400 120)             paginationPage.current = 0;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 121)             fragranceListingsRef.current = response.data.data;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 122)             setFragranceListings(fragranceListingsRef.current);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 123)           }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 124)       }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 125)     }, []);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 126) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 127)     // If we haven't reached the total rows,
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 128)     // query more fragrance listings
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 129)     const loadMoreListings = () => {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 130)       if (fragranceListings.length < totalRows.current) {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 131)         searchFragrances({
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 132)           ...searchObject,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 133)           searchInput: searchInput,
+e7935b4b (LakelonBailey 2023-11-07 10:49:12 -0500 134)           sortBy: sortBy.val,
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 135)           append: true
+e7935b4b (LakelonBailey 2023-11-07 10:49:12 -0500 136)         }, ++paginationPage.current);
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 140)     // Get the default values for the filters
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 151)         priceEnd: newMaxPrice,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 152)         sizeEnd: newMaxSize
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 157)         priceEnd: newMaxPrice,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 158)         sizeEnd: newMaxSize
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 162)     /*
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 163)     EFFECTS
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 164)     */
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 165)     useEffect(() => {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 166)         window.addEventListener('resize', updateScreenState);
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 167) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 168) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 169) 
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 172)       if (isFirstRender.current) {
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 173)         isFirstRender.current = false;
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 174)         getSearchDefaults();
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 175)         return;
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 176)       }
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 177)       else {
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 178)         searchFragrances({
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 179)           ...searchObject,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 180)           searchInput: searchInput,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 181)           sortBy: sortBy.val
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 182)         });
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 183)       }
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 184) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 185)     }, [searchInput, sortBy]);
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 186) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 196)     const filterBarProps = {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 197)       searchObject: searchObject,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 198)       setSearchObject: setSearchObject,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 199)       searchFragrances: searchFragrances,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 200)       defaultSearchObject: defaultSearchObject,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 201)       searchDefaults: searchDefaults,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 202)       useSidebarFilter: useOffcanvasFilters,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 203)       hideFilters: hideFilters
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 204)     }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 206)     const fragranceListingsProps = {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 207)       fragranceListings: fragranceListings,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 208)       showFilters: showFilters,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 209)       useOffcanvasFilters: useOffcanvasFilters,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 210)       setSearchInput: setSearchInput,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 211)       totalRows: totalRows.current,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 212)       loadMoreListings: loadMoreListings,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 213)       sortBy: sortBy,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 214)       setSortBy: setSortBy,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 215)       sortByOptions: sortByOptions
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 216)     }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 219) 
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 227)               <Offcanvas.Header closeButton style={{
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 228)                 display: 'flex',
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 229)                 justifyContent: 'end'
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 230)               }}/>
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 234)                 {...filterBarProps}
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 240)               {...fragranceListingsProps}
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 254)               {...filterBarProps}
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 256)               <FragranceListings
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 257)               xs={8}
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 258)               {...fragranceListingsProps}
-c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 259)               />
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 168)         return () => {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 169)             window.removeEventListener('resize', updateScreenState);
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 170)         }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 171)     }, []);
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 172) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 173)     // We don't want to search fragrance listings on the
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 174)     // first render since we want to get searchDefaults first
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 176)       if (isFirstRender.current) {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 177)         isFirstRender.current = false;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 178)         getSearchDefaults();
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 179)         return;
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 180)       }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 181)       else {
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 182)         searchFragrances({
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 183)           ...searchObject,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 184)           searchInput: searchInput,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 185)           sortBy: sortBy.val
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 186)         });
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 187)       }
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 188) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 189)     }, [searchInput, sortBy]);
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 190) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 200)     // Collect props
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 201)     const filterBarProps = {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 202)       searchObject: searchObject,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 203)       setSearchObject: setSearchObject,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 204)       searchFragrances: searchFragrances,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 205)       defaultSearchObject: defaultSearchObject,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 206)       searchDefaults: searchDefaults,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 207)       useSidebarFilter: useOffcanvasFilters,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 208)       hideFilters: hideFilters
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 209)     }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 211)     const fragranceListingsProps = {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 212)       fragranceListings: fragranceListings,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 213)       showFilters: showFilters,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 214)       useOffcanvasFilters: useOffcanvasFilters,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 215)       setSearchInput: setSearchInput,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 216)       totalRows: totalRows.current,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 217)       loadMoreListings: loadMoreListings,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 218)       sortBy: sortBy,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 219)       setSortBy: setSortBy,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 220)       sortByOptions: sortByOptions
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 221)     }
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 230)               <Offcanvas.Header closeButton style={{
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 231)                 display: 'flex',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 232)                 justifyContent: 'end'
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 233)               }}/>
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 237)                 {...filterBarProps}
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 243)               {...fragranceListingsProps}
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 257)               {...filterBarProps}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 259)               <FragranceListings
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 260)               xs={8}
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 261)               {...fragranceListingsProps}
+c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 262)               />
 
 
 ./frontend/src/components/Navigation.js
 dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400  8) import '../assets/css/navbar.css';
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 17)     <Navbar className="navigation bg-body-tertiary" style={style}>
-dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500 29)               <NavDropdown.Item href="#logout" onClick={() => auth.logout()}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 14)     <Navbar className="navigation bg-body-tertiary" style={style}>
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 23)                Signed in as: {profile.firstName} {profile.lastName}
+dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500 26)               <NavDropdown.Item href="#logout" onClick={() => auth.logout()}>
 
 
 ./frontend/src/components/FragranceListings.js
@@ -309,7 +309,7 @@ c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400   7) import Form from "react-b
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500   9) import DropdownButton from 'react-bootstrap/DropdownButton';
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  10) import FragranceListingCard from "./FragranceListingCard";
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  11) import Modal from "react-bootstrap/Modal";
-e7935b4b (LakelonBailey 2023-11-07 10:49:12 -0500  13) const PROGRESSIVE_LOADING_TRIGGER_DIFF = 20 // pixels;
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  13) const PROGRESSIVE_LOADING_TRIGGER_DIFF = 5; // pixels;
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  14) function FragranceListings({
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  15)     xs,
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  16)     fragranceListings,
@@ -424,75 +424,79 @@ f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 129)         </>
 
 
 ./frontend/src/components/FragranceListingCard.js
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  1) import React, {useRef, useState} from "react";
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  2) import Card from 'react-bootstrap/Card';
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  3) import Button from "react-bootstrap/Button";
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  4) import Modal from 'react-bootstrap/Modal';
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  5) import CardLink from 'react-bootstrap/CardLink';
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  6) import auth from '../utils/auth';
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  7) import { sendGet, sendPost, sendD, sendDelete} from "../utils/requests";
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  8) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  9) function FragranceListingCard({
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 10)     fragranceListing,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 11)     handleShowLoginModal,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 12)     fragranceWatchlistedMapper,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 13)     setFragranceWatchlistedMapper
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 14) }){
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 15)     const fragrance = fragranceListing.fragrance;
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 16)     const isWatchlisted = fragranceWatchlistedMapper[fragrance.id];
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 17) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 18)     const addToWatchlist = async () => {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 19)         const isLoggedIn = await auth.validateToken();
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 20)         if (!isLoggedIn) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 21)             handleShowLoginModal();
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 22)             return;
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 23)         }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 24) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 25)         const response = await sendPost(`/api/watchlist/${fragrance.id}`);
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 26)         if (response.ok) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 27)             setFragranceWatchlistedMapper({
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 28)                 ...fragranceWatchlistedMapper,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 29)                 [fragrance.id]: true
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 30)             });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 31)         }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 32)     }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 33) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 34)     const removeFromWatchlist = async () => {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 35)         const response = await sendDelete(`/api/watchlist/${fragrance.id}`);
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 36)         if (response.ok) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 37)             setFragranceWatchlistedMapper({
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 38)                 ...fragranceWatchlistedMapper,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 39)                 [fragrance.id]: false
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 40)             });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 41)         }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 42)     }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 43) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 44)     return (
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 45)         <Card className={isWatchlisted ? 'border-info' : ''}>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 46)             <Card.Img  style={{cursor: 'pointer'}} variant="top" src={fragrance.photoLink} onClick={() => window.open(fragranceListing.link, '_blank')} />
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 47)             <Card.Body>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 48)             <Card.Title>{fragrance.title} ({fragranceListing.sizeoz} oz)</Card.Title>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 49)             <div style={{marginLeft: '8px'}}>
-79a90afe (LakelonBailey 2023-11-05 18:09:36 -0500 50)                 <Card.Subtitle>{fragrance.brand} ({fragrance.gender}) - {fragrance.concentration}</Card.Subtitle>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 51)                 <Card.Subtitle style={{marginTop: '4px'}}><strong>${fragranceListing.price}</strong></Card.Subtitle>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 52)             </div>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 53)             {isWatchlisted
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 54)             ? (
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 55)                 <Button style={{marginTop: '12px'}} size="sm" variant="danger" onClick={removeFromWatchlist}>Remove from watchlist</Button>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 56)             )
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 57)             : (
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 58)                 <Button style={{marginTop: '12px'}} size="sm" variant="info" onClick={addToWatchlist}>Add to watchlist</Button>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 59)             )
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 60)             }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 61)             <div style={{marginTop: '12px'}}>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 62)                 <CardLink href={fragranceListing.link} target="_blank">See on {fragranceListing.site.replace('www.', '')}</CardLink>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 63)             </div>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 64)             </Card.Body>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 65)         </Card>
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 66)     )
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 67) };
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 68) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 69) export default FragranceListingCard;
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500  1) import React from "react";
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  2) import Card from 'react-bootstrap/Card';
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  3) import Button from "react-bootstrap/Button";
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  4) import CardLink from 'react-bootstrap/CardLink';
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  5) import auth from '../utils/auth';
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500  6) import { sendPost, sendDelete} from "../utils/requests";
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  7) 
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  8) function FragranceListingCard({
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  9)     fragranceListing,
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 10)     handleShowLoginModal,
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 11)     fragranceWatchlistedMapper,
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 12)     setFragranceWatchlistedMapper
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 13) }){
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 14)     const fragrance = fragranceListing.fragrance;
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 15)     const isWatchlisted = fragranceWatchlistedMapper[fragrance.id];
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 16) 
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 17)     // Add a fragrance to watchlist and update
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 18)     // its watchlisted state
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 19)     const addToWatchlist = async () => {
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 20) 
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 22)         const isLoggedIn = await auth.validateToken();
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 23)         if (!isLoggedIn) {
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 24)             handleShowLoginModal();
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 25)             return;
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 26)         }
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 27) 
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 28)         const response = await sendPost(`/api/watchlist/${fragrance.id}`);
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 29)         if (response.ok) {
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 30)             setFragranceWatchlistedMapper({
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 31)                 ...fragranceWatchlistedMapper,
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 32)                 [fragrance.id]: true
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 33)             });
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 34)         }
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 35)     }
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 36) 
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 37)     // Remove a fragrance from watchlist and update its watchlisted
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500 38)     // state.
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 39)     const removeFromWatchlist = async () => {
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 40)         const response = await sendDelete(`/api/watchlist/${fragrance.id}`);
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 41)         if (response.ok) {
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 42)             setFragranceWatchlistedMapper({
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 43)                 ...fragranceWatchlistedMapper,
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 44)                 [fragrance.id]: false
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 45)             });
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 46)         }
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 47)     }
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 48) 
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 49)     return (
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 50)         <Card className={isWatchlisted ? 'border-info' : ''}>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 51)             <Card.Img  style={{cursor: 'pointer'}} variant="top" src={fragrance.photoLink} onClick={() => window.open(fragranceListing.link, '_blank')} />
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 52)             <Card.Body>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 53)             <Card.Title>{fragrance.title} ({fragranceListing.sizeoz} oz)</Card.Title>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 54)             <div style={{marginLeft: '8px'}}>
+79a90afe (LakelonBailey     2023-11-05 18:09:36 -0500 55)                 <Card.Subtitle>{fragrance.brand} ({fragrance.gender}) - {fragrance.concentration}</Card.Subtitle>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 56)                 <Card.Subtitle style={{marginTop: '4px'}}><strong>${fragranceListing.price}</strong></Card.Subtitle>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 57)             </div>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 58)             {isWatchlisted
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 59)             ? (
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 60)                 <Button style={{marginTop: '12px'}} size="sm" variant="danger" onClick={removeFromWatchlist}>Remove from watchlist</Button>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 61)             )
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 62)             : (
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 63)                 <Button style={{marginTop: '12px'}} size="sm" variant="info" onClick={addToWatchlist}>Add to watchlist</Button>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 64)             )
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 65)             }
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 66)             <div style={{marginTop: '12px'}}>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 67)                 <CardLink href={fragranceListing.link} target="_blank">See on {fragranceListing.site.replace('www.', '')}</CardLink>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 68)             </div>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 69)             </Card.Body>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 70)         </Card>
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 71)     )
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 72) };
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 73) 
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 74) export default FragranceListingCard;
 
 
 ./frontend/src/assets/css/auth.css
@@ -535,24 +539,26 @@ dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 4) }
 ./frontend/src/pages/Home.js
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  1) import React, { useEffect } from 'react';
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  4) import auth from '../utils/auth';
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  7)     const checkLoginStatus = async () => {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  8)         const validToken = await auth.validateToken();
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  9)         if (!validToken) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 10)             auth.removeToken();
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 11)         }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 12)     }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 13) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 14)     useEffect(() => {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 15)         checkLoginStatus();
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 16)     }, []);
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 17) 
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 19)         <div style={{
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 20)             height: '100vh',
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 21)             overflow: 'hidden'
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 22)         }}>
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 24)                 height: '5%',
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 28)                 height: '95%',
-dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 32)         </div>
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  7) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  8)     // Validate token at first page opening
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  9)     const checkLoginStatus = async () => {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 10)         const validToken = await auth.validateToken();
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 11)         if (!validToken) {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 12)             auth.removeToken();
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 13)         }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 14)     }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 15) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 16)     useEffect(() => {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 17)         checkLoginStatus();
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 18)     }, []);
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 19) 
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 21)         <div style={{
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 22)             height: '100vh',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 23)             overflow: 'hidden'
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 24)         }}>
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 26)                 height: '5%',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 30)                 height: '95%',
+dc83f4f0 (LakelonBailey 2023-11-04 23:48:02 -0400 34)         </div>
 
 
 ./frontend/src/pages/Signup.js
@@ -675,7 +681,8 @@ dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500  89)
 
 
 ./backend/utils/auth.js
-f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  7) function getTokenFromRequest(req) {
+f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  6) function getTokenFromRequest(req) {
+9adfae36 (LakelonBailey     2023-11-09 10:47:37 -0500  7) 
 f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  8)   // Allows token to be sent via req.body, req.query, or headers
 f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500  9)   let token = req.headers.authorization || req.body?.token || req.query?.token;
 f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 10) 
@@ -724,7 +731,7 @@ f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 60)
 33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  6)     'Unisex': "Unisex",
 33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  7) }
 33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400 44)         data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
-33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400 51)         data.gender = genderMapper[data.gender] || null;
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 51)         data.gender = genderMapper[data.gender] || data.gender;
 
 
 ./backend/models/index.js
@@ -761,152 +768,158 @@ f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 17)     as: 'watchlist',
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  19) 
 01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  20)     const watchlisted = req.query.watchlisted;
 01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  21) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  22)     let sortBy = req.query.sortBy ? req.query.sortBy.split(',') : undefined;
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  23)     if (sortBy) {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  24)         const fragranceSearchByFields = Object.keys(Fragrance.getAttributes());
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  25)         if (fragranceSearchByFields.includes(sortBy[0])) {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  26)             sortBy.unshift({model: Fragrance})
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  27)         }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  28)         sortBy = [sortBy]
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  29)     }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  30) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  31)     // Initialize model filters
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  32)     const fragranceWhere = {}
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  33)     const fragranceListingWhere = {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  34)         price: {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  35)             [Op.between]: [parseFloat(priceStart), parseFloat(priceEnd)],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  36)         },
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  37)         sizeoz: {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  38)             [Op.between]: [parseFloat(sizeStart), parseFloat(sizeEnd)],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  39)         }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  40)     }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  41) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  42)     // Only filter on brands if some are provided
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  43)     const getAllBrands = brands == '';
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  44)     if (!getAllBrands) {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  45)         fragranceWhere.brand = {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  46)             [Op.in]: brands.split(',')
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  47)         }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  48)     }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  49) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  50)     // Only filter on gender if a specific one
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  51)     // is selected
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  52)     if (gender != 'All') {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  53)         fragranceWhere.gender = gender;
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  54)     }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  55) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  56)     // Filter based on searchInput if provided
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  57)     if (searchInput && searchInput.trim() !== '') {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  58)         const searchTerms = searchInput.trim().split(' ');
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  59)         const searchConditions = searchTerms.map(term => ({
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  60)             [Op.or]: [
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  61)                 { brand: { [Op.like]: `%${term}%` } },
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  62)                 { title: { [Op.like]: `%${term}%` } },
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  63)                 { gender: { [Op.like]: `%${term}%` } }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  64)             ]
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  65)         }));
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  66) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  67)         fragranceWhere[Op.and] = searchConditions;
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  68)     }
-e7b47576 (LakelonBailey 2023-11-05 17:56:45 -0500  69) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  70)     const fragranceSubquery = {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  71)         model: Fragrance,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  72)         where: fragranceWhere
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  73)     }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  74) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  75)     if (req.user) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  76)         fragranceSubquery.include = [{
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  77)             model: User,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  78)             as: 'watchlist',
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  79)             through: {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  80)                 attributes: []
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  81)             },
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  82)             attributes: ['id'],
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  83)             where: {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  84)                 id: req.user.id
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  22)     // Parse the sortBy field. This involves determining which model (Fragrance or FragranceListing)
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  23)     // that the field belongs to
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  24)     let sortBy = req.query.sortBy ? req.query.sortBy.split(',') : undefined;
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  25)     if (sortBy) {
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  26)         const fragranceFields = Object.keys(Fragrance.getAttributes());
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  27)         if (fragranceFields.includes(sortBy[0])) {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  28)             sortBy.unshift({model: Fragrance})
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  29)         }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  30)         sortBy = [sortBy]
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  31)     }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  32) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  33)     // Initialize model filters
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  34)     const fragranceWhere = {}
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  35)     const fragranceListingWhere = {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  36)         price: {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  37)             [Op.between]: [parseFloat(priceStart), parseFloat(priceEnd)],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  38)         },
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  39)         sizeoz: {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  40)             [Op.between]: [parseFloat(sizeStart), parseFloat(sizeEnd)],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  41)         }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  42)     }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  43) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  44)     // Only filter on brands if some are provided
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  45)     const getAllBrands = brands == '';
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  46)     if (!getAllBrands) {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  47)         fragranceWhere.brand = {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  48)             [Op.in]: brands.split(',')
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  49)         }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  50)     }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  51) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  52)     // Only filter on gender if a specific one
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  53)     // is selected
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  54)     if (gender != 'All') {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  55)         fragranceWhere.gender = gender;
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  56)     }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  57) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  58)     // Filter based on searchInput if provided
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  59)     if (searchInput && searchInput.trim() !== '') {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  60)         const searchTerms = searchInput.trim().split(' ');
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  61)         const searchConditions = searchTerms.map(term => ({
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  62)             [Op.or]: [
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  63)                 { brand: { [Op.like]: `%${term}%` } },
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  64)                 { title: { [Op.like]: `%${term}%` } },
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  65)                 { gender: { [Op.like]: `%${term}%` } }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  66)             ]
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  67)         }));
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  68) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  69)         fragranceWhere[Op.and] = searchConditions;
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  70)     }
+e7b47576 (LakelonBailey 2023-11-05 17:56:45 -0500  71) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  72)     const fragranceSubquery = {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  73)         model: Fragrance,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  74)         where: fragranceWhere
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  75)     }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  76) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  77)     // If there's a valid user, filter on whether or
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  78)     // not the fragrance is watchlisted
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  79)     if (req.user) {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  80)         fragranceSubquery.include = [{
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  81)             model: User,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  82)             as: 'watchlist',
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  83)             through: {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  84)                 attributes: []
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  85)             },
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  86)             required: watchlisted == 'true'
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  87)         }]
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  88)     }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  89) 
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  90)     // Define a subquery for non-watchlisted items if needed
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  91)     if (watchlisted == 'false' && req.user) {
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  92)          const entries = await UserFragrance.findAll({
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  93)             attributes: ['fragranceId'],
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  94)             where: {
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  95)                 userId: req.user.id
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  96)             },
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  97)             raw: true
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  98)         });
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  99) 
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 100)         fragranceWhere.id = {
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 101)             [Op.notIn]: entries.map(entry => entry.fragranceId)
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 102)         };
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 103)     }
-01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 104) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 105)     // Get data and return
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 106)     const fragranceListings = await FragranceListing.findAndCountAll({
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 107)         where: fragranceListingWhere,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 108)         include: [fragranceSubquery],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 109)         offset: page * FRAGRANCE_QUERY_LIMIT,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 110)         limit: FRAGRANCE_QUERY_LIMIT,
-e7b47576 (LakelonBailey 2023-11-05 17:56:45 -0500 111)         order: sortBy,
-e7b47576 (LakelonBailey 2023-11-05 17:56:45 -0500 112)         subQuery: false
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 113)     });
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 114) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 115)     const listingsWithWatchlisted = fragranceListings.rows.map(f => {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 116)         const plainFragrance = f.get({ plain: true });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 117)         plainFragrance.fragrance.watchlisted = !!f.fragrance.watchlist?.length;
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 118)         return plainFragrance;
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 119)     });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 120) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 121)     res.json({
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 122)         success: true,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 123)         data: listingsWithWatchlisted,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 124)         totalCount: fragranceListings.count
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 125)     });
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 126) };
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 127) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 128) async function getSearchDefaults(req, res) {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 129)     // Aggregate max price and max size
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 130)     const aggregates = await sequelize.query(`
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 131)         SELECT
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 132)             MAX(price) as maxPrice,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 133)             MAX(sizeoz) as maxSize
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 134)         FROM
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 135)             fragrance_listing
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 136)     `, { type: Sequelize.QueryTypes.SELECT });
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 137) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 138)     // Group listings by brand and count the occurrences for
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 139)     // each brand
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 140)     const brandGrouping = await FragranceListing.findAll({
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 141)         attributes: [
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 142)             [Sequelize.fn('COUNT', Sequelize.col('fragrance_listing.id')), 'listingCount'],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 143)             [Sequelize.col('fragrance.brand'), 'brand']
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 144)         ],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 145)         include: [{
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 146)             model: Fragrance,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 147)             attributes: []
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 148)         }],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 149)         group: ['fragrance.brand'],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 150)         order: [['listingCount', 'DESC']]
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 151)     })
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 152) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 153)     // Return search defaults
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 154)     res.json({
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 155)         success: true,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 156)         data: {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 157)             ...aggregates[0],
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 158)             brands: brandGrouping.map(b => b.get())
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 159)         }
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 160)     });
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 161) };
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 162) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 163) 
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 164) module.exports = {
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 165)     getfragranceListings,
-92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 166)     getSearchDefaults
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  86)             attributes: ['id'],
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  87)             where: {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  88)                 id: req.user.id
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  89)             },
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  90)             required: watchlisted == 'true'
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  91)         }]
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  92)     }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  93) 
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  94)     // Define a subquery for non-watchlisted items if needed
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  95)     if (watchlisted == 'false' && req.user) {
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  96)          const entries = await UserFragrance.findAll({
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  97)             attributes: ['fragranceId'],
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  98)             where: {
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  99)                 userId: req.user.id
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 100)             },
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 101)             raw: true
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 102)         });
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 103) 
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 104)         fragranceWhere.id = {
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 105)             [Op.notIn]: entries.map(entry => entry.fragranceId)
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 106)         };
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 107)     }
+01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 108) 
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 109)     // Call find and count since we need to know the total rows
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 110)     // even though we're limiting results
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 111)     const fragranceListings = await FragranceListing.findAndCountAll({
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 112)         where: fragranceListingWhere,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 113)         include: [fragranceSubquery],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 114)         offset: page * FRAGRANCE_QUERY_LIMIT,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 115)         limit: FRAGRANCE_QUERY_LIMIT,
+e7b47576 (LakelonBailey 2023-11-05 17:56:45 -0500 116)         order: sortBy,
+e7b47576 (LakelonBailey 2023-11-05 17:56:45 -0500 117)         subQuery: false
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 118)     });
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 119) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 120)     const listingsWithWatchlisted = fragranceListings.rows.map(f => {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 121)         const plainFragrance = f.get({ plain: true });
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 122)         plainFragrance.fragrance.watchlisted = !!f.fragrance.watchlist?.length;
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 123)         return plainFragrance;
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 124)     });
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 125) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 126)     res.json({
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 127)         success: true,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 128)         data: listingsWithWatchlisted,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 129)         totalCount: fragranceListings.count
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 130)     });
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 131) };
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 132) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 133) async function getSearchDefaults(req, res) {
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 134) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 135)     // Aggregate max price and max size
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 136)     const aggregates = await sequelize.query(`
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 137)         SELECT
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 138)             MAX(price) as maxPrice,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 139)             MAX(sizeoz) as maxSize
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 140)         FROM
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 141)             fragrance_listing
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 142)     `, { type: Sequelize.QueryTypes.SELECT });
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 143) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 144)     // Group listings by brand and count the occurrences for
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 145)     // each brand
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 146)     const brandGrouping = await FragranceListing.findAll({
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 147)         attributes: [
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 148)             [Sequelize.fn('COUNT', Sequelize.col('fragrance_listing.id')), 'listingCount'],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 149)             [Sequelize.col('fragrance.brand'), 'brand']
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 150)         ],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 151)         include: [{
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 152)             model: Fragrance,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 153)             attributes: []
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 154)         }],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 155)         group: ['fragrance.brand'],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 156)         order: [['listingCount', 'DESC']]
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 157)     })
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 158) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 159)     // Return search defaults
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 160)     res.json({
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 161)         success: true,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 162)         data: {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 163)             ...aggregates[0],
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 164)             brands: brandGrouping.map(b => b.get())
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 165)         }
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 166)     });
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 167) };
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 168) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 169) 
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 170) module.exports = {
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 171)     getfragranceListings,
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 172)     getSearchDefaults
+92863883 (LakelonBailey 2023-11-05 13:42:57 -0500 173) };
 
 
 ./backend/actions/index.js
@@ -923,43 +936,36 @@ f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 6)     watchlistActions
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  1) const {UserFragrance} = require('../models');
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  2) 
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  3) async function addFragranceToWatchlist(req, res) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  4)     const existingItem = await UserFragrance.findOne({
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  4)     const [item, _] = await UserFragrance.findCreateFind({
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  5)         where: {
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  6)             fragranceId: req.params.fragranceId,
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  7)             userId: req.user.id
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  8)         }
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500  9)     });
 f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 10) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 11)     if (!existingItem) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 12)         await UserFragrance.create({
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 13)             fragranceId: req.params.fragranceId,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 14)             userId: req.user.id
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 15)         });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 16)     }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 17) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 18)     res.json({
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 19)         success: true
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 20)     });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 21) }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 22) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 23) async function removeFragranceFromWatchlist(req, res) {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 24)     await UserFragrance.destroy({
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 25)         where: {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 26)             fragranceId: req.params.fragranceId,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 27)             userId: req.user.id
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 28)         }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 29)     });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 30) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 31)     res.json({
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 32)         success: true
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 33)     });
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 34) }
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 35) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 36) 
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 37) module.exports = {
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 38)     addFragranceToWatchlist,
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 39)     removeFragranceFromWatchlist
-f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 40) }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 11)     res.json({
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 12)         success: !!item
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 13)     });
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 14) }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 15) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 16) async function removeFragranceFromWatchlist(req, res) {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 17)     await UserFragrance.destroy({
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 18)         where: {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 19)             fragranceId: req.params.fragranceId,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 20)             userId: req.user.id
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 21)         }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 22)     });
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 23) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 24)     res.json({
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 25)         success: true
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 26)     });
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 27) }
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 28) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 29) 
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 30) module.exports = {
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 31)     addFragranceToWatchlist,
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 32)     removeFragranceFromWatchlist
+f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 33) }
 
 
 ./backend/scrapers/MasterScript.py
