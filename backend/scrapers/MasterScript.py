@@ -23,10 +23,9 @@ scrapers = [
 ]
 
 async def get_data(max_items):
-    jomashopData, maxaromaData, fragrancenetData, venbaData, auraData, giftExpressData = await asyncio.gather(
+    return await asyncio.gather(
         *[scraper(max_items) for scraper in scrapers]
     )
-    return jomashopData, maxaromaData, fragrancenetData, venbaData, auraData, giftExpressData
 
 
 max_items_per_scraper = 10000
