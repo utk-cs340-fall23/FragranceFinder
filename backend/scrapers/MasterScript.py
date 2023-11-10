@@ -39,6 +39,6 @@ gdf = pd.concat(list(map(
     result
 )))
 
-gdf.to_json('data/AllRecords.json', orient='records')
+#gdf.to_json('data/AllRecords.json', orient='records')
 
 print(gdf.to_json(orient='records'))
