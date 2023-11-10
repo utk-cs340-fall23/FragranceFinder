@@ -21,7 +21,7 @@ async def scrape_etiket(max_items):
             page = await browser.new_page()
         
             await page.goto("https://etiket.ca/collections/fragrance")
-            await page.wait_for_selector("div.new-grid product-grid collection-grid boost-pfs-filter-products bc-al-style4")
+            #await page.wait_for_selector("div.new-grid product-grid collection-grid boost-pfs-filter-products bc-al-style4")
         
             product_page = await browser.new_page()
             
@@ -32,11 +32,35 @@ async def scrape_etiket(max_items):
                 products = catalog.find_all("a", class_="grid-item__link")
                 #data_page = catalog.find("div", class_="pagination")
                 #data_page = data_page.find("a", class_="btn btn--large btn--circle btn--icon")
-        
+                
+                for product in products:
+                    name = product.find("div", class_="grid-product__title")
+                    brand = product.find("div", class_="grid-product__vendor").text.strip()
+                
+                    if name:
+                        name = name.text.strip()
+                    
+                        if "edt" in name.lower():
+                            cons = "EDT"
+                        elif "eau de toilette" in name.lower():
+                            cons = "EDT"
+                        elif "edp" in name.lower():
+                            cons = "EDP"
+                        elif "eau de parfum" in name.lower():
+                            cons = "EDP"
+                        elif "extrait de parfum" in name.lower():
+                            cons = "EDP"
+                        else:
+                            cons = None
+                
+                    df.loc[len(df)] = [brand, name, cons, "Unisex", 0.2, 0.2, "f", "f"]
+                
+                
         
         
     finally:
+        print(df)
         return df.to_json(orient="records")
 
 if __name__ == "__main__":
-    asyncio.run(scrape_etiket(100))
+    asyncio.run(scrape_etiket(10))
