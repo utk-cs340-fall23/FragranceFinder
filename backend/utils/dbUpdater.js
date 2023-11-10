@@ -35,14 +35,20 @@ async function processData(data) {
             }
         });
 
+		const fragranceListingFields = Object.keys(FragranceListing.getAttributes())
+
         // Nothing more needs to be done if it's a new Fragrance
         if (fragranceCreated) {
-            await FragranceListing.findCreateFind({
-                where: {
-                    fragranceId: fragrance.id,
-                    ...newFragrance
-                }
-            });
+            await FragranceListing.findOrCreate({
+				where: {
+					fragranceId: fragrance.id,
+					sizeoz: newFragrance.sizeoz,
+					site: newFragrance.site
+				},
+				defaults: Object.fromEntries(Object.entries(newFragrance).filter(
+					([key, val]) => fragranceListingFields.includes(key)
+				))
+			});
             continue;
         }
 
@@ -58,7 +64,6 @@ async function processData(data) {
         }
 
         // Find/create FragranceListing
-        const fragranceListingFields = Object.keys(FragranceListing.getAttributes())
         let [fragranceListing, created] = await FragranceListing.findOrCreate({
             where: {
                 fragranceId: fragrance.id,
@@ -139,6 +144,8 @@ async function processData(data) {
     for (let info of Object.values(userFragranceListingsMap)) {
         const user = info.user;
         const fragrances = info.fragrances;
+
+		console.log(user);
 
         // Email
     }
