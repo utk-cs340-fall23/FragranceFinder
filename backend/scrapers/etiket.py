@@ -12,6 +12,11 @@ def valid_float(s):
     except ValueError:
         return False
 
+def extract_price(string):
+    match = re.search(r'\$\d+\.\d{2}', string)
+    return match.group(0) if match else None
+
+
 async def scrape_etiket(max_items):
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
     
@@ -36,6 +41,10 @@ async def scrape_etiket(max_items):
                 for product in products:
                     name = product.find("div", class_="grid-product__title")
                     brand = product.find("div", class_="grid-product__vendor").text.strip()
+                    price = product.find("span", class_="grid-product__price--from")
+                    link = "https://etiket.ca/"+product.get('href')
+                    pic = product.find("img", class_="grid__image-contain lazyautosizes lazyloaded")
+                
                 
                     if name:
                         name = name.text.strip()
@@ -53,7 +62,19 @@ async def scrape_etiket(max_items):
                         else:
                             cons = None
                 
-                    df.loc[len(df)] = [brand, name, cons, "Unisex", 0.2, 0.2, "f", "f"]
+                        if price:
+                            price = extract_price(price.get_text(strip=True))
+                        else:
+                            price = None
+                        
+                        if pic:
+                            pic = pic.get("srcset")
+                        else:
+                            pic = None
+                
+                        #print(pic)
+                
+                    df.loc[len(df)] = [brand, name, cons, "Unisex", 0.0, price, link, pic]
                 
                 
         
