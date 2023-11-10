@@ -1,118 +1,167 @@
-const { Fragrance, FragranceListing, UserFragrance } = require("../models");
+const { Fragrance, FragranceListing, UserFragrance, User } = require("../models");
 const {cleanData} = require('../utils/parsing');
 const sequelize = require('../config/db');
 const {Sequelize} = require('sequelize');
+
 require('dotenv').config();
 
-function dbUpdate(maxItemsPerScraper) {
-	// https://stackoverflow.com/questions/23450534/how-to-call-a-python-function-from-node-js
-	const spawn = require("child_process").spawn;
-	maxItemsPerScraper = maxItemsPerScraper || '';
+async function findSmallest(fid, size){
+    const aggregate = await sequelize.query(`
+        SELECT
+            MIN(price) as minPrice
+        FROM
+            fragrance_listing
+        WHERE
+            fragrance_listing.fragrance_id = ${fid}
+            AND sizeoz LIKE ${size}
+    `, { type: Sequelize.QueryTypes.SELECT });
 
-	function scrapeWeb(){
-		const pythonPath = process.env.PYTHON_PATH || 'python';
-		const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
-			maxBuffer: 1000 * 1000 * 10 // 10 MB
-		});
+    return aggregate ? aggregate[0].minPrice : null;
+}
 
-		let output = '';
-		pyproc.stdout.on('data', (data) => {
-			output += data.toString();
-		});
+async function processData(data) {
+    const newLowestPrices = {};
 
-		pyproc.stdout.on("end", (data) => {
-			const ret = cleanData(JSON.parse(output));
+    console.log('Processing fragrances...');
+    for (let newFragrance of data) {
 
-			for(let i = 0; i < ret.length; i++){
-				if(ret[i].brand != "N/A" && ret[i].title != "N/A" && ret[i].concentration != "N/A" && ret[i].gender != "N/A"){
-					Fragrance.findOne({
-						where:{
-							brand: ret[i].brand,
-							title: ret[i].title,
-							concentration: ret[i].concentration,
-							gender: ret[i].gender
-						}
-					}).then(res => {
-						if(res == null){
-							// Creates new record of item
-							Fragrance.create({
-								brand: ret[i].brand,
-								title: ret[i].title,
-								concentration: ret[i].concentration,
-								photoLink: ret[i].photoLink,
-								gender: ret[i].gender
-							}).then(ins => {
-								FragranceListing.create({
-									fragranceId: ins.id,
-									price: ret[i].price,
-									link: ret[i].link,
-									sizeoz: ret[i].sizeoz
-								});
-							});
-						}
-						else{
-							// Append existing element
-							FragranceListing.findOne({
-								where:{
-									fragranceId: res.id,
-									link: ret[i].link,
-									sizeoz: ret[i].sizeoz
-								}
-							}).then(lst => {
-								if(lst == null){
-									// Create new list
-									FragranceListing.create({
-										fragranceId: res.id,
-										price: ret[i].price,
-										link: ret[i].link,
-										sizeoz: ret[i].sizeoz
-									});
-								}
-								else{
-									FragranceListing.update({
-										price: ret[i].price,
-									},{
-										where:{
-											id: lst.id
-										}
-									});
-								}
+        // Get existing Fragrance
+        const [fragrance, fragranceCreated] = await Fragrance.findCreateFind({
+            where: {
+                brand: newFragrance.brand,
+                title: newFragrance.title,
+                concentration: newFragrance.concentration,
+                gender: newFragrance.gender
+            }
+        });
 
-								findSmallest(res.id, ret[i].sizeoz).then(query => {
-									if(query != null){
-										if(query.price > ret[i].price){
-											//email user of price drop
-											//console.log(res.id);
-										}
-									}
-								});
+        // Nothing more needs to be done if it's a new Fragrance
+        if (fragranceCreated) {
+            await FragranceListing.findCreateFind({
+                where: {
+                    fragranceId: fragrance.id,
+                    ...newFragrance
+                }
+            });
+            continue;
+        }
 
-							});
-						}
-					}).catch((error) => {
-						console.log("Error: Cannot fetch data: ", error);
-					});
-				}
-			}
-		});
-	}
+        // Default lowest price to lowest existing price
+        const key = `${fragrance.id}_${newFragrance.sizeoz}`;
+        if (newLowestPrices[key] == undefined) {
+            const minPrice = await findSmallest(fragrance.id, newFragrance.sizeoz);
 
-	function emailUpdate(type, fid, price){ // 0: lowest price increase; 1: lowest price decrease; 2: new lowest price
-		UserFragrance.findAll({
-			where:{
-				fragranceId: fid
-			}
-		}).then(rt => {
-			//
-		});
-	}
+            newLowestPrices[key] = {
+                fragranceListing: null,
+                price: minPrice
+            };
+        }
 
-	async function findSmallest(fid, size){
-		let lowest = await sequelize.query("SELECT * FROM fragrance_listing WHERE fragrance_id="+fid+" AND sizeoz LIKE "+size+" ORDER BY price ASC LIMIT 1", {type: Sequelize.QueryTypes.SELECT});
-		return lowest[0];
-	}
+        // Find/create FragranceListing
+        const fragranceListingFields = Object.keys(FragranceListing.getAttributes())
+        let [fragranceListing, created] = await FragranceListing.findOrCreate({
+            where: {
+                fragranceId: fragrance.id,
+                sizeoz: newFragrance.sizeoz,
+                site: newFragrance.site
+            },
+            defaults: Object.fromEntries(Object.entries(newFragrance).filter(
+                ([key, val]) => fragranceListingFields.includes(key)
+            ))
+        });
 
-	scrapeWeb();
+        // If it's not new and there's no price change, continue
+        if (fragranceListing.price != undefined && !created && fragranceListing.price == newFragrance.price) {
+            continue;
+        }
+
+        // Store intiial price
+        const initialPrice = fragranceListing.price || newFragrance.price;
+
+        // Update with new price
+        fragranceListing.price = newFragrance.price;
+        await fragranceListing.save();
+
+        // If it's a price increase, nothing more is needed
+        if (initialPrice >= newFragrance.price) {
+            continue;
+        }
+
+        // Set new lowest price
+        newLowestPrices[key] = {
+            fragranceListing: fragranceListing,
+            price: fragranceListing.price
+        };
+    }
+
+    const userFragranceListingsMap = {};
+
+    for (let [key, info] of Object.entries(newLowestPrices)) {
+        if (info.fragranceListing == null) {
+            continue;
+        }
+        let [fragranceId, _] = key.split('_');
+        fragranceId = parseInt(fragranceId);
+        const fragranceListing = info.fragranceListing;
+
+        // Find users that have the fragrance watchlisted
+        const users = await User.findAll({
+            include: [{
+                model: Fragrance,
+                as: 'watchlist',
+                where: {
+                    id: fragranceId
+                },
+                required: true
+            }]
+        });
+
+        for (let user of users) {
+
+            // Create default object for user
+            if (userFragranceListingsMap[user.id] == undefined) {
+                userFragranceListingsMap[user.id] = {
+                    user: user,
+                    fragrances: []
+                };
+            }
+
+            // Add fragrance that user will be emailed about
+            userFragranceListingsMap[user.id].fragrances.push({
+                fragrance: user.watchlist[0].get({raw: true}),
+                fragranceListing: fragranceListing.get({raw: true})
+            });
+        }
+    }
+
+    // For each user added to userFragranceListingsMap, email
+    // the user about the price drops in all of the fragrances
+    for (let info of Object.values(userFragranceListingsMap)) {
+        const user = info.user;
+        const fragrances = info.fragrances;
+
+        // Email
+    }
+}
+
+async function dbUpdate(maxItemsPerScraper) {
+    const spawn = require("child_process").spawn;
+    maxItemsPerScraper = maxItemsPerScraper || '';
+	
+	const pythonPath = process.env.PYTHON_PATH || 'python';
+
+    const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
+        maxBuffer: 1000 * 1000 * 10 // 10 MB
+    });
+
+    let output = '';
+    pyproc.stdout.on('data', (data) => {
+        output += data.toString();
+    });
+
+    pyproc.stdout.on("end", async (data) => {
+        await processData(cleanData(JSON.parse(output)));
+    });
 }
 
 module.exports = dbUpdate;
