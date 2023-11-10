@@ -13,7 +13,9 @@ function extractPrice(str) {
 }
 
 function isEmptyFragrance(newFragrance) {
-    return newFragrance.brand == null || newFragrance.title == null || newFragrance.concentration == null || newFragrance.gender == null;
+    const badValues = ['N/A', null, undefined];
+    const fieldsToCheck = ['brand', 'title', 'concentration', 'gender'];
+    return fieldsToCheck.filter(field => badValues.includes(newFragrance[field])).length > 0;
 }
 
 
@@ -23,7 +25,7 @@ function extractDomain(url) {
         let parsedURL = new URL(url);
         return parsedURL.hostname;
     } catch (e) {
-        console.error("Invalid URL");
+        console.error(`Invalid URL: ${url}`);
         return null;
     }
 }

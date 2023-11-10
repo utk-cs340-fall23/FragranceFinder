@@ -28,7 +28,7 @@ Fragrance.init(
     },
     gender: {
       type: DataTypes.STRING
-    }, 
+    },
   },
   {
     hooks: {},

@@ -1,9 +1,17 @@
 const { Fragrance, FragranceListing, UserFragrance, User } = require("../models");
 const {cleanData} = require('../utils/parsing');
 const sequelize = require('../config/db');
-const {Sequelize} = require('sequelize');
+const {Sequelize, Op} = require('sequelize');
 
 require('dotenv').config();
+
+function extractFields(item, model, ignore) {
+    ignore = ignore ? ignore : [];
+    const modelFields = Object.keys(model.getAttributes());
+    return Object.fromEntries(Object.entries(item).filter(
+        ([key, val]) => modelFields.includes(key) && !ignore.includes(key)
+    ));
+}
 
 async function findSmallest(fid, size){
     const aggregate = await sequelize.query(`
@@ -21,34 +29,28 @@ async function findSmallest(fid, size){
 
 async function processData(data) {
     const newLowestPrices = {};
-
     console.log('Processing fragrances...');
     for (let newFragrance of data) {
 
         // Get existing Fragrance
-        const [fragrance, fragranceCreated] = await Fragrance.findCreateFind({
-            where: {
-                brand: newFragrance.brand,
-                title: newFragrance.title,
-                concentration: newFragrance.concentration,
-                gender: newFragrance.gender
-            }
+        const [fragrance, fragranceCreated] = await Fragrance.findOrCreate({
+            where: extractFields(newFragrance, Fragrance, ['photoLink']),
+            defaults: extractFields(newFragrance, Fragrance)
         });
 
-		const fragranceListingFields = Object.keys(FragranceListing.getAttributes())
+        let [fragranceListing, _] = await FragranceListing.findOrCreate({
+            where: {
+                sizeoz: {
+                    [Op.like]: newFragrance.sizeoz
+                },
+                fragranceId: fragrance.id,
+                site: newFragrance.site
+            },
+            defaults: extractFields(newFragrance, FragranceListing)
+        });
 
         // Nothing more needs to be done if it's a new Fragrance
         if (fragranceCreated) {
-            await FragranceListing.findOrCreate({
-				where: {
-					fragranceId: fragrance.id,
-					sizeoz: newFragrance.sizeoz,
-					site: newFragrance.site
-				},
-				defaults: Object.fromEntries(Object.entries(newFragrance).filter(
-					([key, val]) => fragranceListingFields.includes(key)
-				))
-			});
             continue;
         }
 
@@ -63,32 +65,16 @@ async function processData(data) {
             };
         }
 
-        // Find/create FragranceListing
-        let [fragranceListing, created] = await FragranceListing.findOrCreate({
-            where: {
-                fragranceId: fragrance.id,
-                sizeoz: newFragrance.sizeoz,
-                site: newFragrance.site
-            },
-            defaults: Object.fromEntries(Object.entries(newFragrance).filter(
-                ([key, val]) => fragranceListingFields.includes(key)
-            ))
-        });
-
-        // If it's not new and there's no price change, continue
-        if (fragranceListing.price != undefined && !created && fragranceListing.price == newFragrance.price) {
-            continue;
+        // Update with new price
+        const newVals = extractFields(newFragrance, FragranceListing, ['fragranceId']);
+        for (let [name, val] of Object.entries(newVals)) {
+            fragranceListing[name] = val;
         }
 
-        // Store intiial price
-        const initialPrice = fragranceListing.price || newFragrance.price;
-
-        // Update with new price
-        fragranceListing.price = newFragrance.price;
         await fragranceListing.save();
 
         // If it's a price increase, nothing more is needed
-        if (initialPrice >= newFragrance.price) {
+        if (newFragrance.price >= newLowestPrices[key]) {
             continue;
         }
 
@@ -145,16 +131,20 @@ async function processData(data) {
         const user = info.user;
         const fragrances = info.fragrances;
 
-		console.log(user);
-
-        // Email
+        for (let fragranceInfo of fragrances) {
+            console.log(fragranceInfo.fragrance.title, fragranceInfo.fragranceListing.sizeoz, fragranceInfo.fragranceListing.price);
+        }
     }
 }
 
 async function dbUpdate(maxItemsPerScraper) {
+    const data = require('../data/jomashop.json');
+    await processData(cleanData(data));
+    return;
+
     const spawn = require("child_process").spawn;
     maxItemsPerScraper = maxItemsPerScraper || '';
-	
+
 	const pythonPath = process.env.PYTHON_PATH || 'python';
 
     const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
