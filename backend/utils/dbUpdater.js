@@ -2,6 +2,7 @@ const { Fragrance, FragranceListing, UserFragrance, User } = require("../models"
 const {cleanData} = require('../utils/parsing');
 const sequelize = require('../config/db');
 const {Sequelize, Op} = require('sequelize');
+const mailer = require('../config/mail');
 
 require('dotenv').config();
 
@@ -131,9 +132,29 @@ async function processData(data) {
         const user = info.user;
         const fragrances = info.fragrances;
 
-        for (let fragranceInfo of fragrances) {
-            console.log(fragranceInfo.fragrance.title, fragranceInfo.fragranceListing.sizeoz, fragranceInfo.fragranceListing.price);
+		message = "<!DOCTYPE html><html>Hello "+user.firstName+",<br><br>The price for the following items on your watchlist have dropped:<br>";
+
+		for (let fragranceInfo of fragrances) {
+            message += "<a href=\""+fragranceInfo.fragranceListing.link+"\">"+fragranceInfo.fragrance.title+" "+fragranceInfo.fragrance.concentration+" by "+fragranceInfo.fragrance.brand+"</a> is now $"+fragranceInfo.fragranceListing.price+" at "+fragranceInfo.fragranceListing.site+"<br>";
         }
+		
+		message += "<br>Thank you and have a nice day.</html>";
+
+		const mail = {
+			from: process.env.EMAIL_USER,
+			to: user.email,
+			subject: "Price alerts for one or more items on your watchlist",
+			html: message
+		}
+		
+		mailer.sendMail(mail, function(error, info){
+			if(error){
+				console.log("An error has occurred while sending the email.\n" + error);
+			}
+			else{
+				console.log("Email sent: " + info.response);
+			}
+		});
     }
 }
 
