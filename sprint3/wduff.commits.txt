@@ -1,0 +1,413 @@
+venba.py commits
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   1) # William Duff
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   2) # This program scrapes men's and women's fragrance information from venbafragrance.com
+db758be6 (Shmoopy 2023-11-09 14:53:18 -0500   3) # Last updated 11/09/2023
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   4) 
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   5) import asyncio
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   6) from playwright.async_api import async_playwright
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   7) from bs4 import BeautifulSoup
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   8) import pandas as pd
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   9) 
+db758be6 (Shmoopy 2023-11-09 14:53:18 -0500  10) async def scrape_venba(max_items):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  11)     async with async_playwright() as p:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  12)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500  13)         browser = await p.chromium.launch(headless = False)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  14)         page = await browser.new_page()
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  15)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500  16)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500  17)         '''
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  18)         # Men's Fragrances from Venba Fragrance
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  19)         await page.goto("https://www.venbafragrance.com/collections/men?page=1")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  20)         html = await page.inner_html('#MainContent')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  21)         soup = BeautifulSoup(html, 'html.parser')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  22)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  23)         # Finding all brand names for later use
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  24)         brandNames = []
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  25)         brandList = soup.find('ul', class_='collection-nav')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  26)         brandListItems = brandList.find_all('li', 'sidebar__item')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  27)         for i in range(0, len(brandListItems)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  28)             brandName = brandListItems[i].text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  29)             brandName = brandName.replace('\n', "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  30)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  31)             brandNames.append(brandName)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  32)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  33)         # Needs to be run twice because of how Python handles iterators
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  34)         for i in range(2):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  35)             for i in range(len(brandNames)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  36)                 if i == len(brandNames):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  37)                     break
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  38)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  39)                 if ("All Collections" in brandNames[i] or "All Bottles" in brandNames[i] or "Best Seller" in brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  40)                     or "Clearance" in brandNames[i] or "Men" in brandNames[i] or "New Arrivals" in brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  41)                     or "Sample" in brandNames[i] or "Tester" in brandNames[i] or "Unisex" in brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  42)                     or "Women" in brandNames[i]):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  43)                         del brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  44)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  45)         # Finding total number of pages to scrape from
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  46)         pageNumbersFind = soup.find('ul', class_='pagination-custom')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  47)         pageListItems = pageNumbersFind.find_all('li', class_='pagination-custom__num')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  48)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  49)         for i in range (0, len(pageListItems)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  50)             pageListInfo = pageListItems[i].text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  51)             pageListInfo = pageListInfo.replace(" ", "").replace('\n', "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  52)             totalPages = pageListInfo
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  53)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  54)         # Men's scraping
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  55)         for i in range(1, int(totalPages) + 1):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  56)             fragPages = []
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  57)             catalogPage = "https://www.venbafragrance.com/collections/men?page=" + str(i)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  58)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  59)             # Opening the catalog page
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  60)             await page.goto(catalogPage)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  61)             html = await page.inner_html('#MainContent')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  62)             soup = BeautifulSoup(html, 'html.parser')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  63)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  64)             # Collecting links to individual fragrance pages
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  65)             targetDiv = soup.find('div', class_='js-grid')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  66)             linkTags = targetDiv.find_all('a')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  67)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  68)             for index, a in enumerate(linkTags):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  69)                 if index % 3 == 0:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  70)                     href = a.get('href')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  71)                     fragPages.append(href)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  72)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  73)             # Going to the individual fragrance page
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  74)             for j in range(0, len(fragPages)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  75)                 fragPage = "https://www.venbafragrance.com/" + fragPages[j]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  76)                 tcellList = []
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  77)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  78)                 await page.goto(fragPage)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  79)                 html = await page.inner_html('#MainContent')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  80)                 soup = BeautifulSoup(html, 'html.parser')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  81)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  82)                 # Collecting information
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  83)                 infoCluster = soup.find('h1', class_='product__title').text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  84)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500  85)                 if ("Extrait" in infoCluster or "Cologne" in infoCluster or "Sample" in infoCluster
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500  86)                     or "EDP oz" in infoCluster):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  87)                     continue
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500  88)                 position = infoCluster.find(" oz")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500  89)                 infoCluster = infoCluster[:position + 3]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  90)                 link = fragPage
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  91)                 imageLinkDiv = soup.find('div', class_='lazy-image mobile-zoom-wrapper')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  92)                 imageTag = imageLinkDiv.find('img')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  93)                 imageLink = imageTag.get('src')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  94)                 price = soup.find('span', class_='product__price').text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  95)                 infoTable = soup.find('div', class_='productheader')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  96)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  97)                 if infoTable != None:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  98)                     trows = infoTable.find_all('tr')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500  99)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 100)                 if infoTable == None or trows == []:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 101)                     if "EDP" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 102)                         concentration = "EDP"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 103)                     elif "EDT" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 104)                         concentration = "EDT"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 105)                     elif "Parfum" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 106)                         concentration = "Parfum"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 107)                     else:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 108)                         concentration = None
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 109)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 110)                     if "Men" in infoCluster or "Man" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 111)                         gender = "Male"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 112)                     else:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 113)                         gender = "Unisex"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 114)                 else:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 115)                     for tcell in trows:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 116)                         tcellList.append(tcell.text)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 117)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 118)                     gender = tcellList[3]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 119)                     concentration = tcellList[4]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 120)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 121)                     # Beginning formatting
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 122)                     if "Eau de Parfum" in concentration:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 123)                         concentration = "EDP"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 124)                     elif "Eau de Toilette" in concentration:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 125)                         concentration = "EDT"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 126)                     elif "Parfum" in concentration:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 127)                         concentration = "Parfum"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 128)                     else:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 129)                         concentration = None
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 130)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 131)                     if "Men" in gender:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 132)                         gender = "Male"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 133)                     else:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 134)                         gender = "Unisex"
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 135)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 136)                 if concentration == None:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 137)                     continue
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 138)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 139)                 # Formatting continued
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 140)                 imageLink = "https:" + imageLink
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 141)                 price = price.replace('\n', "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 142)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 143)                 for brandName in brandNames:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 144)                     if brandName in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 145)                         brand = brandName
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 146)                         if brand == "Escentric Molecule":
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 147)                             infoCluster = infoCluster.replace(brand + "s ", "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 148)                         else:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 149)                             infoCluster = infoCluster.replace(brand + " ", "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 150)                         break
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 151)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 152)                 if "Maison Margiela" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 153)                     brand = "Maison Martin Margiela"
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 154)                     infoCluster = infoCluster.replace("Maison Margiela ", "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 155)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 156)                 position = infoCluster.find(concentration)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 157)                 if position != -1:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 158)                     sizeOZ = infoCluster[position + len(concentration) + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 159)                     infoCluster = infoCluster.replace(" " + concentration + " ", "").replace(sizeOZ, "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 160)                 elif "EDP" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 161)                     position = infoCluster.find("EDP")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 162)                     sizeOZ = infoCluster[position + len("EDP") + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 163)                     infoCluster = infoCluster.replace(" " + "EDP" + " ", "").replace(sizeOZ, "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 164)                 elif "EDT" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 165)                     position = infoCluster.find("EDT")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 166)                     sizeOZ = infoCluster[position + len("EDT") + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 167)                     infoCluster = infoCluster.replace(" " + "EDT" + " ", "").replace(sizeOZ, "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 168)                 elif "Parfum" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 169)                     position = infoCluster.find("Parfum")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 170)                     sizeOZ = infoCluster[position + len("Parfum") + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 171)                     infoCluster = infoCluster.replace(" " + "Parfum" + " ", "").replace(sizeOZ, "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 172)                 infoCluster = infoCluster.replace(" for Men", "").replace(" Man", "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 173)                 title = infoCluster
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 174)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 175)                 # Databasing the results
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 176)                 df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 177)                                     str(price), str(link), str(imageLink)]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 178)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 179)         '''
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 180)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 181)         # Women's Fragrances from Venba Fragrance
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 182)         await page.goto("https://www.venbafragrance.com/collections/women?page=1")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 183)         html = await page.inner_html('#MainContent')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 184)         soup = BeautifulSoup(html, 'html.parser')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 185)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 186)         # Finding all brand names for later use
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 187)         brandNames = []
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 188)         brandList = soup.find('ul', class_='collection-nav')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 189)         brandListItems = brandList.find_all('li', 'sidebar__item')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 190)         for i in range(0, len(brandListItems)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 191)             brandName = brandListItems[i].text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 192)             brandName = brandName.replace('\n', "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 193)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 194)             brandNames.append(brandName)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 195)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 196)         # Needs to be run twice because of how Python handles iterators
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 197)         for i in range(2):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 198)             for i in range(len(brandNames)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 199)                 if i == len(brandNames):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 200)                     break
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 201)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 202)                 if ("All Collections" in brandNames[i] or "All Bottles" in brandNames[i] or "Best Seller" in brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 203)                     or "Clearance" in brandNames[i] or "Men" in brandNames[i] or "New Arrivals" in brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 204)                     or "Sample" in brandNames[i] or "Tester" in brandNames[i] or "Unisex" in brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 205)                     or "Women" in brandNames[i]):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 206)                         del brandNames[i]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 207)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 208)         # Finding total number of pages to scrape from
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 209)         pageNumbersFind = soup.find('ul', class_='pagination-custom')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 210)         pageListItems = pageNumbersFind.find_all('li', class_='pagination-custom__num')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 211)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 212)         for i in range (0, len(pageListItems)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 213)             pageListInfo = pageListItems[i].text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 214)             pageListInfo = pageListInfo.replace(" ", "").replace('\n', "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 215)             totalPages = pageListInfo
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 216)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 217)         # Women's scraping
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 218)         for i in range(1, int(totalPages) + 1):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 219)             fragPages = []
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 220)             catalogPage = "https://www.venbafragrance.com/collections/women?page=" + str(i)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 221)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 222)             # Opening the catalog page
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 223)             await page.goto(catalogPage)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 224)             html = await page.inner_html('#MainContent')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 225)             soup = BeautifulSoup(html, 'html.parser')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 226)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 227)             # Collecting links to individual fragrance pages
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 228)             targetDiv = soup.find('div', class_='js-grid')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 229)             linkTags = targetDiv.find_all('a')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 230)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 231)             for index, a in enumerate(linkTags):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 232)                 if index % 3 == 0:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 233)                     href = a.get('href')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 234)                     fragPages.append(href)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 235)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 236)             # Going to the individual fragrance page
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 237)             for j in range(0, len(fragPages)):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 238)                 fragPage = "https://www.venbafragrance.com/" + fragPages[j]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 239)                 tcellList = []
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 240)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 241)                 await page.goto(fragPage)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 242)                 html = await page.inner_html('#MainContent')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 243)                 soup = BeautifulSoup(html, 'html.parser')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 244)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 245)                 # Collecting information
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 246)                 infoCluster = soup.find('h1', class_='product__title').text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 247)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 248)                 if ("Extrait" in infoCluster or "Cologne" in infoCluster or "Sample" in infoCluster
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 249)                     or "EDP oz" in infoCluster):
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 250)                     continue
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 251)                 position = infoCluster.find(" oz")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 252)                 infoCluster = infoCluster[:position + 3]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 253)                 link = fragPage
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 254)                 imageLinkDiv = soup.find('div', class_='lazy-image mobile-zoom-wrapper')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 255)                 imageTag = imageLinkDiv.find('img')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 256)                 imageLink = imageTag.get('src')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 257)                 price = soup.find('span', class_='product__price').text
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 258)                 infoTable = soup.find('div', class_='productheader')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 259)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 260)                 if infoTable != None:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 261)                     trows = infoTable.find_all('tr')
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 262)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 263)                 if infoTable == None or trows == []:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 264)                     if "EDP" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 265)                         concentration = "EDP"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 266)                     elif "EDT" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 267)                         concentration = "EDT"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 268)                     elif "Parfum" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 269)                         concentration = "Parfum"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 270)                     else:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 271)                         concentration = None
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 272)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 273)                     if "Her" in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 274)                         gender = "Female"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 275)                     else:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 276)                         gender = "Unisex"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 277)                 else:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 278)                     for tcell in trows:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 279)                         tcellList.append(tcell.text)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 280)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 281)                     gender = tcellList[3]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 282)                     concentration = tcellList[4]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 283)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 284)                     # Beginning formatting
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 285)                     if "Eau de Parfum" in concentration:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 286)                         concentration = "EDP"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 287)                     elif "Eau de Toilette" in concentration:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 288)                         concentration = "EDT"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 289)                     elif "Parfum" in concentration:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 290)                         concentration = "Parfum"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 291)                     else:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 292)                         concentration = None
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 293)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 294)                     if "Feminine" in gender or "Women" in gender:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 295)                         gender = "Female"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 296)                     else:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 297)                         gender = "Unisex"
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 298)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 299)                 if concentration == None:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 300)                     continue
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 301)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 302)                 # Formatting continued
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 303)                 imageLink = "https:" + imageLink
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 304)                 price = price.replace('\n', "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 305)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 306)                 for brandName in brandNames:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 307)                     if brandName in infoCluster:
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 308)                         brand = brandName
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 309)                         if brand == "Escentric Molecule":
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 310)                             infoCluster = infoCluster.replace(brand + "s ", "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 311)                         else:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 312)                             infoCluster = infoCluster.replace(brand + " ", "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 313)                         break
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 314)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 315)                 if "Maison Margiela" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 316)                     brand = "Maison Martin Margiela"
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 317)                     infoCluster = infoCluster.replace("Maison Margiela ", "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 318)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 319)                 position = infoCluster.find(concentration)
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 320)                 if position != -1:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 321)                     sizeOZ = infoCluster[position + len(concentration) + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 322)                     infoCluster = infoCluster.replace(" " + concentration + " ", "").replace(sizeOZ, "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 323)                 elif "EDP" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 324)                     position = infoCluster.find("EDP")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 325)                     sizeOZ = infoCluster[position + len("EDP") + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 326)                     infoCluster = infoCluster.replace(" " + "EDP" + " ", "").replace(sizeOZ, "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 327)                 elif "EDT" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 328)                     position = infoCluster.find("EDT")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 329)                     sizeOZ = infoCluster[position + len("EDT") + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 330)                     infoCluster = infoCluster.replace(" " + "EDT" + " ", "").replace(sizeOZ, "")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 331)                 elif "Parfum" in infoCluster:
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 332)                     position = infoCluster.find("Parfum")
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 333)                     sizeOZ = infoCluster[position + len("Parfum") + 1:]
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 334)                     infoCluster = infoCluster.replace(" " + "Parfum" + " ", "").replace(sizeOZ, "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 335)                 infoCluster = infoCluster.replace(" for Her", "")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 336)                 title = infoCluster
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 337)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 338)                 # Databasing the results
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 339)                 df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+09709eb4 (Shmoopy 2023-11-09 22:55:20 -0500 340)                                     str(price), str(link), str(imageLink)]
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 341)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 342)         await browser.close()
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 343)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 344)         return df.to_json(orient="columns")
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 345)
+caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 346) if __name__ == "__main__":
+17b09d68 (Shmoopy 2023-11-09 22:56:32 -0500 347)     asyncio.run(scrape_venba(10000))
+
+aura.py commits
+db758be6 (Shmoopy 2023-11-09 14:53:18 -0500  10) async def scrape_aura(max_items):
+61e067b5 (Shmoopy 2023-11-03 08:43:39 -0400  12)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 117)                     sizeOZ = sizeOZ + " oz"
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 126)                         price = "$" + price
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 129)                         price = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 138)                         concentration = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 145)                         brand = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 163)                         title = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 179)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 180)                                         str(price), str(link), str(imageLink)]
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 292)                         price = "$" + price
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 295)                         price = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 304)                         concentration = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 311)                         brand = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 312)
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 313)                         ############ Make "NA" = None on aura, check what they would be on gift and venba, add oz to size, and add $ to price
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 346)                     # Databasing the results
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 347)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 348)                                         str(price), str(link), str(imageLink)]
+2fb63b32 (Shmoopy 2023-11-03 08:37:38 -0400 350)         await browser.close()
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 355)     asyncio.run(scrape_aura(10000))
+
+giftExpress.py commits
+db758be6 (Shmoopy       2023-11-09 14:53:18 -0500  10) async def scrape_giftexpress(max_items):
+54db62a0 (Shmoopy       2023-11-03 08:44:54 -0400  12)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  60)                 imageLinks = []
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  70)                     imageLinkInfo = sizeBoxes.find_all('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  78)                     for displayedImage in imageLinkInfo:
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  79)                         imageSource = displayedImage.get('src')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  80)                         imageLinks.append(imageSource)
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  92)                             mensImageLink = str(imageLinks[k])
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 103)                             mensSizeOZ = mensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 109)                             mensPrice = "$" + mensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 121)                                 mensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 123)                             df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 124)                                                str(mensPrice), str(mensLink), str(mensImageLink)]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 134)                     mensImageDiv = soup.find('div', class_='fotorama__stage__shaft')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 135)                     mensImgTag = mensImageDiv.find('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 147)                     mensSizeOZ = mensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 153)                     mensPrice = "$" + mensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 165)                         mensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 167)                     df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),       
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 168)                                         str(mensPrice), str(mensLink), str(mensImageLink)]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 214)                 imageLinks = []
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 223)                     imageLinkInfo = sizeBoxes.find_all('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 231)                     for displayedImage in imageLinkInfo:
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 232)                         imageSource = displayedImage.get('src')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 233)                         imageLinks.append(imageSource)
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 245)                             womensImageLink = imageLinks[k]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 256)                             womensSizeOZ = womensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 262)                             womensPrice = "$" + womensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 274)                                 womensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 276)                             df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), (womensSizeOZ),
+54db62a0 (Shmoopy       2023-11-03 08:44:54 -0400 277)                                                float(womensPrice), str(womensLink), str(womensImageLink)]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 287)                     womensImageDiv = soup.find('div', class_='fotorama__stage__shaft')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 288)                     womensImgTag = mensImageDiv.find('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 300)                     womensSizeOZ = womensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 306)                     womensPrice = "$" + womensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 318)                         womensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 320)                     df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), str(womensSizeOZ),
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 321)                                         str(womensPrice), str(womensLink), str(womensImageLink)]
+0b4323a1 (Shmoopy       2023-11-03 08:37:10 -0400 323)         await browser.close()
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 328)     asyncio.run(scrape_giftexpress(10000))

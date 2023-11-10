@@ -94,7 +94,7 @@ const Browsing = ({style}) => {
             window.innerWidth < SMALL_SCREEN_CUTOFF
         );
     };
-    console.log(fragranceListings.length);
+
     // Use searchObject to search for fragrances
     const searchFragrances = useCallback(async (params, page) => {
       const {append, ...searchParams} = params;

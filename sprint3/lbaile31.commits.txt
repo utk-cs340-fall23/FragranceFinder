@@ -192,7 +192,7 @@ c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  83)     const fragranceListin
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  94)             window.innerWidth < SMALL_SCREEN_CUTOFF
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  95)         );
 92863883 (LakelonBailey 2023-11-05 13:42:57 -0500  96)     };
-9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500  97)     console.log(fragranceListings.length);
+607997cc (LakelonBailey 2023-11-09 22:12:52 -0500  97) 
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400  99)     const searchFragrances = useCallback(async (params, page) => {
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 100)       const {append, ...searchParams} = params;
 c3741ba0 (LakelonBailey 2023-11-04 02:10:33 -0400 103)           `${url}?${new URLSearchParams({
@@ -674,11 +674,42 @@ dc83f4f0 (LakelonBailey     2023-11-04 23:48:02 -0400 74)     </AuthForm>
 
 
 ./backend/utils/dbUpdater.js
-dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500   5) require('dotenv').config();
-dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500  13) 		const pythonPath = process.env.PYTHON_PATH || 'python';
-dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500  14) 		const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
-dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500  80) 
-dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500  89)
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500   4) const {Sequelize, Op} = require('sequelize');
+dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500   6) require('dotenv').config();
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500   8) function extractFields(item, model, ignore) {
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500   9)     ignore = ignore ? ignore : [];
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  10)     const modelFields = Object.keys(model.getAttributes());
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  11)     return Object.fromEntries(Object.entries(item).filter(
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  12)         ([key, val]) => modelFields.includes(key) && !ignore.includes(key)
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  13)     ));
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  14) }
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  15) 
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  36)         const [fragrance, fragranceCreated] = await Fragrance.findOrCreate({
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  37)             where: extractFields(newFragrance, Fragrance, ['photoLink']),
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  38)             defaults: extractFields(newFragrance, Fragrance)
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  41)         let [fragranceListing, _] = await FragranceListing.findOrCreate({
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  42)             where: {
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  43)                 sizeoz: {
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  44)                     [Op.like]: newFragrance.sizeoz
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  45)                 },
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  46)                 fragranceId: fragrance.id,
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  47)                 site: newFragrance.site
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  48)             },
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  49)             defaults: extractFields(newFragrance, FragranceListing)
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  50)         });
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  68)         // Update with new price
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  69)         const newVals = extractFields(newFragrance, FragranceListing, ['fragranceId']);
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  70)         for (let [name, val] of Object.entries(newVals)) {
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  71)             fragranceListing[name] = val;
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  77)         if (newFragrance.price >= newLowestPrices[key]) {
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 134)         for (let fragranceInfo of fragrances) {
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 135)             console.log(fragranceInfo.fragrance.title, fragranceInfo.fragranceListing.sizeoz, fragranceInfo.fragranceListing.price);
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 136)         }
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 141)     const data = require('../data/jomashop.json');
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 142)     await processData(cleanData(data));
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 143)     return;
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 144) 
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 147)
 
 
 ./backend/utils/auth.js
@@ -731,8 +762,21 @@ f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 60)
 33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  5)     'Female': "Women's",
 33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  6)     'Unisex': "Unisex",
 33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400  7) }
-33b50530 (LakelonBailey 2023-11-04 01:53:53 -0400 44)         data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
-9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 51)         data.gender = genderMapper[data.gender] || data.gender;
+9671a75f (LakelonBailey 2023-11-09 17:39:42 -0500 15) function isEmptyFragrance(newFragrance) {
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 16)     const badValues = ['N/A', null, undefined];
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 17)     const fieldsToCheck = ['brand', 'title', 'concentration', 'gender'];
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 18)     return fieldsToCheck.filter(field => badValues.includes(newFragrance[field])).length > 0;
+9671a75f (LakelonBailey 2023-11-09 17:39:42 -0500 19) }
+9671a75f (LakelonBailey 2023-11-09 17:39:42 -0500 20) 
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500 28)         console.error(`Invalid URL: ${url}`);
+9671a75f (LakelonBailey 2023-11-09 17:39:42 -0500 39)     return data.filter(item => !isEmptyFragrance(item)).map(item => {
+9671a75f (LakelonBailey 2023-11-09 17:39:42 -0500 56)         data.price = data.price.toString();
+9adfae36 (LakelonBailey 2023-11-09 10:47:37 -0500 61)         data.gender = genderMapper[data.gender] || data.gender;
+9671a75f (LakelonBailey 2023-11-09 17:39:42 -0500 72) }
+
+
+./backend/models/Fragrance.js
+7916fba8 (LakelonBailey     2023-11-09 22:11:58 -0500 31)     },
 
 
 ./backend/models/index.js
@@ -741,6 +785,7 @@ f22628ea (LakelonBailey     2023-11-05 17:18:17 -0500 17)     as: 'watchlist',
 
 
 ./backend/scripts/seedData.js
+7916fba8 (LakelonBailey 2023-11-09 22:11:58 -0500  1) const fragranceData = require('../data/jomashop.json');
 01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500  4) const sequelize = require('../config/db');
 01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 52) sequelize.sync({ force: false, alter: true }).then(() => {
 01ecbb2d (LakelonBailey 2023-11-05 17:51:14 -0500 53)     loadFragrances();
@@ -970,18 +1015,19 @@ f22628ea (LakelonBailey 2023-11-05 17:18:17 -0500 33) }
 
 
 ./backend/scrapers/MasterScript.py
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 12) 
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 13) scrapers = [
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 14)     scrape_jomashop,
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 17) ]
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 18) 
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 21)         *[scraper(max_items) for scraper in scrapers]
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 35) result = asyncio.run(get_data(max_items_per_scraper))
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 37) gdf = pd.concat(list(map(
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 38)     lambda data: pd.read_json(data, orient='records'),
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 39)     result
-0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 40) )))
-dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500 42) gdf.to_json('data/AllRecords.json', orient='records')
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 14) 
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 15) scrapers = [
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 16)     scrape_jomashop,
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 21) ]
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 22) 
+9a7c5518 (LakelonBailey 2023-11-09 18:10:52 -0500 24)     return await asyncio.gather(
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 25)         *[scraper(max_items) for scraper in scrapers]
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 38) result = asyncio.run(get_data(max_items_per_scraper))
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 40) gdf = pd.concat(list(map(
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 41)     lambda data: pd.read_json(data, orient='records'),
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 42)     result
+0217d198 (LakelonBailey 2023-10-27 08:56:03 -0400 43) )))
+dc34a5c0 (LakelonBailey 2023-11-08 17:07:51 -0500 45) gdf.to_json('data/AllRecords.json', orient='records')
 
 
 ./backend/routes/fragranceListingRoutes.js

@@ -1,4 +1,4 @@
-const fragranceData = require('../data/AllRecords.json');
+const fragranceData = require('../data/jomashop.json');
 const {FragranceListing, Fragrance} = require('../models');
 const {cleanData} = require('../utils/parsing');
 const sequelize = require('../config/db');

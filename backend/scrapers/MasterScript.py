@@ -3,6 +3,8 @@ import pandas as pd
 from jomashop import scrape_jomashop
 from maxaroma import scrape_maxaroma
 from fragrancenet import scrape_fragrancenet
+from aura import scrape_aura
+from giftExpress import scrape_giftexpress
 import os
 import sys
 
@@ -13,14 +15,15 @@ import sys
 scrapers = [
     scrape_jomashop,
     scrape_maxaroma,
-    scrape_fragrancenet
+    scrape_fragrancenet,
+    scrape_aura,
+    scrape_giftexpress
 ]
 
 async def get_data(max_items):
-    jomashopData, maxaromaData, fragrancenetData = await asyncio.gather(
+    return await asyncio.gather(
         *[scraper(max_items) for scraper in scrapers]
     )
-    return jomashopData, maxaromaData, fragrancenetData
 
 
 max_items_per_scraper = 10000

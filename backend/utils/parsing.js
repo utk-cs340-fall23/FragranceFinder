@@ -12,6 +12,12 @@ function extractPrice(str) {
     return parseFloat(str.replace(/[^0-9.]/g, ''));
 }
 
+function isEmptyFragrance(newFragrance) {
+    const badValues = ['N/A', null, undefined];
+    const fieldsToCheck = ['brand', 'title', 'concentration', 'gender'];
+    return fieldsToCheck.filter(field => badValues.includes(newFragrance[field])).length > 0;
+}
+
 
 // Use JavaScript's URL builder to parse hostname
 function extractDomain(url) {
@@ -19,7 +25,7 @@ function extractDomain(url) {
         let parsedURL = new URL(url);
         return parsedURL.hostname;
     } catch (e) {
-        console.error("Invalid URL");
+        console.error(`Invalid URL: ${url}`);
         return null;
     }
 }
@@ -30,20 +36,24 @@ function extractFloat(str) {
 }
 
 function cleanData(data) {
-    return data.filter(item => item.title != 'N/A').map(item => {
-        const {size, ...data} = item;
+    return data.filter(item => !isEmptyFragrance(item)).map(item => {
+        let { size, ...data } = item;
 
-        // Designate size
-        if (size.includes('oz')) {
-            data.sizeoz = extractFloat(size);
-        }
-        else if (size.includes('ml')) {
-            data.sizeoz = extractFloat(size) * ML_TO_OZ_FACTOR;
-        }
+        if (size != null) {
+            size = size.toString();
+            // Designate size
+            if (size.includes('oz')) {
+                data.sizeoz = extractFloat(size);
+            }
+            else if (size.includes('ml')) {
+                data.sizeoz = extractFloat(size) * ML_TO_OZ_FACTOR;
+            }
 
-        data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
+            data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
+        }
 
         // Parse price string
+        data.price = data.price.toString();
         data.price = extractFloat(data.price);
 
         // Get site
