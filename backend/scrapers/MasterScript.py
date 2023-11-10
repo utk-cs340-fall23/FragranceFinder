@@ -3,7 +3,6 @@ import pandas as pd
 from jomashop import scrape_jomashop
 from maxaroma import scrape_maxaroma
 from fragrancenet import scrape_fragrancenet
-from venba import scrape_venba
 from aura import scrape_aura
 from giftExpress import scrape_giftexpress
 import os
@@ -17,7 +16,6 @@ scrapers = [
     scrape_jomashop,
     scrape_maxaroma,
     scrape_fragrancenet,
-    scrape_venba,
     scrape_aura,
     scrape_giftexpress
 ]
