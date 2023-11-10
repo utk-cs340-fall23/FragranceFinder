@@ -7,7 +7,7 @@ import pandas as pd
 
 async def scrape_onlineca():
     async with async_playwright() as p:
-        ## try:
+         try:
             df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
             fragrance_list = []
             fragrance = {}
@@ -106,8 +106,22 @@ async def scrape_onlineca():
                                         fragrance['link'] = prodlink
                                         fragrance['brand'] = brandName
                                         fragrance['title'] = prodName
-
+                                        fragrance_list.append(fragrance)
                                         #print(sizeNcon)
-if __name__ == "__main__":
-    asyncio.run(scrape_onlineca())
-        ## finally:
+                                        df.loc[len(df)] = [brandName, prodName, concentration, gender, size, price, prodlink, photolink] 
+                                await browser.close()
+         finally:
+                 """for fragrance in all_fragrances:
+                print(f"Photo Link: {fragrance['photoLink']}")
+                print(f"Brand: {fragrance['brand']}")
+                print(f"Title: {fragrance['title']}")
+                print(f"Concentration: {fragrance['concentration']}")
+                print(f"Sizeoz {fragrance['sizeoz']}")
+                print(f"Sizeml: {fragrance['sizeml']}")
+                print(f"Price: {fragrance['price']}")
+                print(f"Gender: {fragrance['gender']}")
+                print(f"Link: {fragrance['link']}")
+                print("-----")"""
+
+    if __name__ == "__main__":
+        asyncio.run(scrape_onlineca())
