@@ -114,6 +114,7 @@ async def scrape_aura(max_items):
                         size = size[position + 1:]
                     position = size.find('O')
                     sizeOZ = size[:position]
+                    sizeOZ = sizeOZ + " oz"
                     
                     # Formatting the rest of the information
                     if '$' in stock:
@@ -122,9 +123,10 @@ async def scrape_aura(max_items):
                         position = price.find('$')
                         price = price[position + 1:]
                         price = price.replace(" USD", "")
+                        price = "$" + price
                     else:
                         stock = "Sold Out"
-                        price = -1
+                        price = None
                         
                     if "EDP" in infoCluster:
                         concentration = "EDP"
@@ -133,14 +135,14 @@ async def scrape_aura(max_items):
                         concentration = "EDT"
                         infoCluster = infoCluster.replace("EDT", "")
                     else:
-                        concentration = "NA"
+                        concentration = None
                         
                     for m in range(0, len(brandNames)):
                         if brandNames[m] in infoCluster:
                             brand = brandNames[m]
                             infoCluster = infoCluster.replace(brand, "")
                     if len(brand) == 0:
-                        brand = "NA"
+                        brand = None
                     
                     if "Men" in infoCluster and "en and " not in infoCluster:
                         gender = "Male"
@@ -158,7 +160,7 @@ async def scrape_aura(max_items):
                     
                     infoCluster = infoCluster.replace("by", "").replace("   ", " ").replace("  ", " ")
                     if len(infoCluster) == 0:
-                        title = "NA"
+                        title = None
                     else :
                         if infoCluster[0] == " ":
                             infoCluster = infoCluster[1:]
@@ -174,8 +176,8 @@ async def scrape_aura(max_items):
                         title = infoCluster
                         
                     # Databasing th results
-                    df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                        float(price), str(link), str(imageLink)]
+                    df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ), 
+                                        str(price), str(link), str(imageLink)]
                         
         # Women's Fragrances from Aura Fragrance
         # Opening the Aura Fragrance women's catalog page, timeout required due to potential long loading times
@@ -278,6 +280,7 @@ async def scrape_aura(max_items):
                         size = size[position + 1:]
                     position = size.find('O')
                     sizeOZ = size[:position]
+                    sizeOZ = sizeOZ + " oz"
                     
                     # Formatting the rest of the information
                     if '$' in stock:
@@ -286,9 +289,10 @@ async def scrape_aura(max_items):
                         position = price.find('$')
                         price = price[position + 1:]
                         price = price.replace(" USD", "")
+                        price = "$" + price
                     else:
                         stock = "Sold Out"
-                        price = -1
+                        price = None
                     
                     if "EDP" in infoCluster:
                         concentration = "EDP"
@@ -297,14 +301,16 @@ async def scrape_aura(max_items):
                         concentration = "EDT"
                         infoCluster = infoCluster.replace("EDT", "")
                     else:
-                        concentration = "NA"
+                        concentration = None
                         
                     for m in range(0, len(brandNames)):
                         if brandNames[m] in infoCluster:
                             brand = brandNames[m]
                             infoCluster = infoCluster.replace(brand, "")
                     if len(brand) == 0:
-                        brand = "NA"
+                        brand = None
+                        
+                        ############ Make "NA" = None on aura, check what they would be on gift and venba, add oz to size, and add $ to price
                     
                     if "Women" in infoCluster and "en and " not in infoCluster:
                         gender = "Female"
@@ -322,7 +328,7 @@ async def scrape_aura(max_items):
                     
                     infoCluster = infoCluster.replace("by", "").replace("   ", " ").replace("  ", " ")
                     if len(infoCluster) == 0:
-                        title = "NA"
+                        title = None
                     else :
                         if infoCluster[0] == " ":
                             infoCluster = infoCluster[1:]
@@ -337,13 +343,13 @@ async def scrape_aura(max_items):
                         
                         title = infoCluster
                         
-                    # Databasing th results
-                    df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                        float(price), str(link), str(imageLink)]
+                    # Databasing the results
+                    df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ), 
+                                        str(price), str(link), str(imageLink)]
                     
         await browser.close()
         
         return df.to_json(orient="columns")
         
 if __name__ == "__main__":
-    asyncio.run(scrape_aura())
+    asyncio.run(scrape_aura(10000))

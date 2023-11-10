@@ -57,6 +57,7 @@ async def scrape_giftexpress(max_items):
                 sizes = []
                 stocks = []
                 prices = []
+                imageLinks = []
 
                 # Scraping individual data for each size, will create a new list item for each attribute being scraped
                 sizeBoxes = soup.find('div', class_='products-detal')
@@ -66,6 +67,7 @@ async def scrape_giftexpress(max_items):
                     sizeInfo = sizeBoxes.find_all('span', class_='size')
                     stockInfo = sizeBoxes.find_all('span', class_='prod-dtl-instock instock')
                     priceInfo = sizeBoxes.find_all('span', class_='price')
+                    imageLinkInfo = sizeBoxes.find_all('img')
 
                     for displayedSize in sizeInfo:
                         sizes.append(displayedSize.text)
@@ -73,6 +75,9 @@ async def scrape_giftexpress(max_items):
                         stocks.append(displayedStock.text)
                     for displayedPrice in priceInfo:
                         prices.append(displayedPrice.text)
+                    for displayedImage in imageLinkInfo:
+                        imageSource = displayedImage.get('src')
+                        imageLinks.append(imageSource)
 
                     for k in range(0, len(sizes)):
                         if sizes[k] != "Standard":
@@ -84,8 +89,7 @@ async def scrape_giftexpress(max_items):
                             price = str(prices[k])
                             stock = str(stocks[k])
                             mensLink = fragPages[j]
-                            mensImgTag = soup.find('img')
-                            mensImageLink = mensImgTag.get('src')
+                            mensImageLink = str(imageLinks[k])
 
                             # Formatting the scraped data for uniformity
                             mensBrand = brand.replace('\n', "").rstrip(" ")
@@ -96,11 +100,13 @@ async def scrape_giftexpress(max_items):
                             size = size.replace('\n', "").replace("(Tester) ", "")
                             position = size.find("oz")
                             mensSizeOZ = size[:position - 1]
+                            mensSizeOZ = mensSizeOZ + " oz"
                             if "Unisex" in gender:
                                 mensGender = "Unisex"
                             else:
                                 mensGender = "Male"
                             mensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+                            mensPrice = "$" + mensPrice
                             mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
                             if mensConcentration == "Eau De Cologne":
@@ -112,10 +118,10 @@ async def scrape_giftexpress(max_items):
                             elif mensConcentration == "Parfum":
                                 mensConcentration = mensConcentration
                             else:
-                                mensConcentration = "NA"
+                                mensConcentration = None
                                 
-                            df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
-                                               float(mensPrice), str(mensLink), str(mensImageLink)]
+                            df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),
+                                               str(mensPrice), str(mensLink), str(mensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
                     title = soup.find('div', class_='b-name').text
@@ -125,7 +131,8 @@ async def scrape_giftexpress(max_items):
                     price = soup.find('span', {'class': 'price'}).text
                     stock = soup.find('div', {'class': 'pro-stock'})
                     mensLink = fragPages[j]
-                    mensImgTag = soup.find('img')
+                    mensImageDiv = soup.find('div', class_='fotorama__stage__shaft')
+                    mensImgTag = mensImageDiv.find('img')
                     mensImageLink = mensImgTag.get('src')
 
                     # Formatting, same as above
@@ -137,11 +144,13 @@ async def scrape_giftexpress(max_items):
                     size = size.replace('\n', "").replace("(Tester) ", "")
                     position = size.find("oz")
                     mensSizeOZ = size[:position - 1]
+                    mensSizeOZ = mensSizeOZ + " oz"
                     if "Unisex" in gender:
                         mensGender = "Unisex"
                     else:
                         mensGender = "Male"
                     mensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+                    mensPrice = "$" + mensPrice
                     mensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
                     if mensConcentration == "Eau De Cologne":
@@ -153,10 +162,10 @@ async def scrape_giftexpress(max_items):
                     elif mensConcentration == "Parfum":
                         mensConcentration = mensConcentration
                     else:
-                        mensConcentration = "NA"
+                        mensConcentration = None
                             
-                    df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), round(float(mensSizeOZ), 2), 
-                                        float(mensPrice), str(mensLink), str(mensImageLink)]
+                    df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),
+                                        str(mensPrice), str(mensLink), str(mensImageLink)]
 
         # Women's Fragrances from Gift Express
         pageNumbers = []
@@ -202,6 +211,7 @@ async def scrape_giftexpress(max_items):
                 sizes = []
                 stocks = []
                 prices = []
+                imageLinks = []
 
                 # Scraping individual data for each size, will create a new list item for each attribute being scraped
                 sizeBoxes = soup.find('div', class_='products-detal')
@@ -210,6 +220,7 @@ async def scrape_giftexpress(max_items):
                     sizeInfo = sizeBoxes.find_all('span', class_='size')
                     stockInfo = sizeBoxes.find_all('span', class_='prod-dtl-instock instock')
                     priceInfo = sizeBoxes.find_all('span', class_='price')
+                    imageLinkInfo = sizeBoxes.find_all('img')
 
                     for displayedSize in sizeInfo:
                         sizes.append(displayedSize.text)
@@ -217,6 +228,9 @@ async def scrape_giftexpress(max_items):
                         stocks.append(displayedStock.text)
                     for displayedPrice in priceInfo:
                         prices.append(displayedPrice.text)
+                    for displayedImage in imageLinkInfo:
+                        imageSource = displayedImage.get('src')
+                        imageLinks.append(imageSource)
 
                     for k in range(0, len(sizes)):
                         if sizes[k] != "Standard":
@@ -228,8 +242,7 @@ async def scrape_giftexpress(max_items):
                             price = str(prices[k])
                             stock = str(stocks[k])
                             womensLink = fragPages[j]
-                            womensImgTag = soup.find('img')
-                            womensImageLink = womensImgTag.get('src')
+                            womensImageLink = imageLinks[k]
 
                             # Formatting the scraped data for uniformity
                             womensBrand = brand.replace('\n', "").rstrip(" ")
@@ -240,11 +253,13 @@ async def scrape_giftexpress(max_items):
                             size = size.replace('\n', "").replace("(Tester) ", "")
                             position = size.find("oz")
                             womensSizeOZ = size[:position - 1]
+                            womensSizeOZ = womensSizeOZ + " oz"
                             if "Unisex" in gender:
                                 womensGender = "Unisex"
                             else:
                                 womensGender = "Female"
                             womensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+                            womensPrice = "$" + womensPrice
                             womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
                             if womensConcentration == "Eau De Cologne":
@@ -256,9 +271,9 @@ async def scrape_giftexpress(max_items):
                             elif womensConcentration == "Parfum":
                                 womensConcentration = womensConcentration
                             else:
-                                womensConcentration = "NA"
+                                womensConcentration = None
                                 
-                            df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
+                            df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), (womensSizeOZ),
                                                float(womensPrice), str(womensLink), str(womensImageLink)]
                 else:
                     brand = soup.find('td', {'class': 'col data'}).text
@@ -269,7 +284,8 @@ async def scrape_giftexpress(max_items):
                     price = soup.find('span', {'class': 'price'}).text
                     stock = soup.find('div', {'class': 'pro-stock'})
                     womensLink = fragPages[j]
-                    womensImgTag = soup.find('img')
+                    womensImageDiv = soup.find('div', class_='fotorama__stage__shaft')
+                    womensImgTag = mensImageDiv.find('img')
                     womensImageLink = womensImgTag.get('src')
 
                     # Formatting, same as above
@@ -281,11 +297,13 @@ async def scrape_giftexpress(max_items):
                     size = size.replace('\n', "").replace("(Tester) ", "")
                     position = size.find("oz")
                     womensSizeOZ = size[:position - 1]
+                    womensSizeOZ = womensSizeOZ + " oz"
                     if "Unisex" in gender:
                         womensGender = "Unisex"
                     else:
                         womensGender = "Female"
                     womensPrice = price.replace('\n', "").replace('$', "").rstrip(" ")
+                    womensPrice = "$" + womensPrice
                     womensStock = stock.replace('\n', "").replace("Notify Me", "").replace("ready to ship", "").replace("s", "S")
 
                     if womensConcentration == "Eau De Cologne":
@@ -297,14 +315,14 @@ async def scrape_giftexpress(max_items):
                     elif womensConcentration == "Parfum":
                         womensConcentration = womensConcentration
                     else:
-                        womensConcentration = "NA"
+                        womensConcentration = None
                             
-                    df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), round(float(womensSizeOZ), 2), 
-                                        float(womensPrice), str(womensLink), str(womensImageLink)]
+                    df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), str(womensSizeOZ), 
+                                        str(womensPrice), str(womensLink), str(womensImageLink)]
                     
         await browser.close()
         
         return df.to_json(orient="columns")
 
 if __name__ == "__main__":
-    asyncio.run(scrape_giftexpress())
+    asyncio.run(scrape_giftexpress(10000))
