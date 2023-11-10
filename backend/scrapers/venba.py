@@ -82,8 +82,6 @@ async def scrape_venba(max_items):
                 # Collecting information
                 infoCluster = soup.find('h1', class_='product__title').text
                 
-                print("### InfoCluster:", infoCluster)
-                
                 if ("Extrait" in infoCluster or "Cologne" in infoCluster or "Sample" in infoCluster
                     or "EDP oz" in infoCluster):
                     continue
