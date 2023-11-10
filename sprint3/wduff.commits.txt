@@ -1,4 +1,4 @@
-venba.py committs
+venba.py commits
 caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   1) # William Duff
 caeb64da (Shmoopy 2023-11-08 23:38:04 -0500   2) # This program scrapes men's and women's fragrance information from venbafragrance.com
 db758be6 (Shmoopy 2023-11-09 14:53:18 -0500   3) # Last updated 11/09/2023
@@ -346,3 +346,68 @@ caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 344)         return df.to_json(orien
 caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 345)
 caeb64da (Shmoopy 2023-11-08 23:38:04 -0500 346) if __name__ == "__main__":
 17b09d68 (Shmoopy 2023-11-09 22:56:32 -0500 347)     asyncio.run(scrape_venba(10000))
+
+aura.py commits
+db758be6 (Shmoopy 2023-11-09 14:53:18 -0500  10) async def scrape_aura(max_items):
+61e067b5 (Shmoopy 2023-11-03 08:43:39 -0400  12)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 117)                     sizeOZ = sizeOZ + " oz"
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 126)                         price = "$" + price
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 129)                         price = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 138)                         concentration = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 145)                         brand = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 163)                         title = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 179)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 180)                                         str(price), str(link), str(imageLink)]
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 292)                         price = "$" + price
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 295)                         price = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 304)                         concentration = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 311)                         brand = None
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 312)
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 313)                         ############ Make "NA" = None on aura, check what they would be on gift and venba, add oz to size, and add $ to price
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 346)                     # Databasing the results
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 347)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 348)                                         str(price), str(link), str(imageLink)]
+2fb63b32 (Shmoopy 2023-11-03 08:37:38 -0400 350)         await browser.close()
+b8ec0cdd (Shmoopy 2023-11-09 21:41:46 -0500 355)     asyncio.run(scrape_aura(10000))
+
+giftExpress.py commits
+db758be6 (Shmoopy       2023-11-09 14:53:18 -0500  10) async def scrape_giftexpress(max_items):
+54db62a0 (Shmoopy       2023-11-03 08:44:54 -0400  12)         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  60)                 imageLinks = []
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  70)                     imageLinkInfo = sizeBoxes.find_all('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  78)                     for displayedImage in imageLinkInfo:
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  79)                         imageSource = displayedImage.get('src')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  80)                         imageLinks.append(imageSource)
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500  92)                             mensImageLink = str(imageLinks[k])
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 103)                             mensSizeOZ = mensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 109)                             mensPrice = "$" + mensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 121)                                 mensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 123)                             df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 124)                                                str(mensPrice), str(mensLink), str(mensImageLink)]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 134)                     mensImageDiv = soup.find('div', class_='fotorama__stage__shaft')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 135)                     mensImgTag = mensImageDiv.find('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 147)                     mensSizeOZ = mensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 153)                     mensPrice = "$" + mensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 165)                         mensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 167)                     df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),       
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 168)                                         str(mensPrice), str(mensLink), str(mensImageLink)]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 214)                 imageLinks = []
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 223)                     imageLinkInfo = sizeBoxes.find_all('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 231)                     for displayedImage in imageLinkInfo:
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 232)                         imageSource = displayedImage.get('src')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 233)                         imageLinks.append(imageSource)
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 245)                             womensImageLink = imageLinks[k]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 256)                             womensSizeOZ = womensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 262)                             womensPrice = "$" + womensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 274)                                 womensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 276)                             df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), (womensSizeOZ),
+54db62a0 (Shmoopy       2023-11-03 08:44:54 -0400 277)                                                float(womensPrice), str(womensLink), str(womensImageLink)]
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 287)                     womensImageDiv = soup.find('div', class_='fotorama__stage__shaft')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 288)                     womensImgTag = mensImageDiv.find('img')
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 300)                     womensSizeOZ = womensSizeOZ + " oz"
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 306)                     womensPrice = "$" + womensPrice
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 318)                         womensConcentration = None
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 320)                     df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), str(womensSizeOZ),
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 321)                                         str(womensPrice), str(womensLink), str(womensImageLink)]
+0b4323a1 (Shmoopy       2023-11-03 08:37:10 -0400 323)         await browser.close()
+b8ec0cdd (Shmoopy       2023-11-09 21:41:46 -0500 328)     asyncio.run(scrape_giftexpress(10000))
