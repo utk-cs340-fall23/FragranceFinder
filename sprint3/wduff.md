@@ -2,10 +2,10 @@
 William Duff, Shm00py, Fragrance Finder
 
 ### What you planned to do
-- Scrape Men's fragrance data (brand, title, concentration, size, price, gender, image link, and link to the page) on venbafragrance.com [#37](https://github.com/utk-cs340-fall23/FragranceFinder/issues/37)
-- Scrape Women's fragrance data (brand, title, concentration, size, price, gender, availability, image link, and link to the page) on venbafragrance.com [#38](https://github.com/utk-cs340-fall23/FragranceFinder/issues/38)
-- Format the data to fit the uniform style we decided on [#39](https://github.com/utk-cs340-fall23/FragranceFinder/issues/39)
-- Make data database compatable [#40](https://github.com/utk-cs340-fall23/FragranceFinder/issues/40)
+- Scrape Men's fragrance data (brand, title, concentration, size, price, gender, image link, and link to the page) on venbafragrance.com [#60](https://github.com/utk-cs340-fall23/FragranceFinder/issues/60)
+- Scrape Women's fragrance data (brand, title, concentration, size, price, gender, availability, image link, and link to the page) on venbafragrance.com [#61](https://github.com/utk-cs340-fall23/FragranceFinder/issues/61)
+- Format the data to fit the uniform style we decided on [#62](https://github.com/utk-cs340-fall23/FragranceFinder/issues/62)
+- Make data database compatable [#63](https://github.com/utk-cs340-fall23/FragranceFinder/issues/63)
 
 ### What you did not do
 - I was able to accomplish all of my tasks
@@ -15,10 +15,10 @@ William Duff, Shm00py, Fragrance Finder
 - Setting up the database on my computer had a huge learning curve, which took some time
 
 ### Issues you worked on
-- [#37](https://github.com/utk-cs340-fall23/FragranceFinder/issues/37) Men's Scraping
-- [#38](https://github.com/utk-cs340-fall23/FragranceFinder/issues/17) Women's Scraping
-- [#39](https://github.com/utk-cs340-fall23/FragranceFinder/issues/19) Formatting Data
-- [#40](https://github.com/utk-cs340-fall23/FragranceFinder/issues/40) Get Data Ready to be Databased
+- [#60](https://github.com/utk-cs340-fall23/FragranceFinder/issues/60) Men's Scraping
+- [#61](https://github.com/utk-cs340-fall23/FragranceFinder/issues/61) Women's Scraping
+- [#62](https://github.com/utk-cs340-fall23/FragranceFinder/issues/62) Formatting Data
+- [#63](https://github.com/utk-cs340-fall23/FragranceFinder/issues/63) Get Data Ready to be Databased
 
 ### Files you worked on
 - giftExpress.py (FragranceFinder/backend/scrapers/giftExpress.py)
