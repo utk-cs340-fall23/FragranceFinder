@@ -13,7 +13,7 @@ function extractPrice(str) {
 }
 
 function isEmptyFragrance(newFragrance) {
-    return newFragrance.brand == "N/A" || newFragrance.title == "N/A" || newFragrance.concentration == "N/A" || newFragrance.gender == "N/A";
+    return newFragrance.brand == null || newFragrance.title == null || newFragrance.concentration == null || newFragrance.gender == null;
 }
 
 
@@ -35,17 +35,20 @@ function extractFloat(str) {
 
 function cleanData(data) {
     return data.filter(item => !isEmptyFragrance(item)).map(item => {
-        let {size, ...data} = item;
-        size = size.toString();
-        // Designate size
-        if (size.includes('oz')) {
-            data.sizeoz = extractFloat(size);
-        }
-        else if (size.includes('ml')) {
-            data.sizeoz = extractFloat(size) * ML_TO_OZ_FACTOR;
-        }
+        let { size, ...data } = item;
 
-        data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
+        if (size != null) {
+            size = size.toString();
+            // Designate size
+            if (size.includes('oz')) {
+                data.sizeoz = extractFloat(size);
+            }
+            else if (size.includes('ml')) {
+                data.sizeoz = extractFloat(size) * ML_TO_OZ_FACTOR;
+            }
+
+            data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
+        }
 
         // Parse price string
         data.price = data.price.toString();
