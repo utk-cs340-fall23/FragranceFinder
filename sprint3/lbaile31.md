@@ -25,34 +25,33 @@ Project: Fragrance Finder
 * [#57](https://github.com/utk-cs340-fall23/FragranceFinder/issues/57) Add ability to filter watchlisted/un-watchlisted items
 
 # Files you worked on
-* backend/routes/fragranceListingRoutes.js
-* frontend/src/pages/Login.js
-* frontend/src/components/AuthForm.js
-* backend/models/Fragrance.js
-* frontend/src/components/Navigation.js
-* backend/utils/newDbUpdater.js
-* frontend/src/assets/css/auth.css
-* frontend/src/components/FragranceListings.js
-* backend/utils/auth.js
-* frontend/src/utils/requests.js
-* frontend/src/pages/Signup.js
-* frontend/src/components/Browsing.js
-* backend/utils/parsing.js
-* backend/routes/userRoutes.js
-* frontend/src/components/FragranceListingCard.js
-* backend/scripts/seedData.js
-* frontend/src/assets/css/navbar.css
-* frontend/src/utils/auth.js
-* frontend/src/pages/Home.js
-* backend/actions/index.js
 * backend/routes/watchlistRoutes.js
-* backend/utils/dbUpdater.js
-* backend/actions/fragranceListingActions.js
-* frontend/src/components/FilterBar.js
-* backend/actions/watchlistActions.js
+* frontend/src/components/Browsing.js
+* frontend/src/components/AuthForm.js
+* backend/routes/fragranceListingRoutes.js
+* frontend/src/components/Navigation.js
 * backend/scrapers/MasterScript.py
+* backend/models/Fragrance.js
+* backend/actions/watchlistActions.js
+* backend/actions/fragranceListingActions.js
+* frontend/src/utils/requests.js
+* frontend/src/components/FragranceListings.js
+* frontend/src/pages/Home.js
+* frontend/src/utils/auth.js
+* frontend/src/pages/Signup.js
+* frontend/src/assets/css/auth.css
+* frontend/src/components/FragranceListingCard.js
+* backend/utils/auth.js
+* backend/actions/index.js
 * backend/models/index.js
+* backend/routes/userRoutes.js
 * backend/routes/index.js
+* backend/utils/parsing.js
+* frontend/src/pages/Login.js
+* frontend/src/assets/css/navbar.css
+* backend/utils/dbUpdater.js
+* backend/scripts/seedData.js
+* frontend/src/components/FilterBar.js
 
 # What you accomplished
 Main tasks:
