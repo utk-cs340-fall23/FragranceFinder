@@ -1,7 +1,7 @@
 # Sprint 3
-Name: Nolan Coffey
-Github Username: ncoffey3
-Project: Fragrance Finder
+- Name: Nolan Coffey
+- Github Username: ncoffey3
+- Project: Fragrance Finder
 
 
 ## What you planned to do:
@@ -23,10 +23,10 @@ Project: Fragrance Finder
 * [#72](https://github.com/utk-cs340-fall23/FragranceFinder/issues/72) Alter database model to increase photolink column size
 
 # Files you worked on
-backend\scrapers\jomashop.py
-backend\scrapers\fragrance_buy.py
-backend\utils\parsing.js
-backend\models\Fragrance.js
+* backend\scrapers\jomashop.py
+* backend\scrapers\fragrance_buy.py
+* backend\utils\parsing.js
+* backend\models\Fragrance.js
 
 # What you accomplished
 
