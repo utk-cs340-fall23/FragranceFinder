@@ -1,0 +1,242 @@
+.\backend\scrapers\etiket.py
+98699593 (ssouther 2023-10-31 10:11:16 -0400  1) import asyncio
+98699593 (ssouther 2023-10-31 10:11:16 -0400  2) from playwright.async_api import async_playwright
+98699593 (ssouther 2023-10-31 10:11:16 -0400  3) from bs4 import BeautifulSoup
+98699593 (ssouther 2023-10-31 10:11:16 -0400  4) import re
+98699593 (ssouther 2023-10-31 10:11:16 -0400  5) import json
+98699593 (ssouther 2023-10-31 10:11:16 -0400  6) import pandas as pd
+98699593 (ssouther 2023-10-31 10:11:16 -0400  7) 
+98699593 (ssouther 2023-10-31 10:11:16 -0400  8) def valid_float(s):
+98699593 (ssouther 2023-10-31 10:11:16 -0400  9)     try:
+98699593 (ssouther 2023-10-31 10:11:16 -0400 10)         float(s)
+98699593 (ssouther 2023-10-31 10:11:16 -0400 11)         return True
+98699593 (ssouther 2023-10-31 10:11:16 -0400 12)     except ValueError:
+98699593 (ssouther 2023-10-31 10:11:16 -0400 13)         return False
+98699593 (ssouther 2023-10-31 10:11:16 -0400 14) 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 15) def extract_price(string):
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 16)     match = re.search(r'\$\d+\.\d{2}', string)
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 17)     return match.group(0) if match else None
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 18) 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 19) 
+98699593 (ssouther 2023-10-31 10:11:16 -0400 20) async def scrape_etiket(max_items):
+98699593 (ssouther 2023-10-31 10:11:16 -0400 21)     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+98699593 (ssouther 2023-10-31 10:11:16 -0400 22)     
+98699593 (ssouther 2023-10-31 10:11:16 -0400 23)     try:
+98699593 (ssouther 2023-10-31 10:11:16 -0400 24)         async with async_playwright() as p:
+98699593 (ssouther 2023-10-31 10:11:16 -0400 25)             browser = await p.chromium.launch(headless=False)
+98699593 (ssouther 2023-10-31 10:11:16 -0400 26)             page = await browser.new_page()
+98699593 (ssouther 2023-10-31 10:11:16 -0400 27)         
+98699593 (ssouther 2023-10-31 10:11:16 -0400 28)             await page.goto("https://etiket.ca/collections/fragrance")
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 29)             #await page.wait_for_selector("div.new-grid product-grid collection-grid boost-pfs-filter-products bc-al-style4")
+98699593 (ssouther 2023-10-31 10:11:16 -0400 30)         
+98699593 (ssouther 2023-10-31 10:11:16 -0400 31)             product_page = await browser.new_page()
+98699593 (ssouther 2023-10-31 10:11:16 -0400 32)             
+98699593 (ssouther 2023-10-31 10:11:16 -0400 33)             while df.shape[0] < max_items:
+98699593 (ssouther 2023-10-31 10:11:16 -0400 34)                 catalog_content = await page.content()
+98699593 (ssouther 2023-10-31 10:11:16 -0400 35)                 catalog = BeautifulSoup(catalog_content, "html.parser")
+98699593 (ssouther 2023-10-31 10:11:16 -0400 36)                 
+98699593 (ssouther 2023-10-31 10:11:16 -0400 37)                 products = catalog.find_all("a", class_="grid-item__link")
+98699593 (ssouther 2023-10-31 10:11:16 -0400 38)                 #data_page = catalog.find("div", class_="pagination")
+98699593 (ssouther 2023-10-31 10:11:16 -0400 39)                 #data_page = data_page.find("a", class_="btn btn--large btn--circle btn--icon")
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 40)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 41)                 for product in products:
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 42)                     name = product.find("div", class_="grid-product__title")
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 43)                     brand = product.find("div", class_="grid-product__vendor").text.strip()
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 44)                     price = product.find("span", class_="grid-product__price--from")
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 45)                     link = "https://etiket.ca/"+product.get('href')
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 46)                     pic = product.find("img", class_="grid__image-contain lazyautosizes lazyloaded")
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 47)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 48)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 49)                     if name:
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 50)                         name = name.text.strip()
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 51)                     
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 52)                         if "edt" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 53)                             cons = "EDT"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 54)                         elif "eau de toilette" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 55)                             cons = "EDT"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 56)                         elif "edp" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 57)                             cons = "EDP"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 58)                         elif "eau de parfum" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 59)                             cons = "EDP"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 60)                         elif "extrait de parfum" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 61)                             cons = "EDP"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 62)                         else:
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 63)                             cons = None
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 64)                 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 65)                         if price:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 66)                             price = extract_price(price.get_text(strip=True))
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 67)                         else:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 68)                             price = None
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 69)                         
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 70)                         if pic:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 71)                             pic = pic.get("srcset")
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 72)                         else:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 73)                             pic = None
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 74)                 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 75)                         #print(pic)
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 76)                 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 77)                     df.loc[len(df)] = [brand, name, cons, "Unisex", 0.0, price, link, pic]
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 78)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 79)                 
+98699593 (ssouther 2023-10-31 10:11:16 -0400 80)         
+98699593 (ssouther 2023-10-31 10:11:16 -0400 81)         
+98699593 (ssouther 2023-10-31 10:11:16 -0400 82)     finally:
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 83)         print(df)
+98699593 (ssouther 2023-10-31 10:11:16 -0400 84)         return df.to_json(orient="records")
+98699593 (ssouther 2023-10-31 10:11:16 -0400 85) 
+98699593 (ssouther 2023-10-31 10:11:16 -0400 86) if __name__ == "__main__":
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 87)     asyncio.run(scrape_etiket(10))
+
+
+.\backend\scrapers\maxaroma.py
+a297fbed (ssouther      2023-10-29 15:19:24 -0400  24)             browser = await p.chromium.launch(headless = True)
+
+
+.\backend\utils\dbUpdater.js
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500   1) const { Fragrance, FragranceListing, UserFragrance, User } = require("../models");
+e29a3b64 (ssouther      2023-10-29 13:50:13 -0400   3) const sequelize = require('../config/db');
+2033efae (ssouther      2023-11-09 23:21:35 -0500   5) const mailer = require('../config/mail');
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500   6) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  17) async function findSmallest(fid, size){
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  18)     const aggregate = await sequelize.query(`
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  19)         SELECT
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  20)             MIN(price) as minPrice
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  21)         FROM
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  22)             fragrance_listing
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  23)         WHERE
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  24)             fragrance_listing.fragrance_id = ${fid}
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  25)             AND sizeoz LIKE ${size}
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  26)     `, { type: Sequelize.QueryTypes.SELECT });
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  27) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  28)     return aggregate ? aggregate[0].minPrice : null;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  29) }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  30) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  31) async function processData(data) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  32)     const newLowestPrices = {};
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  33)     console.log('Processing fragrances...');
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  34)     for (let newFragrance of data) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  35) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  36)         // Get existing Fragrance
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  40)         });
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  41) 
+a789e277 (ssouther      2023-11-09 21:01:31 -0500  52) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  53)         // Nothing more needs to be done if it's a new Fragrance
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  54)         if (fragranceCreated) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  55)             continue;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  56)         }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  57) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  58)         // Default lowest price to lowest existing price
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  59)         const key = `${fragrance.id}_${newFragrance.sizeoz}`;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  60)         if (newLowestPrices[key] == undefined) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  61)             const minPrice = await findSmallest(fragrance.id, newFragrance.sizeoz);
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  62) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  63)             newLowestPrices[key] = {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  64)                 fragranceListing: null,
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  65)                 price: minPrice
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  66)             };
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  67)         }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  68) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  73)         }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  74) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  75)         await fragranceListing.save();
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  76) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  77)         // If it's a price increase, nothing more is needed
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  79)             continue;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  80)         }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  81) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  82)         // Set new lowest price
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  83)         newLowestPrices[key] = {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  84)             fragranceListing: fragranceListing,
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  85)             price: fragranceListing.price
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  86)         };
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  87)     }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  88) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  89)     const userFragranceListingsMap = {};
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  90) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  91)     for (let [key, info] of Object.entries(newLowestPrices)) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  92)         if (info.fragranceListing == null) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  93)             continue;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  94)         }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  95)         let [fragranceId, _] = key.split('_');
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  96)         fragranceId = parseInt(fragranceId);
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  97)         const fragranceListing = info.fragranceListing;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  98) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500  99)         // Find users that have the fragrance watchlisted
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 100)         const users = await User.findAll({
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 101)             include: [{
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 102)                 model: Fragrance,
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 103)                 as: 'watchlist',
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 104)                 where: {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 105)                     id: fragranceId
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 106)                 },
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 107)                 required: true
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 108)             }]
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 109)         });
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 110) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 111)         for (let user of users) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 112) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 113)             // Create default object for user
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 114)             if (userFragranceListingsMap[user.id] == undefined) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 115)                 userFragranceListingsMap[user.id] = {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 116)                     user: user,
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 117)                     fragrances: []
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 118)                 };
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 119)             }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 120) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 121)             // Add fragrance that user will be emailed about
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 122)             userFragranceListingsMap[user.id].fragrances.push({
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 123)                 fragrance: user.watchlist[0].get({raw: true}),
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 124)                 fragranceListing: fragranceListing.get({raw: true})
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 125)             });
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 126)         }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 127)     }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 128) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 129)     // For each user added to userFragranceListingsMap, email
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 130)     // the user about the price drops in all of the fragrances
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 131)     for (let info of Object.values(userFragranceListingsMap)) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 132)         const user = info.user;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 133)         const fragrances = info.fragrances;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 134) 
+2033efae (ssouther      2023-11-09 23:21:35 -0500 135) 		message = "<!DOCTYPE html><html>Hello "+user.firstName+",<br><br>The price for the following items on your watchlist have dropped:<br>";
+2033efae (ssouther      2023-11-09 23:21:35 -0500 136) 
+2033efae (ssouther      2023-11-09 23:21:35 -0500 137) 		for (let fragranceInfo of fragrances) {
+2033efae (ssouther      2023-11-09 23:21:35 -0500 138)             message += "<a href=\""+fragranceInfo.fragranceListing.link+"\">"+fragranceInfo.fragrance.title+" "+fragranceInfo.fragrance.concentration+" by "+fragranceInfo.fragrance.brand+"</a> is now $"+fragranceInfo.fragranceListing.price+" at "+fragranceInfo.fragranceListing.site+"<br>";
+2033efae (ssouther      2023-11-09 23:21:35 -0500 140) 		
+2033efae (ssouther      2023-11-09 23:21:35 -0500 141) 		message += "<br>Thank you and have a nice day.</html>";
+2033efae (ssouther      2023-11-09 23:21:35 -0500 142) 
+2033efae (ssouther      2023-11-09 23:21:35 -0500 143) 		const mail = {
+2033efae (ssouther      2023-11-09 23:21:35 -0500 144) 			from: process.env.EMAIL_USER,
+2033efae (ssouther      2023-11-09 23:21:35 -0500 145) 			to: user.email,
+2033efae (ssouther      2023-11-09 23:21:35 -0500 146) 			subject: "Price alerts for one or more items on your watchlist",
+2033efae (ssouther      2023-11-09 23:21:35 -0500 147) 			html: message
+2033efae (ssouther      2023-11-09 23:21:35 -0500 148) 		}
+2033efae (ssouther      2023-11-09 23:21:35 -0500 149) 		
+2033efae (ssouther      2023-11-09 23:21:35 -0500 150) 		mailer.sendMail(mail, function(error, info){
+2033efae (ssouther      2023-11-09 23:21:35 -0500 151) 			if(error){
+2033efae (ssouther      2023-11-09 23:21:35 -0500 152) 				console.log("An error has occurred while sending the email.\n" + error);
+2033efae (ssouther      2023-11-09 23:21:35 -0500 153) 			}
+2033efae (ssouther      2023-11-09 23:21:35 -0500 154) 			else{
+2033efae (ssouther      2023-11-09 23:21:35 -0500 155) 				console.log("Email sent: " + info.response);
+2033efae (ssouther      2023-11-09 23:21:35 -0500 156) 			}
+2033efae (ssouther      2023-11-09 23:21:35 -0500 157) 		});
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 158)     }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 159) }
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 160) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 161) async function dbUpdate(maxItemsPerScraper) {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 166)     const spawn = require("child_process").spawn;
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 167)     maxItemsPerScraper = maxItemsPerScraper || '';
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 169) 	const pythonPath = process.env.PYTHON_PATH || 'python';
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 170) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 171)     const pyproc = spawn(pythonPath, ["./scrapers/MasterScript.py", maxItemsPerScraper], {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 172)         maxBuffer: 1000 * 1000 * 10 // 10 MB
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 173)     });
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 174) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 175)     let output = '';
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 176)     pyproc.stdout.on('data', (data) => {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 177)         output += data.toString();
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 178)     });
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 179) 
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 180)     pyproc.stdout.on("end", async (data) => {
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 181)         await processData(cleanData(JSON.parse(output)));
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 182)     });
+f3bd8015 (ssouther      2023-11-09 19:07:11 -0500 185) module.exports = dbUpdate;
