@@ -1,0 +1,339 @@
+.\backend\models\Fragrance.js
+6ee12cdb (ncoffey3          2023-11-09 19:56:32 -0500 27)       type: DataTypes.STRING(512)
+
+
+.\backend\scrapers\fragrance_buy.py
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   1) # fragrancebuy.ca scraper
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   2) import asyncio
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   3) from playwright.async_api import async_playwright
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   4) from bs4 import BeautifulSoup
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   5) import re
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   6) import json
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   7) import pandas as pd
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   8) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500   9) async def scrape_fragbuy(max_items):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  10) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  11)     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])    
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  12) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  13)     try:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  14)         async with async_playwright() as p:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  15) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  16)             browser = await p.chromium.launch(headless = False)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  17)             page = await browser.new_page()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  18)             frag_page = await browser.new_page()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  19) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  20)             fragranceCounter = 0
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  21) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  22)             for cur_page in range(96):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  23)                 if fragranceCounter >= max_items:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  24)                     break
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  25) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  26)                 if (cur_page == 0):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  27)                     await page.goto('https://fragrancebuy.ca/collections/fullproductcatalogue')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  28)                 else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  29)                     page.close()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  30)                     page = await browser.new_page()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  31)                     await page.goto(f'https://fragrancebuy.ca/collections/fullproductcatalogue?page={(cur_page+1)}')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  32) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  33)                 await page.wait_for_selector('div.collection_page.col-xs-12')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  34)                 catalog_content = await page.content()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  35) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  36)                 catalog = BeautifulSoup(catalog_content, 'html.parser')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  37) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  38)                 products = catalog.find_all('div', class_="col-xs-12 col-lg-3 col-md-3 col-sm-3 product_thumbnail" )
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  39) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  40)                 for product in products: 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  41)                     if fragranceCounter >= max_items:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  42)                         break
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  43) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  44)                     link = product.find('a', class_="thumbnail_image")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  45)                     if link: 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  46)                         fragranceCounter += 1
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  47)     
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  48)                         link = 'https://fragrancebuy.ca' + link.get('href')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  49)                         await frag_page.goto(link)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  50)                         
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  51)                         fragrance = await frag_page.content()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  52)                         fragrance = BeautifulSoup(fragrance, 'html.parser')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  53) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  54)                         await frag_page.close()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  55)                         frag_page = await browser.new_page()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  56) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  57)                         product_dropdown = fragrance.find('ul', class_='isp_product_dropdown')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  58)                         if (product_dropdown):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  59)                             product_dropdown_li = product_dropdown.find_next('li')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  60)                             if (product_dropdown_li):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  61)                                 product_dropdown_a = product_dropdown_li.find('a')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  62) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  63)                                 if (product_dropdown_a):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  64)                                     dropdownText = product_dropdown_a.text.strip()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  65)                                     size_pattern = r'(\d+\s*(ml|oz))'
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  66)                                     concent_pattern = r'\b(EDP|EDT)\b'
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  67) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  68)                                     size_match = re.search(size_pattern, dropdownText, re.IGNORECASE)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  69)                                     if (size_match):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  70)                                         size = size_match.group(1) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  71)                                         size = re.sub(r'(?<=[0-9])oz', ' oz', size)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  72)                                         size = re.sub(r'(?<=[0-9])ml', ' ml', size)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  73) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  74)                                         #print(f"Size: {size}")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  75)                                         concent_match = re.search(concent_pattern, dropdownText, re.IGNORECASE)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  76) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  77) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  78)                                         if (concent_match):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  79)                                             concentration = concent_match.group(1).upper()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  80)                                         else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  81)                                             concentration = "Perfume"
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  82)                                         #print(f"Concentration: {concentration}")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  83)                                     else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  84)                                         size = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  85)                                         concentration = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  86)                                 else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  87)                                     size = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  88)                                     concentration = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  89) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  90)                             else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  91)                                 size = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  92)                                 concentration = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  93)                         else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  94)                             size = None 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  95)                             concentration = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  96)                         #print(link)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  97)                     else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  98)                         #print("No link")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500  99)                         link = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 100)                         size = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 101)                     
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 102)                     photoLink = product.find('img', class_='img-responsive')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 103)                     if photoLink: 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 104)                         photoLink = "https:" + photoLink.get('src').strip()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 105)                         #print(photoLink)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 106)                     else: 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 107)                         #print("No photolink")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 108)                         photoLink = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 109) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 110)                     brand = product.find('em', class_='vendor_italic')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 111)                     if brand: 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 112)                         brand = brand.text.strip()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 113)                         #print(brand)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 114)                     else: 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 115)                         #print("No brand")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 116)                         brand = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 117) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 118)                     title = product.find('span', class_='title')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 119)                     gender = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 120)                     if title:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 121)                         title = title.text
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 122)                         #print("title before strip")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 123)                         #print(title)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 124) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 125)                         # Gender
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 126)                         if re.search(r"For Man/Woman", title, re.IGNORECASE):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 127)                             gender = "Unisex"
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 128)                         elif re.search(r"For Man", title, re.IGNORECASE):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 129)                             gender = "Male"
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 130)                         elif re.search(r"For Woman", title, re.IGNORECASE):
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 131)                             gender = "Female"
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 132)                         else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 133)                             gender = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 134)                         
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 135)                         #print(f"Gender: {gender}")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 136) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 137)                         title = re.sub(r"For Man/Woman|For Man|For Woman", '', title, re.IGNORECASE)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 138)                         title = re.sub(rf"{brand}|By {brand}", '', title, re.IGNORECASE)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 139)                         title = title.strip()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 140)                         #print(f"Title after strip: {title}")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 141) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 142)                     else:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 143)                         #print("No title")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 144)                         title = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 145) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 146)                     price = product.find('span', class_='sale_price_thumbnail')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 147)                     if price:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 148)                         price = price.find('span', class_='money')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 149)                         price = (price.text.strip().split())[0]
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 150)                         #print(price)
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 151)                     else: 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 152)                         #print("No price")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 153)                         price = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 154) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 155)                     #concentration = None
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 156)                     #size = None 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 157) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 158)                     df.loc[len(df)] = [brand, title, concentration, gender, size, price, link, photoLink]
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 159) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 160) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 161)         await browser.close()
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 162) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 163)     finally:
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 164)         df.to_json('data/fragBuy.json', orient='records')
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 165)         return df.to_json(orient="records")
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 166) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 167) 
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 168) if __name__ == "__main__":
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 169)     asyncio.run(scrape_fragbuy(3))
+06b66648 (ncoffey3 2023-11-10 22:04:59 -0500 170)
+
+
+.\backend\scrapers\jomashop.py
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  19)             if (max_items >= 11100):
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  20)                 num_pages = (max_items/60)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  21)             else:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  22)                 num_pages = 185
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  23) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  24)             browser = await p.chromium.launch(headless = False)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  27)             for cur_page in range(num_pages):
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  28)                 #data_list = []
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  29) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  30)                 if (cur_page == 0):
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  31)                     await page.goto('https://jomashop.com/fragrances.html')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  33)                     await page.goto(f'https://jomashop.com/fragrances.html?p={cur_page+1}')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  34)                 await page.wait_for_timeout(1000)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  35) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  36)                 # Jomashop dynamically loads the page content so we must scroll
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  37)                 # in order for the entire page to load
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  38)                 async def scroll_down():
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  39)                     for _ in range(12):
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  40)                         await page.evaluate('window.scrollBy(0,600);')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  41)                         await page.wait_for_timeout(1000)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  42) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  43)                 await scroll_down()
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  44) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  45)                 await page.wait_for_selector('li.productItem')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  46)                 page_content = await page.content()
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  47)                 # Parse the HTML content using BeautifulSoup
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  48)                 soup = BeautifulSoup(page_content, 'html.parser')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  49) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  50)                 product_items = soup.find_all('li', class_='productItem')[:max_items]
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  51)                 for product_item in product_items:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  52)                     brand = product_item.find('span',class_='brand-name')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  53)                     name = product_item.find('span', class_='name-out-brand')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  54)                     price = product_item.find('div', class_='now-price')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  55)                     link = product_item.find('a', class_='productName-link')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  56)                     photoLink = product_item.find('img', class_='productImg')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  57)                     photoLink = photoLink.get('src') if photoLink else None
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  58)                     gender = ""
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  59)                     size = ""
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  60)                     concentration = ""
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  61)                     formattedName = ""
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  62) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  63)                     if brand:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  64)                         brand = brand.text.strip()
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  66)                         brand = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  67) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  68)                     if name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  69)                         name = name.text.strip()
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  70)                         # Fragrance Gender Keywords
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  71)                         if "Men's" in name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  72)                             gender = "Male"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  73)                         elif "Men" in name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  74)                             gender = "Male"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  75)                         elif "(m)" in name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  76)                             gender = "Male"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  77)                         elif "Ladies" in name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  78)                             gender = "Female"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  79)                         elif "Women" in name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  80)                             gender = "Female"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  81)                         elif "(f)" in name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  82)                             gender = "Female"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  84)                             gender = "Unisex"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  85) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  86)                         # Bottle Size Formatting
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  87)                         if "oz" in name:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  88)                             # Regular expression pattern
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  89)                             # Digit followed by an optional .digit then oz
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  90)                             pattern = r'(\d+(\.\d+)?)\s*(oz)'
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  91)                             match = re.search(pattern, name)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  92)                             if match:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  93)                                 size = f"{match.group(1)} oz"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  94)                             else:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  95)                                 size = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  97)                             size = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  98) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500  99)                         # Fragrance Concentration Parsing
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 100)                         # Jomashop does not have any standardization
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 101)                         # So many keywords must be checked
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 102)                         if "edt" in name.lower():
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 103)                             concentration = "EDT"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 104)                         elif "eau de toilette" in name.lower():
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 105)                             concentration = "EDT"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 106)                         elif "edp" in name.lower():
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 107)                             concentration = "EDP"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 108)                         elif "eau de parfum" in name.lower():
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 109)                             concentration = "EDP"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 110)                         elif "parfum" in name.lower():
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 111)                             concentration = "Parfum"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 112)                         else:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 113)                             concentration = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 114)                         name_words = name.split()
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 115)                         for i, word in enumerate(name_words):
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 116) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 117)                             # We skip the gender and brand when storing the fragrance name
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 118)                             if word == brand or word == "Men's" or word == "Ladies" or word == "Unisex" or word == "-":
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 119)                                 continue
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 120)                             # All keywords that indicate the name of the fragrance name has finished
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 121)                             elif re.match(r'.*(edp|edt|eau|parfum|perfume|/)$', word.lower()) or i == len(name_words):
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 122)                                 break # Fragrance Concentration means we have finished storing the name
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 123)                             # by can be used to indicate a fragrance by a brand,
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 124)                             # or may be the actual title of a fragrance
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 125)                             elif re.match(r'.*(by|for)$', word.lower()) and i < len(name_words) - 1:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 126)                                 if name_words[i+1] == brand:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 127)                                     break
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 128)                                 if name_words[i+1] == "Men" or name_words[i+1] == "Women":
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 129)                                     break
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 130)                             else:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 131)                                 if formattedName:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 132)                                     formattedName += " "
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 133)                                 formattedName += word
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 137)                     else:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 138)                         name = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 139)                         size = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 140)                         gender = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 141)                         concentration = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 142)                         formattedName = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 143) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 144)                     if price:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 145)                         price = extract_price(price.get_text(strip=True))
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 146)                     else:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 147)                         price = None
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 149)                     if link:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 150)                         link = link.get('href')
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 151)                         link = "https://www.jomashop.com" + link
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 152)                     else:
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 153)                         link = None#"N/A"
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 154) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 155)                     #print("Brand:", brand)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 156)                     #print("Name:", name)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 157)                     #print("FormatName:", formattedName)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 158)                     #print("Concentration:", concentration)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 159)                     #print("Price: ", price)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 160)                     #print("Gender:", gender)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 161)                     #print("Size:", size)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 162)                     #print("Link:",link)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 163)                     #print("-" * 30)
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 164) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 165)                     #["brand", "title", "concentration", "gender", "size", "price", "link"]
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 166) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 167)                     df.loc[len(df)] = [brand, formattedName, concentration, gender, size, price, link, photoLink]
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 168)                     #print(f"Size: {size}")
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 170)         return df.to_json(orient="records")
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 171)     
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 172) 
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 173) if __name__ == "__main__":
+6ee12cdb (ncoffey3      2023-11-09 19:56:32 -0500 174)     print(asyncio.run(scrape_jomashop(600)))
+
+
+.\backend\utils\parsing.js
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 40)         let { size, ...data } = item;
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 42)         if (size != null) {
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 43)             size = size.toString();
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 44)             // Designate size
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 45)             if (size.includes('oz')) {
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 46)                 data.sizeoz = extractFloat(size);
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 47)             }
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 48)             else if (size.includes('ml')) {
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 49)                 data.sizeoz = extractFloat(size) * ML_TO_OZ_FACTOR;
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 50)             }
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 51) 
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 52)             data.sizeoz = parseFloat(data.sizeoz?.toFixed(2) || 0);
+93414405 (ncoffey3      2023-11-09 20:21:17 -0500 53)         }
