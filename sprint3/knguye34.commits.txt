@@ -1,0 +1,228 @@
+.\backend\scrapers\fragrancenet.py
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  19) async def get_prices(page):
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  23)     variant_text = await page.locator('.variantText.solo').all()
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  24)     index = 0
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  25)     for element in variant_text:
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  26)         await element.click()
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  27)         # Extract the HTML content of the product page
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  28)         product_page_data = await page.content()
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  29)         # Parse the product page using BeautifulSoup
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  30)         product_soup = BeautifulSoup(product_page_data, 'html.parser')
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  31)         pricing_element = product_soup.find('span', class_='pwcprice')
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  32)         # Get the price from the data-price attribute
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  33)         # Extract the pricing text and data-price attribute
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  34)         price = pricing_element.get('data-price')
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  35)         prices[index] = price
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  36)         index += 1
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  37)         #prices[box_id] = price
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  40) async def get_product_info(browser, df, brand, name, concentration, gender, link, photoLink):
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  42)     # link = product.find('a', href=True)['href']
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  59)     prices = await get_prices(page)
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  60)     
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  63)     index = 0
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  64)     #print(f"Brand: {brand}")
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  65)     #print(f"Name: {name}")
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  66)     #print(f"Concentration: {concentration}")
+6374951e (KienKong 2023-11-06 22:18:55 -0500  67)     #print(f"Gender: {gender}")
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  73)         # Print the extracted data
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  74)         #print(f"Price: {prices[index]:}, Size (oz): {size_oz}, Size (mL): {size_ml:.2f}")
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  75)         # Add the details to the DataFrame
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  76)         df.loc[len(df)] = [brand, name, concentration, gender, size_oz, prices[index], link, photoLink]
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  77)         index += 1
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  78)     #print(f"Link: {link}")
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  79)     #print(f"Image: {photoLink}")
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  80)     #print('\n')
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  83)     return df
+6a7f2e50 (KienKong 2023-11-03 22:34:16 -0400  85) async def scrape_fragrancenet(max_items):
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  86)     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  87)     try:
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  88)         async with async_playwright() as p:
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  89)             # trying to get it run through without incognito (to grab proper pricing)
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  90)             # but it doesn't bypass through the bot security check
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  91)             """
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  92)             app_data_path = os.getenv("LOCALAPPDATA")
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  93)             user_data_path = os.path.join(app_data_path, 'Chromium\\User_Data\\Default')
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  94)             context = await p.chromium.launch_persistent_context(user_data_path, headless=False, channel="chrome", user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36")
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  95)             # Create a new page in the browser
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  96)             page = await context.new_page()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400  97)             """
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  98)             headers = {
+14074d32 (KienKong 2023-11-06 22:02:12 -0500  99)             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 100)             }
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 101)             # Launch the Playwright browser
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 102)             browser = await p.chromium.launch(headless=False)
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 103)             
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 104)             
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 105)             # Create a new page in the browser
+6374951e (KienKong 2023-11-06 22:18:55 -0500 106)             # page = await browser.new_page()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 107)             
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 108)             page_number = 1
+6374951e (KienKong 2023-11-06 22:18:55 -0500 109)             #for page_number in range(1, num_pages + 1):
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 110)             while df.shape[0] <= max_items:  # Infinite loop to keep scraping
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 111)                 # Generate the search URL for each page
+6374951e (KienKong 2023-11-06 22:18:55 -0500 112)                 page = await browser.new_page()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 113)                 search_url = f"https://www.fragrancenet.com/fragrances?&page={page_number}"
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 114) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 115)                 # Navigate to the search URL
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 116)                 await page.goto(search_url)
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 117) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 118)                 # Wait for the page to load
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 119)                 await page.wait_for_selector('.resultItem.heightSync')
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 120) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 121)                 # Extract the HTML content of the result set
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 122)                 product_data = await page.inner_html('#resultSet')
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 123) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 124)                 # Parse the HTML content using BeautifulSoup
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 125)                 soup = BeautifulSoup(product_data, 'html.parser')
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 126) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 127)                 # Find all product items on the page
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 128)                 product_items = soup.find_all('div', class_='resultItem heightSync')
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 129) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 130)                 # Iterate through each product on the page
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 131)                 for product in product_items:
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 132)                     # Extract the name of the product
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 133)                     name = product.find('span', class_='brand-name').text.strip()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 134) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 135)                     # Check if any brand names should be ignored
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 136)                     for brand_name in brand_names:
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 137)                         name = name.replace(brand_name, "").strip()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 138) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 139)                     # Extract the brand with a try-except block
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 140)                     try:
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 141)                         brand_element = product.find('p', class_='des').find('a')
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 142)                         brand = brand_element.text.strip()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 143)                     except AttributeError:
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 144)                         brand = "Brand not available"
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 145) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 146)                     # Extract the gender information
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 147)                     gender = product.find('span', class_='gender-badge').text.strip()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 148)                     
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 149)                     # Extract the link to the product
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 150)                     link = product.find('a', href=True)['href']
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 151) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 152)                     # Extract the savings information
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 153)                     # savings = product.find('span', class_='savings').text.strip()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 154) 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 155)                     # Extract the ratings information
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 156)                     # ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 157)                     
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 158)                     photoLink = product.find('img',src=True)['src']
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 159)                     
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 160)                     concentration = product.find('p', class_='desc').text.strip()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 161)                     if(concentration == "eau de toilette"):
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 162)                         concentration = "EDT"
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 163)                     elif(concentration == "eau de parfum"):
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 164)                         concentration = "EDP"
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 165)                                      
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 166)                     df = await get_product_info(browser, df, brand, name, concentration, gender, link, photoLink)
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 167)                     
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 168)                     # Check if the maximum number of items has been reached
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 169)                     if df.shape[0] >= max_items:
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 170)                         break
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 171)                 
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 172)                 # Increment the page number
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 173)                 page_number += 1
+6374951e (KienKong 2023-11-06 22:18:55 -0500 174)                 await page.close()
+14074d32 (KienKong 2023-11-06 22:02:12 -0500 175)                 
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 176)             # Close the browser when done
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 177)             await browser.close()
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 178)     finally:
+a4f5486b (KienKong 2023-11-02 21:14:18 -0400 179)         return df.to_json(orient="records")
+6374951e (KienKong 2023-11-06 22:18:55 -0500 183)     asyncio.run(scrape_fragrancenet(50))
+
+
+.\backend\scrapers\fragrancex.py
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  1) import asyncio
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  2) from playwright.async_api import async_playwright
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  3) from bs4 import BeautifulSoup
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  4) import re
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  5) import pandas as pd
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  6) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  7) # Copied from Nolan's jomashop, my website is also dynamic as well
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  8) async def scroll_down(page):
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500  9)     for _ in range(5):
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 10)         await page.evaluate('window.scrollBy(0,1200);')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 11)         await page.wait_for_timeout(500)
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 12) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 13) async def scrape_fragrancex(max_items):
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 14)     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 15)     try:
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 16)         async with async_playwright() as p:
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 17)             browser = await p.chromium.launch(headless=False)
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 18)             page_number = 1
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 19) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 20)             # Generate the search URL for each page
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 21)             page = await browser.new_page()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 22)             search_url = f"https://www.fragrancex.com/shopping/best"
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 23) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 24)             # Navigate to the search URL
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 25)             await page.goto(search_url)
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 26) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 27)             # Wait for the page to load
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 28)             await page.wait_for_selector('.product-grid-cell')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 29) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 30)             page_content = await page.content()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 31)             # Parse the HTML content using BeautifulSoup
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 32)             soup = BeautifulSoup(page_content, 'html.parser')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 33) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 34)             product_items = soup.find_all('div', class_='product-grid-cell')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 35) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 36)             # Iterate through each product on the page
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 37)             for product in product_items:
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 38)                 # await scroll_down(page)
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 39)                 brand = product.find('div', class_='product-desc-2').find('a').text.strip()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 40)                 title = product.find('h3', class_='serif').find('span').text.strip()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 41)                 gender = product.find('span', class_='category').text.strip()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 42)                 link = "https://www.fragrancex.com" + product.find('a', class_='link-2')['href']
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 43) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 44)                 # Navigate to the product page
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 45)                 await page.goto(link)
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 46) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 47)                 # Wait for the product page to load
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 48)                 await page.wait_for_selector('.listing-information')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 49) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 50)                 # souping the web page again because it followed a new link
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 51)                 page_content = await page.content()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 52) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 53)                 soup = BeautifulSoup(page_content, 'html.parser')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 54)                 product_info = soup.find_all('div', class_='product media')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 55)                 print(f"Brand: {brand}")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 56)                 print(f"Name: {title}")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 57)                 print(f"Gender: {gender}")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 58)                 print(f"Link: {link}")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 59)                 for item in product_info:
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 60)                     # Extract size, price, and photo link
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 61)                     size_element = item.find('h2', class_='listing-description').find('span')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 62)                     size = size_element.text.strip() if size_element else None
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 63)                     print(f"Size: {size}")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 64) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 65)                     price_element = item.find('span', class_='price-value')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 66)                     if price_element:
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 67)                         base_price = price_element.find('span', class_='base-price-val').text.strip()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 68)                         sup_price = price_element.find('span', class_='sup-price sup-price-val').text.strip()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 69)                         price = f"${base_price}.{sup_price}"
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 70)                     else:
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 71)                         price = None
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 72)                     print(f"Price: {price}")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 73) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 74)                     photo_link_element = item.find('picture').find('source', srcset=True)
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 75)                     photo_link = photo_link_element['srcset'] if photo_link_element else None
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 76)                     print(f"Photo: {photo_link}")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 77) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 78)                 print('\n')
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 79) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 80)             # Close the browser when done
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 81)             await browser.close()
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 82) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 83)     finally:
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 84)         return df.to_json(orient="records")
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 85) 
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 86) # Run the main function
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 87) if __name__ == "__main__":
+b4d2cc45 (KienKong 2023-11-10 21:01:26 -0500 88)     print(asyncio.run(scrape_fragrancex(100)))
+
+
+.\backend\scrapers\MasterScript.py
+6a7f2e50 (KienKong      2023-11-03 22:34:16 -0400  5) from fragrancenet import scrape_fragrancenet
+6a7f2e50 (KienKong      2023-11-03 22:34:16 -0400 17)     scrape_maxaroma,
+b622ad04 (KienKong      2023-11-10 07:57:42 -0500 45) #gdf.to_json('data/AllRecords.json', orient='records')

@@ -10,9 +10,11 @@ import pandas as pd
 async def scrape_venba(max_items):
     async with async_playwright() as p:
         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(headless = False)
         page = await browser.new_page()
         
+        
+        '''
         # Men's Fragrances from Venba Fragrance
         await page.goto("https://www.venbafragrance.com/collections/men?page=1")
         html = await page.inner_html('#MainContent')
@@ -80,8 +82,11 @@ async def scrape_venba(max_items):
                 # Collecting information
                 infoCluster = soup.find('h1', class_='product__title').text
                 
-                if "Extrait" in infoCluster or "Cologne" in infoCluster:
+                if ("Extrait" in infoCluster or "Cologne" in infoCluster or "Sample" in infoCluster
+                    or "EDP oz" in infoCluster):
                     continue
+                position = infoCluster.find(" oz")
+                infoCluster = infoCluster[:position + 3]
                 link = fragPage
                 imageLinkDiv = soup.find('div', class_='lazy-image mobile-zoom-wrapper')
                 imageTag = imageLinkDiv.find('img')
@@ -100,7 +105,7 @@ async def scrape_venba(max_items):
                     elif "Parfum" in infoCluster:
                         concentration = "Parfum"
                     else:
-                        concentration = "None"
+                        concentration = None
                     
                     if "Men" in infoCluster or "Man" in infoCluster:
                         gender = "Male"
@@ -121,34 +126,58 @@ async def scrape_venba(max_items):
                     elif "Parfum" in concentration:
                         concentration = "Parfum"
                     else:
-                        concentration = "None"
+                        concentration = None
                     
                     if "Men" in gender:
                         gender = "Male"
                     else:
                         gender = "Unisex"
-                        
+                
+                if concentration == None:
+                    continue
+                
                 # Formatting continued
                 imageLink = "https:" + imageLink
-                price = price.replace("$", "").replace('\n', "")
+                price = price.replace('\n', "")
                     
                 for brandName in brandNames:
                     if brandName in infoCluster:
                         brand = brandName
-                        infoCluster = infoCluster.replace(brand + " ", "")
+                        if brand == "Escentric Molecule":
+                            infoCluster = infoCluster.replace(brand + "s ", "")
+                        else:
+                            infoCluster = infoCluster.replace(brand + " ", "")
                         break
                     
+                if "Maison Margiela" in infoCluster:
+                    brand = "Maison Martin Margiela"
+                    infoCluster = infoCluster.replace("Maison Margiela ", "")
+                    
                 position = infoCluster.find(concentration)
-                sizeOZ = infoCluster[position + len(concentration) + 1:]
-                infoCluster = infoCluster.replace(" " + concentration + " ", "").replace(sizeOZ, "")
-                sizeOZ = sizeOZ.replace(" oz", "")
+                if position != -1:
+                    sizeOZ = infoCluster[position + len(concentration) + 1:]
+                    infoCluster = infoCluster.replace(" " + concentration + " ", "").replace(sizeOZ, "")
+                elif "EDP" in infoCluster:
+                    position = infoCluster.find("EDP")
+                    sizeOZ = infoCluster[position + len("EDP") + 1:]
+                    infoCluster = infoCluster.replace(" " + "EDP" + " ", "").replace(sizeOZ, "")
+                elif "EDT" in infoCluster:
+                    position = infoCluster.find("EDT")
+                    sizeOZ = infoCluster[position + len("EDT") + 1:]
+                    infoCluster = infoCluster.replace(" " + "EDT" + " ", "").replace(sizeOZ, "")
+                elif "Parfum" in infoCluster:
+                    position = infoCluster.find("Parfum")
+                    sizeOZ = infoCluster[position + len("Parfum") + 1:]
+                    infoCluster = infoCluster.replace(" " + "Parfum" + " ", "").replace(sizeOZ, "")
                 infoCluster = infoCluster.replace(" for Men", "").replace(" Man", "")
                 title = infoCluster
                 
                 # Databasing the results
-                df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                    float(price), str(link), str(imageLink)]
-                
+                df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ), 
+                                    str(price), str(link), str(imageLink)]
+        
+        '''    
+            
         # Women's Fragrances from Venba Fragrance
         await page.goto("https://www.venbafragrance.com/collections/women?page=1")
         html = await page.inner_html('#MainContent')
@@ -185,7 +214,7 @@ async def scrape_venba(max_items):
             pageListInfo = pageListInfo.replace(" ", "").replace('\n', "")
             totalPages = pageListInfo
         
-        # Men's scraping
+        # Women's scraping
         for i in range(1, int(totalPages) + 1):
             fragPages = []
             catalogPage = "https://www.venbafragrance.com/collections/women?page=" + str(i)
@@ -216,8 +245,11 @@ async def scrape_venba(max_items):
                 # Collecting information
                 infoCluster = soup.find('h1', class_='product__title').text
                 
-                if "Extrait" in infoCluster or "Cologne" in infoCluster:
+                if ("Extrait" in infoCluster or "Cologne" in infoCluster or "Sample" in infoCluster
+                    or "EDP oz" in infoCluster):
                     continue
+                position = infoCluster.find(" oz")
+                infoCluster = infoCluster[:position + 3]
                 link = fragPage
                 imageLinkDiv = soup.find('div', class_='lazy-image mobile-zoom-wrapper')
                 imageTag = imageLinkDiv.find('img')
@@ -236,7 +268,7 @@ async def scrape_venba(max_items):
                     elif "Parfum" in infoCluster:
                         concentration = "Parfum"
                     else:
-                        concentration = "None"
+                        concentration = None
                     
                     if "Her" in infoCluster:
                         gender = "Female"
@@ -257,37 +289,59 @@ async def scrape_venba(max_items):
                     elif "Parfum" in concentration:
                         concentration = "Parfum"
                     else:
-                        concentration = "None"
+                        concentration = None
                     
                     if "Feminine" in gender or "Women" in gender:
                         gender = "Female"
                     else:
                         gender = "Unisex"
                         
+                if concentration == None:
+                    continue
+                        
                 # Formatting continued
                 imageLink = "https:" + imageLink
-                price = price.replace("$", "").replace('\n', "")
+                price = price.replace('\n', "")
                     
                 for brandName in brandNames:
                     if brandName in infoCluster:
                         brand = brandName
-                        infoCluster = infoCluster.replace(brand + " ", "")
+                        if brand == "Escentric Molecule":
+                            infoCluster = infoCluster.replace(brand + "s ", "")
+                        else:
+                            infoCluster = infoCluster.replace(brand + " ", "")
                         break
                     
+                if "Maison Margiela" in infoCluster:
+                    brand = "Maison Martin Margiela"
+                    infoCluster = infoCluster.replace("Maison Margiela ", "")
+                    
                 position = infoCluster.find(concentration)
-                sizeOZ = infoCluster[position + len(concentration) + 1:]
-                infoCluster = infoCluster.replace(" " + concentration + " ", "").replace(sizeOZ, "")
-                sizeOZ = sizeOZ.replace(" oz", "")
+                if position != -1:
+                    sizeOZ = infoCluster[position + len(concentration) + 1:]
+                    infoCluster = infoCluster.replace(" " + concentration + " ", "").replace(sizeOZ, "")
+                elif "EDP" in infoCluster:
+                    position = infoCluster.find("EDP")
+                    sizeOZ = infoCluster[position + len("EDP") + 1:]
+                    infoCluster = infoCluster.replace(" " + "EDP" + " ", "").replace(sizeOZ, "")
+                elif "EDT" in infoCluster:
+                    position = infoCluster.find("EDT")
+                    sizeOZ = infoCluster[position + len("EDT") + 1:]
+                    infoCluster = infoCluster.replace(" " + "EDT" + " ", "").replace(sizeOZ, "")
+                elif "Parfum" in infoCluster:
+                    position = infoCluster.find("Parfum")
+                    sizeOZ = infoCluster[position + len("Parfum") + 1:]
+                    infoCluster = infoCluster.replace(" " + "Parfum" + " ", "").replace(sizeOZ, "")
                 infoCluster = infoCluster.replace(" for Her", "")
                 title = infoCluster
                 
                 # Databasing the results
-                df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), round(float(sizeOZ), 2), 
-                                    float(price), str(link), str(imageLink)]
+                df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ), 
+                                    str(price), str(link), str(imageLink)]
         
         await browser.close()
         
         return df.to_json(orient="columns")
         
 if __name__ == "__main__":
-    asyncio.run(scrape_venba())
+    asyncio.run(scrape_venba(10000))
