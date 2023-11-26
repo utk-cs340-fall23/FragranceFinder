@@ -134,9 +134,26 @@ async function processData(data) {
 
 		message = "<!DOCTYPE html><html>Hello "+user.firstName+",<br><br>The price for the following items on your watchlist have dropped:<br>";
 
+		let list = {};
+
 		for (let fragranceInfo of fragrances) {
-            message += "<a href=\""+fragranceInfo.fragranceListing.link+"\">"+fragranceInfo.fragrance.title+" "+fragranceInfo.fragrance.concentration+" by "+fragranceInfo.fragrance.brand+"</a> is now $"+fragranceInfo.fragranceListing.price+" at "+fragranceInfo.fragranceListing.site+"<br>";
+			
+			let prodName = fragranceInfo.fragrance.title+" "+fragranceInfo.fragrance.concentration+" by "+fragranceInfo.fragrance.brand;
+			let prodDetail = [fragranceInfo.fragranceListing.price, fragranceInfo.fragranceListing.link, fragranceInfo.fragranceListing.site];
+			
+			if(list[prodName] != null){
+				if(list[prodName][0] < fragranceInfo.fragranceListing.price){
+					list[prodName] = prodDetail;
+				}
+			}
+			else{
+				list = Object.assign(list, {[prodName]:prodDetail});
+			}
         }
+		
+		for(let i in list){
+			message += "<a href=\""+list[i][1]+"\">"+i+"</a> is now $"+list[i][0]+" at "+list[i][2]+"<br>";
+		}
 		
 		message += "<br>Thank you and have a nice day.</html>";
 
