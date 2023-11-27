@@ -123,7 +123,7 @@ async def scrape_fragrancex(max_items):
                     if df.shape[0] >= max_items:
                         return
 
-                print('\n')
+                #print('\n')
 
             # Close the browser when done
             await browser.close()
