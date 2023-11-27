@@ -29,7 +29,7 @@ async def scrape_giftexpress(max_items):
         totalPages = int(-(-(int(totalFrags) / 20) // 1))
 
         # Men's scraping
-        for i in range(1, totalPages + 1):
+        for i in range(1, 20):
             fragPages = []
             catalogPage = "https://www.giftexpress.com/mens-fragrances.html?p=" + str(i) + "&perfume_type=2893%2C2894%2C2895%2C2916"
 
@@ -183,7 +183,7 @@ async def scrape_giftexpress(max_items):
         totalPages = int(-(-(int(totalFrags) / 20) // 1))
 
         # Women's scraping
-        for i in range(1, totalPages + 1):
+        for i in range(1, 20):
             fragPages = []
             catalogPage = "https://www.giftexpress.com/womens-fragrances.html?p=" + str(i) + "&perfume_type=2893%2C2894%2C2895%2C2916"
 
@@ -325,4 +325,4 @@ async def scrape_giftexpress(max_items):
         return df.to_json(orient="columns")
 
 if __name__ == "__main__":
-    asyncio.run(scrape_giftexpress(10000))
+    asyncio.run(scrape_giftexpress(2000))
