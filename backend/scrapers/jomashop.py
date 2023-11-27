@@ -11,7 +11,7 @@ def extract_price(string):
     return match.group(0) if match else None
 
 
-async def scrape_jomashop(max_items):
+async def scrape_jomashop(max_items, headless):
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
     try:
         async with async_playwright() as p:
@@ -21,7 +21,7 @@ async def scrape_jomashop(max_items):
             else:
                 num_pages = 185
 
-            browser = await p.chromium.launch(headless = False)
+            browser = await p.chromium.launch(headless = headless)
             page = await browser.new_page()
 
             for cur_page in range(num_pages):
@@ -168,7 +168,7 @@ async def scrape_jomashop(max_items):
                     #print(f"Size: {size}")
     finally:
         return df.to_json(orient="records")
-    
+
 
 if __name__ == "__main__":
     print(asyncio.run(scrape_jomashop(600)))

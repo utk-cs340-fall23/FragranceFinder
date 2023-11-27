@@ -19,10 +19,11 @@ scrapers = [
     scrape_aura,
     scrape_giftexpress
 ]
+HEADLESS = False
 
 async def get_data(max_items):
     return await asyncio.gather(
-        *[scraper(max_items) for scraper in scrapers]
+        *[scraper(max_items, HEADLESS) for scraper in scrapers]
     )
 
 

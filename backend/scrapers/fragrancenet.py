@@ -40,7 +40,7 @@ async def get_prices(page):
 async def get_product_info(browser, df, brand, name, concentration, gender, link, photoLink):
     # Extract the link to the product
     # link = product.find('a', href=True)['href']
-    
+
     # Create a new page in the browser
     page = await browser.new_page()
 
@@ -57,7 +57,7 @@ async def get_product_info(browser, df, brand, name, concentration, gender, link
     product_soup = BeautifulSoup(product_page_data, 'html.parser')
 
     prices = await get_prices(page)
-    
+
     # Extract pricing and size details
     pricing_elements = product_soup.find_all('div', class_='variantText solo')
     index = 0
@@ -82,7 +82,7 @@ async def get_product_info(browser, df, brand, name, concentration, gender, link
     await page.close()
     return df
 
-async def scrape_fragrancenet(max_items):
+async def scrape_fragrancenet(max_items, headless):
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
     try:
         async with async_playwright() as p:
@@ -99,12 +99,12 @@ async def scrape_fragrancenet(max_items):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
             }
             # Launch the Playwright browser
-            browser = await p.chromium.launch(headless=False)
-            
-            
+            browser = await p.chromium.launch(headless=headless)
+
+
             # Create a new page in the browser
             # page = await browser.new_page()
-            
+
             page_number = 1
             #for page_number in range(1, num_pages + 1):
             while df.shape[0] <= max_items:  # Infinite loop to keep scraping
@@ -145,7 +145,7 @@ async def scrape_fragrancenet(max_items):
 
                     # Extract the gender information
                     gender = product.find('span', class_='gender-badge').text.strip()
-                    
+
                     # Extract the link to the product
                     link = product.find('a', href=True)['href']
 
@@ -154,25 +154,25 @@ async def scrape_fragrancenet(max_items):
 
                     # Extract the ratings information
                     # ratings = product.find('div', class_='starRatingContain').find('span', class_='sr-only').text.strip()
-                    
+
                     photoLink = product.find('img',src=True)['src']
-                    
+
                     concentration = product.find('p', class_='desc').text.strip()
                     if(concentration == "eau de toilette"):
                         concentration = "EDT"
                     elif(concentration == "eau de parfum"):
                         concentration = "EDP"
-                                     
+
                     df = await get_product_info(browser, df, brand, name, concentration, gender, link, photoLink)
-                    
+
                     # Check if the maximum number of items has been reached
                     if df.shape[0] >= max_items:
                         break
-                
+
                 # Increment the page number
                 page_number += 1
                 await page.close()
-                
+
             # Close the browser when done
             await browser.close()
     finally:

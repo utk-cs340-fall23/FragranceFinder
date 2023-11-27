@@ -14,14 +14,14 @@ def valid_float(s):
         return False
 
 
-async def scrape_maxaroma(max_items):
+async def scrape_maxaroma(max_items, headless):
 
     all_fragrances = []
 
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
     try:
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless = True)
+            browser = await p.chromium.launch(headless = headless)
             page = await browser.new_page()
 
             # Max aroma best sellers list

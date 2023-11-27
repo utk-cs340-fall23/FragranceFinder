@@ -7,15 +7,15 @@ from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 import pandas as pd
 
-async def scrape_giftexpress(max_items):
+async def scrape_giftexpress(max_items, headless):
     async with async_playwright() as p:
         df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(headless=headless)
         page = await browser.new_page()
-        
+
         # Men's Fragrances from Gift Express
         pageNumbers = []
-        
+
         await page.goto("https://www.giftexpress.com/mens-fragrances.html?perfume_type=2893%2C2894%2C2895%2C2916")
         html = await page.inner_html('#maincontent')
         soup = BeautifulSoup(html, 'html.parser')
@@ -119,7 +119,7 @@ async def scrape_giftexpress(max_items):
                                 mensConcentration = mensConcentration
                             else:
                                 mensConcentration = None
-                                
+
                             df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),
                                                str(mensPrice), str(mensLink), str(mensImageLink)]
                 else:
@@ -163,7 +163,7 @@ async def scrape_giftexpress(max_items):
                         mensConcentration = mensConcentration
                     else:
                         mensConcentration = None
-                            
+
                     df.loc[len(df)] = [str(mensBrand), str(mensTitle), str(mensConcentration), str(mensGender), str(mensSizeOZ),
                                         str(mensPrice), str(mensLink), str(mensImageLink)]
 
@@ -272,7 +272,7 @@ async def scrape_giftexpress(max_items):
                                 womensConcentration = womensConcentration
                             else:
                                 womensConcentration = None
-                                
+
                             df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), (womensSizeOZ),
                                                float(womensPrice), str(womensLink), str(womensImageLink)]
                 else:
@@ -316,12 +316,12 @@ async def scrape_giftexpress(max_items):
                         womensConcentration = womensConcentration
                     else:
                         womensConcentration = None
-                            
-                    df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), str(womensSizeOZ), 
+
+                    df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), str(womensSizeOZ),
                                         str(womensPrice), str(womensLink), str(womensImageLink)]
-                    
+
         await browser.close()
-        
+
         return df.to_json(orient="columns")
 
 if __name__ == "__main__":
