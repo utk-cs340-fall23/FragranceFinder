@@ -1,0 +1,823 @@
+./README.md
+46b46502 (OutliersAdvantage 2023-09-18 09:23:16 -0400  1) # Fragrance Finder
+46b46502 (OutliersAdvantage 2023-09-18 09:23:16 -0400  2) ## Setup
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  3) ### Install Node
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  4) 1. Install the latest version of node at [NodeJs.org](https://nodejs.org)
+a05cdc7b (OutliersAdvantage 2023-09-20 11:57:29 -0400  5) ### Install MySQL
+a05cdc7b (OutliersAdvantage 2023-09-20 11:57:29 -0400  6) 1. Install the latest version of MySQL at [MySQL.com](https://www.mysql.com/downloads/)
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  7) ### Clone Repo
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  8) 2. Clone repository found at [github.com/utk-cs340-fall23/FragranceFinder](https://github.com/utk-cs340-fall23/FragranceFinder)
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400  9) ### Install Dependencies
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400 10) 3. Open 2 separate terminals. One for the backend folder of the project, and one for the frontend folder of the project.
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400 11) 4. In each folder, run `npm i` to install respective dependencies. The backend and frontend both have their own dependenices. Information on these dependencies is found in their associated `package.json` files.
+3317532e (OutliersAdvantage 2023-09-18 09:53:28 -0400 12) ### Start servers
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 13) 5. Starting backend: run `npm run start` in the `backend` directory.
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 14) 6. Starting frontend: run `npm run start` in the `frontend` directory.
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 15) ### Using Web Scrapers
+585215ba (OutliersAdvantage 2023-10-10 21:58:13 -0400 16) 7. Our web scraping scripts are written in Python. They require usage of a Python virtual environment. In order to create this, move to the `backend` directory and run `python3 -m venv venv`. This will create a virtual environment called `venv`. To activate the environment, run `source venv/bin/activate`. Finally, in order to install Python dependenices, run `pip install -r requirements.txt`.
+
+
+./package.json
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  1) {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  2)   "name": "fragrance-finder",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  3)   "version": "1.0.0",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  4)   "description": "1. Install the latest version of node at [NodeJs.org](https://nodejs.org) ### Install MySQL 1. Install the latest version of MySQL at [MySQL.com](https://www.mysql.com/downloads/) ### Clone Repo 2. Clone repository found at [github.com/utk-cs340-fall23/FragranceFinder](https://github.com/utk-cs340-fall23/FragranceFinder) ### Install Dependencies 3. Open 2 separate terminals. One for the backend folder of the project, and one for the frontend folder of the project. 4. In each folder, run `npm i` to install respective dependencies. The backend and frontend both have their own dependenices. Information on these dependencies is found in their associated `package.json` files. ### Load DB Schema 5. Run `npm run load-db-local` in the backend folder to load the database schema into MySQL `fragrance_finder_db` database. ### Start servers 6. In the backend folder, run `npm run start` 7. Now, in the frontend folder, run `npm run start`. This should open a browser window at http://localhost:3000. This is the location of the frontend. If the frontend says \"TEST API ENDPOINT SUCCESS\", this means your frontend is correctly interacting with the backend API.",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  5)   "main": "index.js",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  6)   "scripts": {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400  7)     "test": "echo \"Error: no test specified\" && exit 1",
+e7e943c3 (OutliersAdvantage 2023-09-22 15:04:53 -0400  8)     "start:frontend": "cd frontend; npm run start;",
+e7e943c3 (OutliersAdvantage 2023-09-22 15:04:53 -0400  9)     "start:backend": "cd backend; npm run start;",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 10)     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 11)   },
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 12)   "repository": {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 13)     "type": "git",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 14)     "url": "git+https://github.com/utk-cs340-fall23/FragranceFinder.git"
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 15)   },
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 16)   "author": "",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 17)   "license": "ISC",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 18)   "bugs": {
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 19)     "url": "https://github.com/utk-cs340-fall23/FragranceFinder/issues"
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 20)   },
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 21)   "homepage": "https://github.com/utk-cs340-fall23/FragranceFinder#readme",
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 22)   "devDependencies": {
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 23)     "concurrently": "^8.2.1",
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 24)     "nodemon": "^3.0.1"
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 25)   }
+45ec4d65 (OutliersAdvantage 2023-09-22 14:25:39 -0400 26) }
+
+
+./frontend/package.json
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   "name": "fragrance-finder-ui",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)   "version": "0.1.0",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  4)   "private": true,
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  5)   "dependencies": {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  6)     "@testing-library/jest-dom": "^5.17.0",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  7)     "@testing-library/react": "^13.4.0",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  8)     "@testing-library/user-event": "^13.5.0",
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 11)     "http-proxy-middleware": "^2.0.6",
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12)     "jwt-decode": "^3.1.2",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 13)     "react": "^18.2.0",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 15)     "react-dom": "^18.2.0",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 19)     "react-scripts": "5.0.1",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 20)     "web-vitals": "^2.1.4"
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 21)   },
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 22)   "scripts": {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 23)     "start": "react-scripts start",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 24)     "build": "react-scripts build",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 25)     "test": "react-scripts test",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 26)     "eject": "react-scripts eject"
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 27)   },
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 28)   "eslintConfig": {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 29)     "extends": [
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 30)       "react-app",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 31)       "react-app/jest"
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 32)     ]
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 33)   },
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 34)   "browserslist": {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 35)     "production": [
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 36)       ">0.2%",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 37)       "not dead",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 38)       "not op_mini all"
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 39)     ],
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 40)     "development": [
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 41)       "last 1 chrome version",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 42)       "last 1 firefox version",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 43)       "last 1 safari version"
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 44)     ]
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 45)   }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 46) }
+
+
+./frontend/src/reportWebVitals.js
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) const reportWebVitals = onPerfEntry => {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   if (onPerfEntry && onPerfEntry instanceof Function) {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)     import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  4)       getCLS(onPerfEntry);
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  5)       getFID(onPerfEntry);
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  6)       getFCP(onPerfEntry);
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  7)       getLCP(onPerfEntry);
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  8)       getTTFB(onPerfEntry);
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  9)     });
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 10)   }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 11) };
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 12) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 13) export default reportWebVitals;
+
+
+./frontend/src/setupProxy.js
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  1) const { createProxyMiddleware } = require('http-proxy-middleware');
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  2) 
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  3) module.exports = function(app) {
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  4)   app.use(
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  5)     '/api',
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  6)     createProxyMiddleware({
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  7)       target: 'http://localhost:3001',
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  8)       changeOrigin: true,
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  9)     })
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 10)   );
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 11) };
+
+
+./frontend/src/index.js
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) import React from 'react';
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2) import ReactDOM from 'react-dom/client';
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3) import './index.css';
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  4) import App from './App';
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  5) import reportWebVitals from './reportWebVitals';
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  6) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  7) const root = ReactDOM.createRoot(document.getElementById('root'));
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  8) root.render(
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  9)   <React.StrictMode>
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 10)     <App />
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 11)   </React.StrictMode>
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 12) );
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 13) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 14) // If you want to start measuring performance in your app, pass a function
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 15) // to log results (for example: reportWebVitals(console.log))
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 16) // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 17) reportWebVitals();
+
+
+./frontend/src/index.css
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) body {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   margin: 0;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  4)     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  5)     sans-serif;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  6)   -webkit-font-smoothing: antialiased;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  7)   -moz-osx-font-smoothing: grayscale;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  8) }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  9) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 10) code {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 11)   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 12)     monospace;
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 13) }
+
+
+./frontend/src/App.test.js
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 1) import { render, screen } from '@testing-library/react';
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 2) import App from './App';
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 3) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 4) test('renders learn react link', () => {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 5)   render(<App />);
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 6)   const linkElement = screen.getByText(/learn react/i);
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 7)   expect(linkElement).toBeInTheDocument();
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 8) });
+
+
+./frontend/src/setupTests.js
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 1) // jest-dom adds custom jest matchers for asserting on DOM nodes.
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 2) // allows you to do things like:
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 3) // expect(element).toHaveTextContent(/react/i)
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 4) // learn more: https://github.com/testing-library/jest-dom
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 5) import '@testing-library/jest-dom';
+
+
+./frontend/src/App.js
+17ccb666 (OutliersAdvantage 2023-09-20 13:49:11 -0400  2) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) import Login from './pages/Login';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) import Signup from './pages/Signup';
+73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  6) import "./App.css";
+17ccb666 (OutliersAdvantage 2023-09-20 13:49:11 -0400  8) 
+9b64e8c8 (OutliersAdvantage 2023-09-21 11:23:01 -0400 10) 
+9b64e8c8 (OutliersAdvantage 2023-09-21 11:23:01 -0400 14) 				<Route exact path='/' element={<Home />} />
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15) 				<Route path='/login' element={<Login />} />
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16) 				<Route path='/signup' element={<Signup />} />
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 20) }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 21) 
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 22) export default App;
+
+
+./frontend/src/utils/auth.js
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import decode from 'jwt-decode';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) class AuthService {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  5) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  6)     // Return user information found in the token
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  7)     getProfile() {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 13)     }
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 14) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 15)     // If token exists and is not expired, user is logged in
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 16)     loggedIn() {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 17)         const token = this.getToken();
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 18)         return !!token && !this.isTokenExpired(token);
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 19)     }
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 20) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 21)     // Check if token is expired against its
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 22)     // timestamp found in 'exp'
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 23)     isTokenExpired(token) {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 24)         try {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 25)         const decoded = decode(token);
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 26)         if (decoded.exp < Date.now() / 1000) {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 27)             return true;
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 28)         } else return false;
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 29)         } catch (err) {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 30)         return false;
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 31)         }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 44)     getToken() {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 45)         return localStorage.getItem('id_token');
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 46)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 47) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 52)     // "log in" the user by setting token in local storage
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 53)     // and redirecting to home page
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 54)     login(idToken) {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 55)         localStorage.setItem('id_token', idToken);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 56) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 57)         window.location.assign('/');
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 58)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 59) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 60)     // "log out" the user by removing local storage token
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 61)     // and redirecting to home page
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 62)     logout() {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 64)         window.location.assign('/');
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 65)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 66) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 67) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 68) const instance = new AuthService();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 69) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 70) export default instance;
+
+
+./frontend/src/utils/requests.js
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  1) import AuthService from '../utils/auth';
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  2) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  3) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  4) const getDefaultHeaders = () => {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  5)     const token = AuthService.getToken();
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  6)     return {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  7)         'Accept': 'application/json',
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  8)         "Authorization": token ? `Bearer ${token}` : '',
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400  9)     }
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 10) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 11) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 12) 
+53690dff (OutliersAdvantage 2023-10-01 21:50:41 -0400 13) const setData = async res => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)     const contentType = res.headers.get("content-type");
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)     if (contentType && contentType.includes('application/json')) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16)         const data = await res.json()
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)         res.data = data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     return res;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 22) // Default method to send a GET request
+8dd1f3e6 (OutliersAdvantage 2023-10-01 22:13:02 -0400 23) export const sendGet = async (url) => {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 24)     const res = await fetch(url, {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 25)         method: 'GET',
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 26)         headers: {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 27)             ...getDefaultHeaders()
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 28)         },
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 29)     });
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 30) 
+53690dff (OutliersAdvantage 2023-10-01 21:50:41 -0400 31)     return await setData(res);
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 32) }
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 33) 
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 34) // Default method to send a GET request
+8dd1f3e6 (OutliersAdvantage 2023-10-01 22:13:02 -0400 35) export const sendPost = async (url, data) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 36)     const res = await fetch(url, {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 37)       method: 'POST',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 38)       body: JSON.stringify(data),
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 39)       headers: {
+47165732 (OutliersAdvantage 2023-10-01 21:43:42 -0400 40)         ...getDefaultHeaders(),
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 41)         'Content-Type': 'application/json',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 42)       }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 43)     })
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 44) 
+53690dff (OutliersAdvantage 2023-10-01 21:50:41 -0400 59)     return await setData(res);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 60) }
+
+
+./frontend/src/assets/css/crudexample.css
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  1) @keyframes rainbow {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  2)     0% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  3)         color: red;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  4)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  5)     10% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  6)         color: orange;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  7)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  8)     20% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400  9)         color: yellow;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 10)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 11)     30% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 12)         color: green;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 13)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 14)     40% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 15)         color: blue;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 16)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 17)     50% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 18)         color: purple;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 19)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 20)     60% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 21)         color: blue;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 22)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 23)     70% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 24)         color: green;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 25)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 26)     80% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 27)         color: yellow;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 28)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 29)     90% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 30)         color: orange
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 31)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 32)     100% {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 33)         color: red
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 34)     }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 35) }
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 36) 
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 37) .rainbow {
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 38)     animation: 5s rainbow linear infinite;
+73254be3 frontend/src/pages/CSS/crudexample.css (OutliersAdvantage 2023-09-21 11:39:39 -0400 39) }
+
+
+./frontend/src/pages/Signup.js
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400   1) import {useState} from "react";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400   2) import auth from '../utils/auth';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400   3) import { sendPost } from "../utils/requests";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400   6) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400   7) function Signup() {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400   8)   // Initialize empty form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400   9)   const [formState, setFormState] = useState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  10)     email: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  11)     password: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  12)     username: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  15)   });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  16) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  19) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  20)   // Handle changing values in form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  21)   const handleFormChange = (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  22)     setFormState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  23)       ...formState,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  24)       [event.target.name]: event.target.value
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  25)     });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  26)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  27) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  28)   // Handle submission of form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  29)   const handleFormSubmit = async (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  30)     event.preventDefault();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  32)     const response = await sendPost('/api/users/', formState);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  33)     if (response.ok) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  34)         const { token } = response.data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  35)         auth.login(token);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  36)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  37)     else {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  38)         if (response.data.message) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  40)         }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  41)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  42)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  43) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  44)   return (
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 105)   );
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 106) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 107) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 108) export default Signup;
+
+
+./frontend/src/pages/Login.js
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) import {useState} from "react";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) import auth from '../utils/auth';
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) import { sendPost } from "../utils/requests";
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  7) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8) function Login() {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)   // Initialize empty form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 10)   const [formState, setFormState] = useState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 11)     email: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12)     password: '',
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13)   });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)   // Handle changing values in form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)   const handleFormChange = (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)     setFormState({
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21)       ...formState,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)       [event.target.name]: event.target.value
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23)     });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 24)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 25) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)   // Handle submission of form
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 27)   const handleFormSubmit = async (event) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 28)     event.preventDefault();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 29) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 30)     const response = await sendPost('/api/users/login/', formState);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 31)     if (response.ok) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32)         const { token } = response.data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33)         auth.login(token);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 34)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 35)     else if (response.data && response.data.message) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 38)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 39)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 40) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 41)   return (
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 75)   );
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 76) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 77) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 78) export default Login;
+
+
+./backend/requirements.txt
+70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 1) beautifulsoup4==4.12.2
+70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 2) greenlet==2.0.2
+70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 3) playwright==1.38.0
+70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 4) pyee==9.0.4
+70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 5) soupsieve==2.5
+70b119c7 (OutliersAdvantage 2023-10-10 21:49:54 -0400 6) typing-extensions==4.8.0
+
+
+./backend/server.js
+8facaea9 (OutliersAdvantage 2023-09-20 13:15:49 -0400  1) // Load environment variables
+8facaea9 (OutliersAdvantage 2023-09-20 13:15:49 -0400  2) require('dotenv').config();
+8facaea9 (OutliersAdvantage 2023-09-20 13:15:49 -0400  4) 
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  5) const path = require('path');
+eff43a9e (OutliersAdvantage 2023-09-20 11:57:10 -0400  6) const express = require('express');
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  7) const PORT = process.env.PORT || 3001;
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  8) const app = express();
+8dd1f3e6 (OutliersAdvantage 2023-10-01 22:13:02 -0400 11) app.use(express.json());
+8dd1f3e6 (OutliersAdvantage 2023-10-01 22:13:02 -0400 12) 
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 13) // Direct all routes starting with api to the API's routes
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14) app.use('/api', require('./routes'));
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 15) 
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 16) // All other GET requests not handled before will return to our React app for frontend routing
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 17) app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 18) app.get('*', (req, res) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+eff43a9e (OutliersAdvantage 2023-09-20 11:57:10 -0400 20) });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23) 	app.listen(PORT, () => console.log('Now listening'));
+
+
+./backend/package.json
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  1) {
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  2)   "name": "fragrance-finder-api",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  3)   "version": "1.0.0",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  4)   "description": "Fragrance Finder API",
+73254be3 (OutliersAdvantage 2023-09-21 11:39:39 -0400  5)   "main": "server.js",
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400  6)   "scripts": {
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400  7)     "test": "echo \"Error: no test specified\" && exit 1",
+e7e943c3 (OutliersAdvantage 2023-09-22 15:04:53 -0400  8)     "start": "nodemon server.js",
+eff43a9e (OutliersAdvantage 2023-09-20 11:57:10 -0400  9)     "load-db-local": "mysql -u root -p < schema/schema.sql"
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 10)   },
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 11)   "author": "",
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 12)   "license": "ISC",
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 13)   "dependencies": {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)     "bcrypt": "^5.1.1",
+8facaea9 (OutliersAdvantage 2023-09-20 13:15:49 -0400 15)     "dotenv": "^16.3.1",
+eff43a9e (OutliersAdvantage 2023-09-20 11:57:10 -0400 16)     "express": "^4.18.2",
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)     "jsonwebtoken": "^9.0.2",
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)     "nodemailer": "^6.9.5",
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)     "sequelize": "^6.33.0"
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 21)   },
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 22)   "devDependencies": {
+bea87e08 (OutliersAdvantage 2023-09-22 15:02:19 -0400 23)     "nodemon": "^3.0.1"
+74885353 (OutliersAdvantage 2023-09-18 09:16:23 -0400 24)   }
+^d09ab64 (OutliersAdvantage 2023-09-18 08:41:11 -0400 25) }
+
+
+./backend/config/db.js
+0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const Sequelize = require('sequelize');
+b66d0afe backend/config/connection.js (OutliersAdvantage 2023-09-22 15:21:26 -0400  2) 
+0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) require('dotenv').config();
+b66d0afe backend/config/connection.js (OutliersAdvantage 2023-09-22 15:21:26 -0400  4) 
+0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) // create connection to our db
+0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  6) const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+70b119c7 backend/config/db.js         (OutliersAdvantage 2023-10-10 21:49:54 -0400  7)     host: process.env.DB_HOST,
+0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  8)     dialect: 'mysql',
+b66d0afe backend/config/connection.js (OutliersAdvantage 2023-09-22 15:21:26 -0400 11) });
+b66d0afe backend/config/connection.js (OutliersAdvantage 2023-09-22 15:21:26 -0400 12) 
+0a43b2b3 backend/config/connection.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 13) module.exports = sequelize;
+
+
+./backend/utils/auth.js
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const jwt = require('jsonwebtoken');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) require('dotenv').config();
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  3) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) const secret = process.env.JWT_SECRET;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 28) module.exports = {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 29)   authMiddleware: function(req, res, next) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 30) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 32) 
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 33)     // Try to decode the token. If it throws an error, that means
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 34)     // token is invalid, in which case we return a 401 (Unauthorized)
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 37)       req.user = data;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 38)       next();
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 41)       res.status(401).send('Bad Token');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 42)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 43)   },
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 44) 
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 51)   // Create a JWT with the user information
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 61)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 62) };
+
+
+./backend/models/Fragrance.js
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  1) const { Model, DataTypes } = require('sequelize');
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  2) const sequelize = require('../config/db');
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) 
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  4) // create our User model
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  5) class Fragrance extends Model {}
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  6) 
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  7) // Create fields/columns for User model
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  8) Fragrance.init(
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  9)   {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 10)     id: {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 11)       type: DataTypes.INTEGER,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 12)       allowNull: false,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 13)       primaryKey: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 14)       autoIncrement: true
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 15)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 17)       type: DataTypes.STRING,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 18)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 20)       type: DataTypes.STRING,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 21)       allowNull: false
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 22)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 24)       type: DataTypes.STRING
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 25)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 26)     photoLink: {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 28)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 32)   },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 33)   {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 34)     hooks: {},
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 35)     sequelize,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 36)     timestamps: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 37)     freezeTableName: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 38)     underscored: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 39)     modelName: 'fragrance'
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 40)   }
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 41) );
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 42)
+
+
+./backend/models/User.js
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const { Model, DataTypes } = require('sequelize');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) const bcrypt = require('bcrypt');
+8dd1f3e6 (OutliersAdvantage 2023-10-01 22:13:02 -0400  3) const sequelize = require('../config/db');
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) // create our User model
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  6) class User extends Model {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  7)   checkPassword(loginPw) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8)     return bcrypt.compareSync(loginPw, this.password);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 10) }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 11) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 12) // Create fields/columns for User model
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13) User.init(
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)   {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)     id: {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16)       type: DataTypes.INTEGER,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 17)       allowNull: false,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 18)       primaryKey: true,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)       autoIncrement: true
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)     },
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 21)     username: {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)       type: DataTypes.STRING,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 23)       allowNull: false
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 24)     },
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 33)     email: {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 34)       type: DataTypes.STRING,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 35)       allowNull: false,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 36)       unique: true,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 37)       validate: {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 38)         isEmail: true
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 39)       }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 40)     },
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 41)     password: {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 42)       type: DataTypes.STRING,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 43)       allowNull: false,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 44)       validate: {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 45)         len: [4]
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 46)       }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 47)     }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 48)   },
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 49)   {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 50)     hooks: {
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 51) 
+4001565e (OutliersAdvantage 2023-10-01 21:32:49 -0400 52)       // Encrypt password before creating or updating user.
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 53)       async beforeCreate(newUserData) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 54)         newUserData.password = await bcrypt.hash(newUserData.password, 10);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 55)         return newUserData;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 56)       },
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 57) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 58)       async beforeUpdate(updatedUserData) {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 59)         updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 60)         return updatedUserData;
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 61)       }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 62)     },
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 63)     sequelize,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 64)     timestamps: true,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 65)     freezeTableName: true,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 66)     underscored: true,
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 67)     modelName: 'user'
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 68)   }
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 69) );
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 70) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 71) module.exports = User;
+
+
+./backend/models/index.js
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) // import the models
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) const User = require('./User');
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  3) const Fragrance = require('./Fragrance');
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  4) const FragranceListing = require('./FragranceListing');
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  5) const UserFragrance = require('./UserFragrance');
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  6) 
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  7) // create associations
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  8) User.belongsToMany(Fragrance, {
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400  9)     through: UserFragrance,
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 12)     onDelete: 'SET NULL'
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 13) });
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 14) 
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 15) Fragrance.belongsToMany(User, {
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 16)     through: UserFragrance,
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 19)     onDelete: 'SET NULL'
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 20) });
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 21) 
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 22) FragranceListing.belongsTo(Fragrance, {
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 23)     foreignKey: 'fragranceId',
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 24)     onDelete: 'SET NULL'
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 25) });
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 26) 
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 27) 
+809d3a48 (OutliersAdvantage 2023-10-05 13:56:04 -0400 28) module.exports = { User, Fragrance, FragranceListing, UserFragrance };
+
+
+./backend/models/UserFragrance.js
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  1) const { Model, DataTypes } = require('sequelize');
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  2) const sequelize = require('../config/db');
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) 
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  4) // create our User model
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  5) class UserFragrance extends Model {}
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  6) 
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  7) // Create fields/columns for User model
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  8) UserFragrance.init(
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  9)   {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 10)     id: {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 11)       type: DataTypes.INTEGER,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 12)       allowNull: false,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 13)       primaryKey: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 14)       autoIncrement: true
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 15)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 16)     userId: {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 17)       type: DataTypes.INTEGER,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 18)       references: {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 19)         model: 'user',
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 20)         key: 'id'
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 21)       }
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 22)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 23)     fragranceId: {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 24)       type: DataTypes.INTEGER,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 25)       references: {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 26)         model: 'fragrance',
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 27)         key: 'id'
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 28)       }
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 29)     },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 30)   },
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 31)   {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 32)     hooks: {},
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 33)     sequelize,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 34)     timestamps: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 35)     freezeTableName: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 36)     underscored: true,
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 37)     modelName: 'user_fragrance'
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 38)   }
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 39) );
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 40) 
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 41) module.exports = UserFragrance;
+
+
+./backend/models/FragranceListing.js
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  1) const { Model, DataTypes } = require('sequelize');
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  2) const sequelize = require('../config/db');
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) 
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  4) // create our User model
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  5) class FragranceListing extends Model {}
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  6) 
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  7) // Create fields/columns for User model
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  8) FragranceListing.init(
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400  9)   {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 10)     id: {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 11)       type: DataTypes.INTEGER,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 12)       allowNull: false,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 13)       primaryKey: true,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 14)       autoIncrement: true
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 15)     },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 16)     fragranceId: {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 17)       type: DataTypes.INTEGER,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 18)       references: {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 19)         model: 'fragrance',
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 20)         key: 'id'
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 21)       }
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 22)     },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 23)     price: {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 25)       allowNull: false
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 26)     },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 27)     discount: {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 28)       type: DataTypes.INTEGER
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 29)     },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 31)       type: DataTypes.INTEGER
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 32)     },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 38)     },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 39)     reviews: {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 41)     },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 42)     site: {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 43)       type: DataTypes.STRING
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 47)     }
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 48)   },
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 49)   {
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 50)     hooks: {},
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 51)     sequelize,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 52)     timestamps: true,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 53)     freezeTableName: true,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 54)     underscored: true,
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 55)     modelName: 'fragrance_listing'
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 56)   }
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 57) );
+fc1e18ae backend/models/FragraceListing.js  (OutliersAdvantage 2023-10-05 13:51:01 -0400 58)
+
+
+./backend/routes/mailRoutes.js
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  3) const {authMiddleware} = require('../utils/auth');
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  5) router.post("/", authMiddleware, (req, res) => {
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400  8) 	if (!email || !title || !body){
+fc1e18ae (OutliersAdvantage 2023-10-05 13:51:01 -0400 11) 	else {
+
+
+./backend/routes/index.js
+da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400  5) const router = require('express').Router();
+da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400  6) 
+da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400  7) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400  8) router.use('/users', userRoutes);
+8dd1f3e6 (OutliersAdvantage 2023-10-01 22:13:02 -0400 11) router.use('/email', mailRoutes);
+da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400 12) 
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 13) // This middleware handles any request that starts with /api and is not handled above
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 14) router.use('*', (req, res) => {
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)     res.status(404).json({ error: 'API route not found' });
+0a43b2b3 (OutliersAdvantage 2023-10-01 21:24:55 -0400 16) });
+da5a88a0 (OutliersAdvantage 2023-09-22 15:24:22 -0400 18) module.exports = router;
+
+
+./backend/routes/userRoutes.js
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  1) const router = require('express').Router();
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  2) const { User } = require('../models');
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  4) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  5) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  6) router.post('/', async (req, res) => {
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400  7) 
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400  8)     // Try to create user. Return token if successful
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400  9)     try {
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 11) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 12)         res.json({
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400 13)             token: signToken(newUser)
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 14)         });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 15)     }
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 16)     catch (err) {
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400 18)             res.status(400).json({
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 19)                 message: "An account already exists with that email!"
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 20)             });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 21)             return;
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 22)         }
+abf4187a backend/routes/user-routes.js (OutliersAdvantage 2023-10-05 13:52:05 -0400 23)         console.log(err);
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 24)         res.status(500).json({
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 25)             message: "An error occurred. Please try again."
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 26)         });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 27)     }
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 28) });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 29) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 35) })
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 36) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 37) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 38) router.post('/login', async (req, res) => {
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400 39) 
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400 40)     // Find user
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 41)     const user = await User.findOne({
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 42)         where: {
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 43)             email: req.body.email
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 44)         }
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 45)     });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 46) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 47)     if (!user) {
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 48)         res.status(404).json({
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 49)             message: 'No user with that email address!',
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 50)             type: 'is-danger'
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 51)         });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 52)         return;
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 53)     }
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 54) 
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400 55)     // If password is correct, create token and return to user
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 56)     const validPassword = user.checkPassword(req.body.password);
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 57)     if (!validPassword) {
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 58)       res.status(400).json({
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 59)         message: 'Incorrect password!',
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 60)         type: 'is-danger'
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 61)       });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 62)       return;
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 63)     }
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 64) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 65)     res.json({
+4001565e backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:32:49 -0400 66)         token: signToken(user)
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 67)     });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 68) });
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 69) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 70) 
+0a43b2b3 backend/routes/user-routes.js (OutliersAdvantage 2023-10-01 21:24:55 -0400 71) module.exports = router;
