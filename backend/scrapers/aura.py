@@ -41,7 +41,7 @@ async def scrape_aura(max_items):
         totalPages = pageList[5].replace('\n', "")
     
         # Men's scraping
-        for i in range(1, int(totalPages) + 1):
+        for i in range(1, 15):
             fragPages = []
             catalogPage = "https://www.aurafragrance.com/collections/mens-fragrances?page=" + str(i)
         
@@ -207,7 +207,7 @@ async def scrape_aura(max_items):
         totalPages = pageList[5].replace('\n', "")
     
         # Women's scraping
-        for i in range(1, int(totalPages) + 1):
+        for i in range(1, 15):
             fragPages = []
             catalogPage = "https://www.aurafragrance.com/collections/womens-fragrances?page=" + str(i)
         
@@ -352,4 +352,4 @@ async def scrape_aura(max_items):
         return df.to_json(orient="columns")
         
 if __name__ == "__main__":
-    asyncio.run(scrape_aura(10000))
+    asyncio.run(scrape_aura(2000))
