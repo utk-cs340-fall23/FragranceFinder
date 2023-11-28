@@ -39,14 +39,27 @@ Fragrance Finder is a web application that allows users to find the best price o
 4. Clone repository found at [github.com/utk-cs340-fall23/FragranceFinder](https://github.com/utk-cs340-fall23/FragranceFinder)
 ### Install Dependencies
 5. From the root directory, run this command: `npm i; cd backend; npm i; cd ../frontend; npm i;`
+### Setting environment variables
+6. A .env file must be created in the `backend` directory with set variables for logging in to the database and email host.
+   * `DB_HOST=localhost` Host URL
+   * `DB_USER=root` Username
+   * `DB_PASSWORD=password` Password
+   * `DB_NAME` Database name
+   * `EMAIL_HOST=smtp.gmail.com` SMTP server URL
+   * `EMAIL_PORT=465` SMTP server port
+   * `EMAIL_SECURE=false` TLS encryption
+   * `EMAIL_USER=example@gmail.com` Email address of host
+   * `EMAIL_PASS=password` Password for email host
+   * `JWT_SECRET=1234` JWT Token
+   * `PYTHON_PATH="python"` Leave this undefined if using a virtual environment
 ### Start development servers
-6. Open two different terminals: one for the backend directory and one for the frontend directory.
-7. Starting backend: run `npm run start` in the `backend` directory.
-8. Starting frontend: run `npm run start` in the `frontend` directory.
+7. Open two different terminals: one for the backend directory and one for the frontend directory.
+8. Starting backend: run `npm run start` in the `backend` directory.
+9. Starting frontend: run `npm run start` in the `frontend` directory.
 ### Start regular server
-9. Run this command from the root directory to start the regular server: `cd frontend; npm run build; cd ../backend; npm run start;`. If it is not necessary to recreate the frontend build, simply run `cd backend; npm run start;`.
+10. Run this command from the root directory to start the regular server: `cd frontend; npm run build; cd ../backend; npm run start;`. If it is not necessary to recreate the frontend build, simply run `cd backend; npm run start;`.
 ### Using Web Scrapers
-10. Our web scraping scripts are written in Python. They require usage of a Python virtual environment. In order to create this, move to the `backend` directory and run `python3 -m venv venv`. This will create a virtual environment called `venv`. To activate the environment, run `source venv/bin/activate`. Finally, in order to install Python dependenices, run `pip install -r requirements.txt`.
+11. Our web scraping scripts are written in Python. They require usage of a Python virtual environment. In order to create this, move to the `backend` directory and run `python3 -m venv venv`. This will create a virtual environment called `venv`. To activate the environment, run `source venv/bin/activate`. Finally, in order to install Python dependenices, run `pip install -r requirements.txt`.
 
 ## License
 MIT - Found in LICENSE.txt
