@@ -1,0 +1,9 @@
+aura.py
+d97a9a11 (Shmoopy 2023-11-27 08:45:18 -0400  44)         for i in range(1, 15):
+5392ca6b (Shmoopy 2023-11-27 08:45:18 -0400 210)         for i in range(1, 15):
+b8ec0cdd (Shmoopy 2023-11-27 08:45:18 -0500 355)     asyncio.run(scrape_aura(10000))
+
+giftExpress.py
+7afcbcf0 (Shmoopy 2023-11-27 08:45:18 -0400   32)         for i in range(1, 20):
+54de162d (Shmoopy 2023-11-27 08:45:18 -0400  186)         for i in range(1, 20):
+b8ec0cdd (Shmoopy 2023-11-27 08:45:18 -0500 328)     asyncio.run(scrape_giftexpress(2000))
