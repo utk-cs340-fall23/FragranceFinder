@@ -1,0 +1,93 @@
+.\README.md
+38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500  4) - Stephen Souther - ssouther
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 42) ### Setting environment variables
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 43) 6. A .env file must be created in the `backend` directory with set variables for logging in to the database and email host.
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 44)    * `DB_HOST=localhost` Host URL
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 45)    * `DB_USER=root` Username
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 46)    * `DB_PASSWORD=password` Password
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 47)    * `DB_NAME` Database name
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 48)    * `EMAIL_HOST=smtp.gmail.com` SMTP server URL
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 49)    * `EMAIL_PORT=465` SMTP server port
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 50)    * `EMAIL_SECURE=false` TLS encryption
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 51)    * `EMAIL_USER=example@gmail.com` Email address of host
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 52)    * `EMAIL_PASS=password` Password for email host
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 53)    * `JWT_SECRET=1234` JWT Token
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 54)    * `PYTHON_PATH="python"` Leave this undefined if using a virtual environment
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 56) 7. Open two different terminals: one for the backend directory and one for the frontend directory.
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 57) 8. Starting backend: run `npm run start` in the `backend` directory.
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 58) 9. Starting frontend: run `npm run start` in the `frontend` directory.
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 60) 10. Run this command from the root directory to start the regular server: `cd frontend; npm run build; cd ../backend; npm run start;`. If it is not necessary to recreate the frontend build, simply run `cd backend; npm run start;`.
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 62) 11. Our web scraping scripts are written in Python. They require usage of a Python virtual environment. In order to create this, move to the `backend` directory and run `python3 -m venv venv`. This will create a virtual environment called `venv`. To activate the environment, run `source venv/bin/activate`. Finally, in order to install Python dependenices, run `pip install -r requirements.txt`.
+e85746b8 (ssouther          2023-11-27 19:51:45 -0500 65) MIT - Found in LICENSE.txt
+
+
+.\backend\scrapers\etiket.py
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 15) def extract_price(string):
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 16)     match = re.search(r'\$\d+\.\d{2}', string)
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 17)     return match.group(0) if match else None
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 18) 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 19) 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 29)             #await page.wait_for_selector("div.new-grid product-grid collection-grid boost-pfs-filter-products bc-al-style4")
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 40)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 41)                 for product in products:
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 42)                     name = product.find("div", class_="grid-product__title")
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 43)                     brand = product.find("div", class_="grid-product__vendor").text.strip()
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 44)                     price = product.find("span", class_="grid-product__price--from")
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 45)                     link = "https://etiket.ca/"+product.get('href')
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 46)                     pic = product.find("img", class_="grid__image-contain lazyautosizes lazyloaded")
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 47)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 48)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 49)                     if name:
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 50)                         name = name.text.strip()
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 51)                     
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 52)                         if "edt" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 53)                             cons = "EDT"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 54)                         elif "eau de toilette" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 55)                             cons = "EDT"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 56)                         elif "edp" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 57)                             cons = "EDP"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 58)                         elif "eau de parfum" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 59)                             cons = "EDP"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 60)                         elif "extrait de parfum" in name.lower():
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 61)                             cons = "EDP"
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 62)                         else:
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 63)                             cons = None
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 64)                 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 65)                         if price:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 66)                             price = extract_price(price.get_text(strip=True))
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 67)                         else:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 68)                             price = None
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 69)                         
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 70)                         if pic:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 71)                             pic = pic.get("srcset")
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 72)                         else:
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 73)                             pic = None
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 74)                 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 75)                         #print(pic)
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 76)                 
+007aec4c (ssouther 2023-11-10 06:30:45 -0500 77)                     df.loc[len(df)] = [brand, name, cons, "Unisex", 0.0, price, link, pic]
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 78)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 79)                 
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 83)         print(df)
+faf7ddd9 (ssouther 2023-11-10 00:10:07 -0500 87)     asyncio.run(scrape_etiket(10))
+
+
+.\backend\utils\dbUpdater.js
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 137) 		let list = {};
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 138) 
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 140) 			
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 141) 			let prodName = fragranceInfo.fragrance.title+" "+fragranceInfo.fragrance.concentration+" by "+fragranceInfo.fragrance.brand;
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 142) 			let prodDetail = [fragranceInfo.fragranceListing.price, fragranceInfo.fragranceListing.link, fragranceInfo.fragranceListing.site];
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 143) 			
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 144) 			if(list[prodName] != null){
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 145) 				if(list[prodName][0] < fragranceInfo.fragranceListing.price){
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 146) 					list[prodName] = prodDetail;
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 147) 				}
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 148) 			}
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 149) 			else{
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 150) 				list = Object.assign(list, {[prodName]:prodDetail});
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 151) 			}
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 154) 		for(let i in list){
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 155) 			message += "<a href=\""+list[i][1]+"\">"+i+"</a> is now $"+list[i][0]+" at "+list[i][2]+"<br>";
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 156) 		}
+2bc230ae (ssouther      2023-11-26 12:45:32 -0500 157)
