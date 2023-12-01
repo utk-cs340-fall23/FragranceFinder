@@ -1,5 +1,4 @@
 .\README.md
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500  4) - Stephen Souther - ssouther
 e85746b8 (ssouther          2023-11-27 19:51:45 -0500 42) ### Setting environment variables
 e85746b8 (ssouther          2023-11-27 19:51:45 -0500 43) 6. A .env file must be created in the `backend` directory with set variables for logging in to the database and email host.
 e85746b8 (ssouther          2023-11-27 19:51:45 -0500 44)    * `DB_HOST=localhost` Host URL
