@@ -46,21 +46,60 @@ async def scrape_fragrancex(max_items):
 
                 # Wait for the product page to load
                 await page.wait_for_selector('.listing-information')
-
+                
+                # Wait for the page to be fully loaded
+                await page.wait_for_load_state('load')
+                # Scroll to load in some stuff 
+                await scroll_down(page)
+                
                 # souping the web page again because it followed a new link
                 page_content = await page.content()
-
                 soup = BeautifulSoup(page_content, 'html.parser')
                 product_info = soup.find_all('div', class_='product media')
-                print(f"Brand: {brand}")
-                print(f"Name: {title}")
-                print(f"Gender: {gender}")
-                print(f"Link: {link}")
+                # print(f"Brand: {brand}")
+                # print(f"Name: {title}")
+                # print(f"Gender: {gender}")
+                # print(f"Link: {link}")
+                # Find the div with the class 'c-12-of-12'
+                product_info_div = soup.find('div', class_='c-12-of-12 product-specifications-wrapper')
+                
+                # Find the table within the div
+                table = product_info_div.find('table', class_='table')
+
+                # Print the content of the table for debugging
+                #print(table)
+
+                for row in table.find_all('tr'):
+                    # Check if the row contains 'Fragrance Classification' in the text (case-insensitive)
+                    #print(row.text.strip().casefold())
+                    if 'Fragrance Classification' in row.text.strip():
+                        # Find the cell with the concentration value in the second column
+                        concentration_cell = row.find_all('td')[1]
+
+                        # Check if the cell is found
+                        if concentration_cell:
+                            # Get the text content of the concentration cell
+                            concentration = concentration_cell.text.strip()
+                            if(concentration.lower() == "eau de toilette"):
+                                concentration = "EDT"
+                            elif(concentration.lower() == "eau de toilette (edt)"):
+                                concentration = "EDT"
+                            elif(concentration.lower() == "eau de parfum"):
+                                concentration = "EDP"
+                            elif(concentration.lower() == "eau de parfum (edp)"):
+                                concentration = "EDP"
+                            else:
+                                concentration = "None"
+                            # print(f"Concentration: {concentration}")
+
+                        # Break the loop once the relevant row is found
+                        break
+
                 for item in product_info:
                     # Extract size, price, and photo link
                     size_element = item.find('h2', class_='listing-description').find('span')
                     size = size_element.text.strip() if size_element else None
-                    print(f"Size: {size}")
+                    # print(f"Size: {size}")
 
                     price_element = item.find('span', class_='price-value')
                     if price_element:
@@ -69,13 +108,22 @@ async def scrape_fragrancex(max_items):
                         price = f"${base_price}.{sup_price}"
                     else:
                         price = None
-                    print(f"Price: {price}")
+                    # print(f"Price: {price}")
 
                     photo_link_element = item.find('picture').find('source', srcset=True)
-                    photo_link = photo_link_element['srcset'] if photo_link_element else None
-                    print(f"Photo: {photo_link}")
+                    if photo_link_element:
+                        photo_link = photo_link_element['srcset'] 
+                    else:
+                        photo_link = "None"
+                    #else:
+                        #photo_link_element = item.find('picture').find('img', src=True)
+                        #photo_link = photo_link_element['src']
+                    # print(f"Photo: {photo_link}")
+                    df.loc[len(df)] = [brand, title, concentration, gender, size, price, link, photo_link]
+                    if df.shape[0] >= max_items:
+                        return
 
-                print('\n')
+                #print('\n')
 
             # Close the browser when done
             await browser.close()
@@ -85,4 +133,4 @@ async def scrape_fragrancex(max_items):
 
 # Run the main function
 if __name__ == "__main__":
-    print(asyncio.run(scrape_fragrancex(100)))
+    print(asyncio.run(scrape_fragrancex(50)))

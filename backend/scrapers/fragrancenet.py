@@ -180,4 +180,4 @@ async def scrape_fragrancenet(max_items, headless):
 
 # Run the main function
 if __name__ == "__main__":
-    asyncio.run(scrape_fragrancenet(50))
+    print(asyncio.run(scrape_fragrancenet(50)))

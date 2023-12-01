@@ -1,0 +1,75 @@
+.\backend\scrapers\fragrancenet.py
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 183)     print(asyncio.run(scrape_fragrancenet(50)))
+
+
+.\backend\scrapers\fragrancex.py
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  49)                 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  50)                 # Wait for the page to be fully loaded
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  51)                 await page.wait_for_load_state('load')
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  52)                 # Scroll to load in some stuff 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  53)                 await scroll_down(page)
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  54)                 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  59)                 # print(f"Brand: {brand}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  60)                 # print(f"Name: {title}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  61)                 # print(f"Gender: {gender}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  62)                 # print(f"Link: {link}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  63)                 # Find the div with the class 'c-12-of-12'
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  64)                 product_info_div = soup.find('div', class_='c-12-of-12 product-specifications-wrapper')
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  65)                 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  66)                 # Find the table within the div
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  67)                 table = product_info_div.find('table', class_='table')
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  68) 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  69)                 # Print the content of the table for debugging
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  70)                 #print(table)
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  71) 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  72)                 for row in table.find_all('tr'):
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  73)                     # Check if the row contains 'Fragrance Classification' in the text (case-insensitive)
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  74)                     #print(row.text.strip().casefold())
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  75)                     if 'Fragrance Classification' in row.text.strip():
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  76)                         # Find the cell with the concentration value in the second column
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  77)                         concentration_cell = row.find_all('td')[1]
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  78) 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  79)                         # Check if the cell is found
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  80)                         if concentration_cell:
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  81)                             # Get the text content of the concentration cell
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  82)                             concentration = concentration_cell.text.strip()
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  83)                             if(concentration.lower() == "eau de toilette"):
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  84)                                 concentration = "EDT"
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  85)                             elif(concentration.lower() == "eau de toilette (edt)"):
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  86)                                 concentration = "EDT"
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  87)                             elif(concentration.lower() == "eau de parfum"):
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  88)                                 concentration = "EDP"
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  89)                             elif(concentration.lower() == "eau de parfum (edp)"):
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  90)                                 concentration = "EDP"
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  91)                             else:
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  92)                                 concentration = "None"
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  93)                             # print(f"Concentration: {concentration}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  94) 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  95)                         # Break the loop once the relevant row is found
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  96)                         break
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500  97) 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 102)                     # print(f"Size: {size}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 111)                     # print(f"Price: {price}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 114)                     if photo_link_element:
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 115)                         photo_link = photo_link_element['srcset'] 
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 116)                     else:
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 117)                         photo_link = "None"
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 118)                     #else:
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 119)                         #photo_link_element = item.find('picture').find('img', src=True)
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 120)                         #photo_link = photo_link_element['src']
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 121)                     # print(f"Photo: {photo_link}")
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 122)                     df.loc[len(df)] = [brand, title, concentration, gender, size, price, link, photo_link]
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 123)                     if df.shape[0] >= max_items:
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 124)                         return
+ef36b782 (KienKong 2023-11-27 13:53:04 -0500 126)                 #print('\n')
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 136)     print(asyncio.run(scrape_fragrancex(50)))
+
+
+.\backend\scrapers\MasterScript.py
+a19b1db2 (KienKong      2023-11-27 13:51:18 -0500  8) from fragrancex import scrape_fragrancex
+a19b1db2 (KienKong      2023-11-27 13:51:18 -0500 21)     scrape_giftexpress,
+a19b1db2 (KienKong      2023-11-27 13:51:18 -0500 22)     scrape_fragrancex
+
+
+.\backend\scrapers\tempCodeRunnerFile.py
+a19b1db2 (KienKong 2023-11-27 13:51:18 -0500 1) .casefold():

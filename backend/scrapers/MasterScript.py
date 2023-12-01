@@ -5,6 +5,7 @@ from maxaroma import scrape_maxaroma
 from fragrancenet import scrape_fragrancenet
 from aura import scrape_aura
 from giftExpress import scrape_giftexpress
+from fragrancex import scrape_fragrancex
 import os
 import sys
 
@@ -17,7 +18,8 @@ scrapers = [
     scrape_maxaroma,
     scrape_fragrancenet,
     scrape_aura,
-    scrape_giftexpress
+    scrape_giftexpress,
+    scrape_fragrancex
 ]
 HEADLESS = False
 
