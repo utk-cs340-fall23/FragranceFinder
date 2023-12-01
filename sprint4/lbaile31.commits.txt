@@ -34,16 +34,10 @@
 38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 37) 3. Install the latest version of Chromium at [Chromium.org](https://www.chromium.org). Without Chromium installed, the web scrapers will not be able to function.
 38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 39) 4. Clone repository found at [github.com/utk-cs340-fall23/FragranceFinder](https://github.com/utk-cs340-fall23/FragranceFinder)
 38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 41) 5. From the root directory, run this command: `npm i; cd backend; npm i; cd ../frontend; npm i;`
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 42) ### Start development servers
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 43) 6. Open two different terminals: one for the backend directory and one for the frontend directory.
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 44) 7. Starting backend: run `npm run start` in the `backend` directory.
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 45) 8. Starting frontend: run `npm run start` in the `frontend` directory.
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 46) ### Start regular server
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 47) 9. Run this command from the root directory to start the regular server: `cd frontend; npm run build; cd ../backend; npm run start;`. If it is not necessary to recreate the frontend build, simply run `cd backend; npm run start;`.
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 49) 10. Our web scraping scripts are written in Python. They require usage of a Python virtual environment. In order to create this, move to the `backend` directory and run `python3 -m venv venv`. This will create a virtual environment called `venv`. To activate the environment, run `source venv/bin/activate`. Finally, in order to install Python dependenices, run `pip install -r requirements.txt`.
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 50) 
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 51) ## License
-38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 52) MIT - Found in LICENSE.txt
+38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 55) ### Start development servers
+38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 59) ### Start regular server
+38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 63) 
+38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500 64) ## License
 
 
 ./LICENSE.txt
@@ -68,3 +62,117 @@
 38d0efd1 (LakelonBailey 2023-11-27 09:59:10 -0500 19) LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 38d0efd1 (LakelonBailey 2023-11-27 09:59:10 -0500 20) OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 38d0efd1 (LakelonBailey 2023-11-27 09:59:10 -0500 21) SOFTWARE.
+
+
+./backend/scrapers/MasterScript.py
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 22) HEADLESS = False
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 26)         *[scraper(max_items, HEADLESS) for scraper in scrapers]
+
+
+./backend/scrapers/giftExpress.py
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  10) async def scrape_giftexpress(max_items, headless):
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  13)         browser = await p.chromium.launch(headless=headless)
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  15) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  18) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 122) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 166) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 275) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 319) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 320)                     df.loc[len(df)] = [str(womensBrand), str(womensTitle), str(womensConcentration), str(womensGender), str(womensSizeOZ),
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 322) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 324)
+
+
+./backend/scrapers/fragrancenet.py
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  43) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  60) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  85) async def scrape_fragrancenet(max_items, headless):
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 102)             browser = await p.chromium.launch(headless=headless)
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 103) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 104) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 107) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 148) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 157) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 159) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 165) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 167) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 171) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 175)
+
+
+./backend/scrapers/aura.py
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  10) async def scrape_aura(max_items, headless):
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  13)         browser = await p.chromium.launch(headless=headless)
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  15) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  32) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  37) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  40) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  42) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  47) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  52) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  57) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  61) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  65) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  72) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  76) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  81) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  88) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  91) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  95) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  99) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 104) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 108) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 111) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 118) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 122) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 130) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 139) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 146) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 160) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 175) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 177) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 179)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 181) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 198) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 203) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 206) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 208) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 213) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 218) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 223) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 227) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 231) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 238) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 242) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 247) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 254) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 257) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 261) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 265) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 270) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 274) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 277) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 284) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 288) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 296) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 305) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 312) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 314) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 328) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 343) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 345) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 347)                     df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ),
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 349) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 351) 
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 353)
+
+
+./backend/scrapers/maxaroma.py
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  17) async def scrape_maxaroma(max_items, headless):
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  24)             browser = await p.chromium.launch(headless = headless)
+
+
+./backend/scrapers/jomashop.py
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  14) async def scrape_jomashop(max_items, headless):
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500  24)             browser = await p.chromium.launch(headless = headless)
+daf450e3 (LakelonBailey 2023-11-27 10:31:07 -0500 171)
