@@ -1,0 +1,29 @@
+.\README.md
+38d0efd1 (LakelonBailey     2023-11-27 09:59:10 -0500  9) - Nolan Coffey - ncoffey3
+
+
+.\backend\scrapers\fragrancex.py
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500  13) async def scrape_fragrancex(max_items, HEADLESS):
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500  17)             browser = await p.chromium.launch(headless = HEADLESS)#headless=False)
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 136)     print(asyncio.run(scrape_fragrancex(50, False)))
+
+
+.\backend\scrapers\fragrance_buy.py
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500   9) async def scrape_fragbuy(max_items, HEADLESS):
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500  16)             browser = await p.chromium.launch(headless = HEADLESS)
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 157)                     """
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 158)                     print(f"BRAND: {brand}")
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 159)                     print(f"TITLE: {title}")
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 160)                     print(f"CONCENTRATION: {concentration}")
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 161)                     print(f"GENDER: {gender}")
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 162)                     print(f"SIZE: {size}")
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 163)                     print(f"PRICE: {price}")
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 164)                     print(f"LINK: {link}")
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 165)                     print(f"PHOTOLINK: {photoLink}")"""
+a3e9bf0a (ncoffey3 2023-12-01 21:22:22 -0500 177)     asyncio.run(scrape_fragbuy(3, False))
+
+
+.\backend\scrapers\MasterScript.py
+a3e9bf0a (ncoffey3      2023-12-01 21:22:22 -0500  9) from fragrance_buy import scrape_fragbuy
+a3e9bf0a (ncoffey3      2023-12-01 21:22:22 -0500 23)     scrape_fragrancex,
+a3e9bf0a (ncoffey3      2023-12-01 21:22:22 -0500 24)     scrape_fragbuy
