@@ -10,11 +10,11 @@ async def scroll_down(page):
         await page.evaluate('window.scrollBy(0,1200);')
         await page.wait_for_timeout(500)
 
-async def scrape_fragrancex(max_items):
+async def scrape_fragrancex(max_items, HEADLESS):
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])
     try:
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False)
+            browser = await p.chromium.launch(headless = HEADLESS)#headless=False)
             page_number = 1
 
             # Generate the search URL for each page
@@ -133,4 +133,4 @@ async def scrape_fragrancex(max_items):
 
 # Run the main function
 if __name__ == "__main__":
-    print(asyncio.run(scrape_fragrancex(50)))
+    print(asyncio.run(scrape_fragrancex(50, False)))

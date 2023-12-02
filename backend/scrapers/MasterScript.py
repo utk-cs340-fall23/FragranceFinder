@@ -6,6 +6,7 @@ from fragrancenet import scrape_fragrancenet
 from aura import scrape_aura
 from giftExpress import scrape_giftexpress
 from fragrancex import scrape_fragrancex
+from fragrance_buy import scrape_fragbuy
 import os
 import sys
 
@@ -19,7 +20,8 @@ scrapers = [
     scrape_fragrancenet,
     scrape_aura,
     scrape_giftexpress,
-    scrape_fragrancex
+    scrape_fragrancex,
+    scrape_fragbuy
 ]
 HEADLESS = False
 

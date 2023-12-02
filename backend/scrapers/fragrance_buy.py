@@ -6,14 +6,14 @@ import re
 import json
 import pandas as pd
 
-async def scrape_fragbuy(max_items):
+async def scrape_fragbuy(max_items, HEADLESS):
 
     df = pd.DataFrame(columns=["brand", "title", "concentration", "gender", "size", "price", "link", "photoLink"])    
 
     try:
         async with async_playwright() as p:
 
-            browser = await p.chromium.launch(headless = False)
+            browser = await p.chromium.launch(headless = HEADLESS)
             page = await browser.new_page()
             frag_page = await browser.new_page()
 
@@ -154,7 +154,15 @@ async def scrape_fragbuy(max_items):
 
                     #concentration = None
                     #size = None 
-
+                    """
+                    print(f"BRAND: {brand}")
+                    print(f"TITLE: {title}")
+                    print(f"CONCENTRATION: {concentration}")
+                    print(f"GENDER: {gender}")
+                    print(f"SIZE: {size}")
+                    print(f"PRICE: {price}")
+                    print(f"LINK: {link}")
+                    print(f"PHOTOLINK: {photoLink}")"""
                     df.loc[len(df)] = [brand, title, concentration, gender, size, price, link, photoLink]
 
 
@@ -166,5 +174,5 @@ async def scrape_fragbuy(max_items):
 
 
 if __name__ == "__main__":
-    asyncio.run(scrape_fragbuy(3))
+    asyncio.run(scrape_fragbuy(3, False))
 
