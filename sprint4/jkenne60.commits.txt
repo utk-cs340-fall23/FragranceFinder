@@ -1,1 +1,141 @@
-hold
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  1) import { useState, useEffect } from "react";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  2) import AuthForm from "../components/AuthForm";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  3) import '../assets/css/darkmode.css';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  4) import { Button } from 'react-bootstrap';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  5) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  6) function User() {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  7)   const [theme, setTheme] = useState('light');
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  8)   const toggleTheme = () => {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  9)     if(theme === 'light'){
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 10)       setTheme('dark');
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 11)     } else {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 12)       setTheme('light');
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 13)     }
+:...skipping...
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  1) import { useState, useEffect } from "react";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  2) import AuthForm from "../components/AuthForm";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  3) import '../assets/css/darkmode.css';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  4) import { Button } from 'react-bootstrap';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  5) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  6) function User() {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  7)   const [theme, setTheme] = useState('light');
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  8)   const toggleTheme = () => {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  9)     if(theme === 'light'){
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 15)   useEffect(() => {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 16)     document.body.className = theme;
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 17)   }, [theme]);
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 18)   const [showToast, setShowToast] = useState(false);
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 19) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 20)   return (
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 21)     <AuthForm
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 22)       setShowToast={setShowToast}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 23)       showToast={showToast}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 24)     >
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 25)       <h1>User</h1>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 26)       <h3>Tracking</h3>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 27)       <Button variant="primary" type="order" className="w-100 mt-3">
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 28)         Fragrance #1
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 29)       </Button>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 30)       <Button variant="primary" type="order" className="w-100 mt-3">
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 31)         Fragrance #2
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 32)       </Button>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 33)       <Button variant="primary" type="order" className="w-100 mt-3">
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 34)         Fragrance #3
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 35)       </Button>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 36) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 37)       {/* Add margin-bottom to create space between sections */}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 38)       <div className="mb-4"></div>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 39) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 40)       <h3>Settings: </h3>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 41)       {/* Use isDarkMode to conditionally apply dark mode styles */}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 42)      
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 43)      <Button variant="primary" className="w-100 mt-3" onClick={toggleTheme}>Dark Mode</Button>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 44)       <Button variant="" type="switch2" href='/newPass' className="w-100 mt-3">
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 45)         Change Password
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 46)       </Button>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 47)     </AuthForm>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 48)   );
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 49) }
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 50) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 51) export default User;
+
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  1) import { useState } from "react";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  2) import auth from '../utils/auth';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  3) import { sendPost } from "../utils/requests";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  4) import { Form, Button } from 'react-bootstrap';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  5) import AuthForm from "../components/AuthForm";     
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  6) import '../assets/css/darkmode.css';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  7) import '../assets/css/auth.css';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  8) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  9) function Forgot() {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 10)   // Initialize empty form
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 11)   // Will need the rest of this when looking up if the email is attached to an account or not
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 12)   const [formState, setFormState] = useState({
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 13)     email: '',
+:...skipping...
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  1) import { useState } from "react";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  2) import auth from '../utils/auth';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  3) import { sendPost } from "../utils/requests";
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  4) import { Form, Button } from 'react-bootstrap';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  5) import AuthForm from "../components/AuthForm";     
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  6) import '../assets/css/darkmode.css';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  7) import '../assets/css/auth.css';
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  8) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500  9) function Forgot() {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 10)   // Initialize empty form
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 11)   // Will need the rest of this when looking up if the email is attached to an account or not
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 12)   const [formState, setFormState] = useState({
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 13)     email: '',
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 14)   });
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 15) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 16)   const [showToast, setShowToast] = useState(false);
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 17) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 18)   // Handle changing values in form
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 19)   const handleFormChange = (event) => {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 20)     setFormState({
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 21)       ...formState,
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 22)       [event.target.name]: event.target.value
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 23)     });
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 24)   }
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 25) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 26)   // Handle submission of form
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 27)   const handleFormSubmit = async (event) => {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 28)     event.preventDefault();
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 29) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 30)     const response = await sendPost('/api/users/login/', formState);
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 31)     if (response.ok) {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 32)         const { token } = response.data;
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 33)         auth.login(token);
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 34)     }
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 35)     else if (response.data && response.data.message) {
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 36)         setShowToast(true);
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 37)     }
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 38)   }
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 39) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 40)   return (
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 41)     <AuthForm
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 42)     setShowToast={setShowToast}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 43)     showToast={showToast}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 44)     >
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 45)       <h1>Forgot Password</h1>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 46)       <Form onSubmit={handleFormSubmit}>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 47)       <Form.Group controlId="formBasicEmail">
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 48)         <Form.Label>Email address</Form.Label>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 49)         <Form.Control
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 50)           type="email"
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 51)           placeholder="Enter email"
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 52)           name="email"
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 53)           value={formState.email}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 54)           onChange={handleFormChange}
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 55)         />
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 56)       </Form.Group>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 57) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 58)         <Button variant="primary" href="/newPass" className="w-100 mt-3">
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 59)           Submit
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 60)         </Button>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 61)       </Form>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 62)     </AuthForm>
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 63)   );
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 64) }
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 65) 
+b0157407 (BlueNinja420 2023-12-01 19:46:13 -0500 66) export default Forgot;
