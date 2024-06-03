@@ -13,8 +13,6 @@ async def scrape_venba(max_items):
         browser = await p.chromium.launch(headless = False)
         page = await browser.new_page()
         
-        
-        '''
         # Men's Fragrances from Venba Fragrance
         await page.goto("https://www.venbafragrance.com/collections/men?page=1")
         html = await page.inner_html('#MainContent')
@@ -174,9 +172,7 @@ async def scrape_venba(max_items):
                 
                 # Databasing the results
                 df.loc[len(df)] = [str(brand), str(title), str(concentration), str(gender), str(sizeOZ), 
-                                    str(price), str(link), str(imageLink)]
-        
-        '''    
+                                    str(price), str(link), str(imageLink)]    
             
         # Women's Fragrances from Venba Fragrance
         await page.goto("https://www.venbafragrance.com/collections/women?page=1")
